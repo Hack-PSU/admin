@@ -10,7 +10,7 @@ import 'rxjs-compat/add/observable/of';
 import User = firebase.User;
 
 @Injectable()
-export class RegistrationResolver implements Resolve<User> {
+export class UserResolver implements Resolve<User> {
   constructor(private authService: AuthService,
               private progress: NgProgress,
               private router: Router) {
