@@ -10,8 +10,9 @@ import { CountModel } from '../../models/count-model';
 import { StatisticsModel } from '../../models/statistics-model';
 import 'rxjs-compat/add/observable/from';
 import { ApiRoute } from '../../models/ApiRoute';
-import { AuthService, BaseHttpService } from '../services';
 import { CustomErrorHandlerService } from '../custom-error-handler/custom-error-handler.service';
+import { BaseHttpService } from '../base-http/base-http.service';
+import { AuthService } from '../AuthService/auth.service';
 
 @Injectable()
 export class HttpAdminService extends BaseHttpService {
@@ -148,7 +149,7 @@ export class HttpAdminService extends BaseHttpService {
 
   getAllUsers(limit?: number): Observable<PreRegistrationModel[]> {
     const apiRoute = new ApiRoute(
-      'admin/extra_credit_list',
+      'admin/user_data',
       true,
       limit ? new Map<string, any>().set('limit', limit) : null,
     );

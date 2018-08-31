@@ -8,7 +8,7 @@ import { MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } fro
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AddLocationDialogComponent } from './add-location-dialog';
 import { UpdateLocationDialogComponent } from './update-location-dialog';
 
@@ -33,16 +33,15 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
 
   constructor(
     public adminService: HttpAdminService,
-    public afAuth: AngularFireAuth,
+    public activatedRoute: ActivatedRoute,
     private router: Router,
     public dialog: MatDialog,
     private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
+    this.activatedRoute.data.subscribe((user) => {
       if (user) {
-        this.user = user;
         this.onLocationClick();
       } else {
         console.error('NO USER');
@@ -76,7 +75,7 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
   }
 
   onLocationClick() {
-    this.adminService.getLocations(this.user).subscribe((data) => {
+    this.adminService.getLocations().subscribe((data) => {
       this.displayedColumns = ManageLocationsComponent.regCols;
       this.dataSource.data = data;
     },                                                  (error) => {
@@ -88,7 +87,7 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(AddLocationDialogComponent, {
       height: '240px',
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       // console.log(result);
       this.insertLocation(result);
     },                                (error) => {
@@ -99,7 +98,7 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
   insertLocation(locationValue: string) {
     const mLocationValue = locationValue.trim();
     // console.log(mLocationValue);
-    this.adminService.addNewLocation(this.user, mLocationValue).subscribe((resp) => {
+    this.adminService.addNewLocation(mLocationValue).subscribe((resp) => {
       this.refreshData();
       this.openSnackBar('Success: Inserted new location', '');
     },                                                                    (error) => {
@@ -110,7 +109,7 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
 
   removeLocation(uid: string) {
     // console.log(uid);
-    this.adminService.removeLocation(this.user, uid).subscribe((resp) => {
+    this.adminService.removeLocation(uid).subscribe((resp) => {
       this.refreshData();
       this.openSnackBar('Success: Removed location', '');
     },                                                         (error) => {
@@ -123,7 +122,7 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(UpdateLocationDialogComponent, {
       height: '240px',
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.updateLocation(result, uid);
       }
@@ -135,7 +134,7 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
   updateLocation(locationValue: string, uid: string) {
     const mLocationValue = locationValue.trim();
     console.log(mLocationValue);
-    this.adminService.updateLocation(this.user, uid, mLocationValue).subscribe((resp) => {
+    this.adminService.updateLocation(uid, mLocationValue).subscribe((resp) => {
       this.refreshData();
       this.openSnackBar('Success: Updated location', '');
     },                                                                         (error) => {

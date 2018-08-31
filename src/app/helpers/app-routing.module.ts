@@ -33,8 +33,8 @@ const routes: Routes = [
     path: 'userdata',
     component: UserDataComponent,
     canActivate: [AuthGuard],
-    resolve: { UserResolver },
     data: { privilegeLevel: PRIVILEGE_LEVEL.TEAM_MEMBER },
+    resolve: { UserResolver },
   },
   {
     path: 'admin',

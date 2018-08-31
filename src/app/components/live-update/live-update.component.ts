@@ -13,6 +13,7 @@ import { UpdateModel } from '../../models/update-model';
   providers: [LiveUpdatesService],
   styleUrls: ['./live-update.component.css'],
 })
+// TODO: Revamp to match new update model
 export class LiveUpdateComponent implements OnInit {
 
   updates: UpdateModel[];
@@ -39,7 +40,7 @@ export class LiveUpdateComponent implements OnInit {
         this.loading = true;
       });
     this.afAuth.auth.onAuthStateChanged((user) => {
-      this.idtoken = Observable.fromPromise(user.getIdToken(true));
+      this.idtoken = Observable.from(user.getIdToken(true));
       this.idtoken.subscribe((value) => {
         this.liveUpdates.getUpdates(value).subscribe((message: UpdateModel[]) => {
           message.forEach(m => this.updates.push(m));

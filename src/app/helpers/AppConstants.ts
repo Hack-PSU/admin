@@ -10,5 +10,6 @@ export class AppConstants {
   public static REGISTRATION_ENDPOINT = '/registrations';
   public static PRE_REGISTRATION_ENDPOINT = '/preregistrations';
   public static EMAIL_ENDPOINT =  '/email';
-  static HTML_TEMPLATE = '../../assets/email_template.ts';
+  public static HTML_TEMPLATE = '../../assets/email_template.ts';
+  public static DASHBOARD_ENDPOINT =  '/dashboard';
 }

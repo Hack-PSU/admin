@@ -140,7 +140,7 @@
                         <!--  Pin Number Column -->
                         <ng-container matColumnDef="pin">
                             <mat-header-cell *matHeaderCellDef class = "pin-number"> Pin Number</mat-header-cell>
-                            <mat-cell *matCellDef="let user" class = "pin-number"> {{convertFromBaseToBase(user.pin, 10, 14)}}</mat-cell>
+                            <mat-cell *matCellDef="let user" class = "pin-number"> {{user.pin}} </mat-cell>
                         </ng-container>
 
                         <!-- Icon Display Column -->

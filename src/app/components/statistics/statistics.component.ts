@@ -1,11 +1,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
 
-
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppConstants } from '../../helpers/AppConstants';
 
 @Component({
@@ -14,21 +13,9 @@ import { AppConstants } from '../../helpers/AppConstants';
     HttpAdminService,
   ],
   templateUrl: './statistics.component.html',
-  styleUrls: ['./statistics.component.css']
+  styleUrls: ['./statistics.component.css'],
 })
 export class StatisticsComponent implements OnInit {
-
-  get user(): firebase.User {
-    return this._user;
-  }
-
-  set user(value: firebase.User) {
-    this._user = value;
-  }
-
-  private _user: firebase.User;
-
-
   /*
    * Error array used to display error messages
    */
@@ -43,7 +30,7 @@ export class StatisticsComponent implements OnInit {
    *  4: Graduate
    */
   private academic_year = [];
-  
+
   /*
    * Index of array represents the Coding Experience
    * 0: None
@@ -76,7 +63,7 @@ export class StatisticsComponent implements OnInit {
    * 5: Caucasian
    * 6: Prefer not to disclose
    */
-  private race = []
+  private race = [];
 
   /*
    * Index of the array represents the shirt size
@@ -112,35 +99,34 @@ export class StatisticsComponent implements OnInit {
    */
   private veteran = [];
 
-
-
   constructor(
     public adminService: HttpAdminService,
-    public afAuth: AngularFireAuth,
+    public activatedRoute: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+  ) {
   }
 
   ngOnInit() {
-  	this.afAuth.auth.onAuthStateChanged((user) => {
-      if (user) {
-        this._user = user;
-        this.getStatData();
-      } else {
-        this.errors = new Error("Error: No user")
-        console.error('No User');
-      }
-    }, (error) => {
-        this.errors = new Error("Error: Issue with authentication of user")
-        console.error(error);
-    });
+    this.activatedRoute.data
+        .subscribe((user) => {
+          if (user) {
+            this.getStatData();
+          } else {
+            this.errors = new Error('Error: No user');
+            console.error('No User');
+          }
+        },         (error) => {
+          this.errors = new Error('Error: Issue with authentication of user');
+          console.error(error);
+        });
   }
 
   getStatData() {
-  	this.adminService.getStatistics(this._user).subscribe((data) => {
+    this.adminService.getStatistics().subscribe((data) => {
       console.log(data);
-    },                                                       (error) => {
+    },                                                    (error) => {
       this.errors = new Error('Error: Issue with getting the number of users');
       console.error(error);
     });

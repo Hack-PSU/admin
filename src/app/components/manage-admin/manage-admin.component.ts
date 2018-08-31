@@ -1,6 +1,6 @@
 /**
  * Manage admin component displays features relevant for Admin users. It currently has the ability
- * to send live updates, manage locations, and manage events. 
+ * to send live updates, manage locations, and manage events.
  *
  * Working Features: Manage Locations
  * Non Working Features: Live Updates, Manage Events
@@ -8,11 +8,14 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 
-import { MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
-import { AngularFireAuth } from 'angularfire2/auth';
-
-import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
+import {
+  MatDialog,
+  MatPaginator,
+  MatSnackBar,
+  MatSort,
+  MatTableDataSource,
+} from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { LocationDialogComponent } from './location-dialog';
 
@@ -22,7 +25,7 @@ import { LocationDialogComponent } from './location-dialog';
     HttpAdminService,
   ],
   templateUrl: './manage-admin.component.html',
-  styleUrls: ['./manage-admin.component.css']
+  styleUrls: ['./manage-admin.component.css'],
 })
 
 export class ManageAdminComponent implements OnInit, AfterViewInit {
@@ -41,10 +44,11 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
 
   constructor(
     public adminService: HttpAdminService,
-    public afAuth: AngularFireAuth,
     private router: Router,
     public dialog: MatDialog,
-    private snackBar: MatSnackBar) {
+    private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar,
+  ) {
   }
 
   /**
@@ -56,18 +60,20 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
    * @exception: Issue with the user not existing in the auth service database will cause an error to be displayed on the /admin/ route page
    */
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.user = user;
-        this.loadTableData();
-      } else {
-        this.errors = new Error("Error: No user")
-        console.error('No User');
-      }
-    }, (error) => {
-        this.errors = new Error("Error: Issue with authentication of user")
-        console.error(error);
-    });
+    this.activatedRoute.data
+        .subscribe((user) => {
+          console.log(user);
+          if (user) {
+            // this.user = user;
+            this.loadTableData();
+          } else {
+            this.errors = new Error('Error: No user');
+            console.error('No User');
+          }
+        },         (error) => {
+          this.errors = new Error('Error: Issue with authentication of user');
+          console.error(error);
+        });
   }
 
   /**
@@ -105,12 +111,13 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
    * @exception: Failure with the admin service with cause an error to be displayed on the /admin/ route page
    */
   loadTableData() {
-    this.adminService.getLocations(this.user).subscribe((data) => {
-      this.displayedColumns = ManageAdminComponent.tableCols;
-      this.dataSource.data = data;
-    },                                                  (error) => {
-      console.error(error);
-    });
+    this.adminService.getLocations()
+        .subscribe((data) => {
+          this.displayedColumns = ManageAdminComponent.tableCols;
+          this.dataSource.data = data;
+        },         (error) => {
+          console.error(error);
+        });
   }
 
   /**
@@ -126,17 +133,23 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
    * @param: user  single user data
    */
   openLocationEditDialog(actionType: string, locationName: string, locationUID: string) {
-    var temp = {};
+    const temp = {};
     temp['action_name'] = actionType;
     temp['current_location_name'] = locationName;
     console.log('DB:' + actionType + ' ' + locationName + ' ' + locationUID);
 
-    var windowHeight = '300px';
+    let windowHeight = '300px';
 
-    switch(actionType) {
-      case 'Update': windowHeight = '300px'; break;
-      case 'Remove': windowHeight = '200px'; break;
-      case 'Add': windowHeight = '250px'; break;
+    switch (actionType) {
+      case 'Update':
+        windowHeight = '300px';
+        break;
+      case 'Remove':
+        windowHeight = '200px';
+        break;
+      case 'Add':
+        windowHeight = '250px';
+        break;
     }
 
     const dialogRef = this.dialog.open(LocationDialogComponent, {
@@ -145,26 +158,26 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
       autoFocus: false,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if(result) {
-        if(result.slice(0,6) === 'Update') {
-          var newLocationName = result.slice(6);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (result.slice(0, 6) === 'Update') {
+          const newLocationName = result.slice(6);
           this.updateLocation(newLocationName, locationUID);
-        } else if(result.slice(0,6) === 'Remove') {
+        } else if (result.slice(0, 6) === 'Remove') {
           this.removeLocation(locationUID);
-        } else if(result.slice(0,3) === 'Add') {
-          var newLocationName = result.slice(3);
+        } else if (result.slice(0, 3) === 'Add') {
+          const newLocationName = result.slice(3);
           this.insertLocation(newLocationName);
         }
       } else {
-        console.log("No result from dialog");
+        console.log('No result from dialog');
       }
-    }, (error) => {
-        this.errors = new Error("Error Processing Action.")
-        console.error('Error Processing Action');
+    },                                (error) => {
+      this.errors = new Error('Error Processing Action.');
+      console.error('Error Processing Action');
     });
   }
-   
+
   /**
    * Calls the Admin Service to update the location with the given location uid to the new name
    *
@@ -175,10 +188,10 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
    */
   updateLocation(locationValue: string, uid: string) {
     const mLocationValue = locationValue.trim();
-    this.adminService.updateLocation(this.user, uid, mLocationValue).subscribe((resp) => {
+    this.adminService.updateLocation(uid, mLocationValue).subscribe((resp) => {
       this.refreshData();
       this.openSnackBar('Success: Updated location', '');
-    },                                                                         (error) => {
+    },                                                              (error) => {
       console.error(error);
       this.openSnackBar('Error: Failed to update location', '');
     });
@@ -194,10 +207,10 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
   insertLocation(locationValue: string) {
     const mLocationValue = locationValue.trim();
     // console.log(mLocationValue);
-    this.adminService.addNewLocation(this.user, mLocationValue).subscribe((resp) => {
+    this.adminService.addNewLocation(mLocationValue).subscribe((resp) => {
       this.refreshData();
       this.openSnackBar('Success: Inserted new location', '');
-    },                                                                    (error) => {
+    },                                                         (error) => {
       console.error(error);
       this.openSnackBar('Error: Failed to insert location', '');
     });
@@ -212,10 +225,10 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
    */
   removeLocation(uid: string) {
     console.log(uid);
-    this.adminService.removeLocation(this.user, uid).subscribe((resp) => {
+    this.adminService.removeLocation(uid).subscribe((resp) => {
       this.refreshData();
       this.openSnackBar('Success: Removed location', '');
-    },                                                         (error) => {
+    },                                              (error) => {
       console.error(error);
       this.openSnackBar('Error: Failed to remove location', '');
     });

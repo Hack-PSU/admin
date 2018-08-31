@@ -8,7 +8,7 @@ import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 import * as uuid from 'uuid/v4';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppConstants } from '../../helpers/AppConstants';
 import { AddEventDialogComponent } from './add-event-dialog';
 
@@ -21,21 +21,9 @@ import { AddEventDialogComponent } from './add-event-dialog';
     MatSnackBar,
   ],
 })
+// TODO: Revamp this
 export class ManageEventsComponent implements OnInit {
-  get idtokenString(): string {
-    return this._idtokenString;
-  }
 
-  set idtokenString(value: string) {
-    this._idtokenString = value;
-  }
-  get idtoken(): Observable<string> {
-    return this._idtoken;
-  }
-
-  set idtoken(value: Observable<string>) {
-    this._idtoken = value;
-  }
   static get regCols(): string[] {
     return this._regCols;
   }
@@ -43,63 +31,56 @@ export class ManageEventsComponent implements OnInit {
   static set regCols(value: string[]) {
     this._regCols = value;
   }
+
   private static _regCols =
-    ['location_name',
+    [
+      'location_name',
       'uid',
       'event_start_time',
       'event_end_time',
       'event_title',
       'event_description',
       'event_type',
-      'button'];
-  private _idtoken: Observable<string>;
-  private _idtokenString = '';
-
+      'button',
+    ];
 
   public displayedColumns = ManageEventsComponent._regCols;
   public newEvent: EventModel;
   public dataSource = new MatTableDataSource<EventModel>([]);
 
-
-  constructor(private eventsService: EventsService,
-              public dialog: MatDialog,
-              public snackBar: MatSnackBar,
-              private afAuth: AngularFireAuth,
-              private _router: Router,
-    ) {
+  constructor(
+    private eventsService: EventsService,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar,
+    private activatedRoute: ActivatedRoute,
+    private _router: Router,
+  ) {
     this.newEvent = new EventModel();
   }
 
   ngOnInit() {
     this.eventsService.subject(new Event('connected'))
-      .subscribe(() => {
-        this.dataSource.data = [];
-      });
-    this.eventsService.subject(new Event('disconnected'))
-      .subscribe(() => {
-        this.dataSource.data = [];
-      });
-    this.afAuth.auth.onAuthStateChanged((user) => {
-      if (user) {
-        this._idtoken = Observable.fromPromise(user.getIdToken(true));
-        this._idtoken.subscribe((value) => {
-          this._idtokenString = value;
-          this.eventsService.getEvents(value).subscribe((events: EventModel[]) => {
-            this.dataSource.data = this.dataSource.data.concat(events);
-          });
-        },                      (error) => {
-          this.snackBar.open(error.body, null, {
-            duration: 2000,
-          });
+        .subscribe(() => {
+          this.dataSource.data = [];
         });
-      } else {
-        this._router.navigate([AppConstants.LOGIN_ENDPOINT]);
-      }
-    });
+    this.eventsService.subject(new Event('disconnected'))
+        .subscribe(() => {
+          this.dataSource.data = [];
+        });
+    this.activatedRoute.data
+        .subscribe((user) => {
+          if (user) {
+            this.eventsService.getEvents('').subscribe((events: EventModel[]) => {
+              this.dataSource.data = this.dataSource.data.concat(events);
+            });
+          } else {
+            this._router.navigate([AppConstants.LOGIN_ENDPOINT]);
+          }
+        });
   }
 
   refreshData() {
-    this.eventsService.getEvents(this._idtokenString).subscribe((events: EventModel[]) => {
+    this.eventsService.getEvents('').subscribe((events: EventModel[]) => {
       this.dataSource.data = this.dataSource.data.concat(events);
     });
   }
@@ -116,15 +97,15 @@ export class ManageEventsComponent implements OnInit {
         result.event_start_time = new Date(result.event_start_time).getTime().toString();
         result.event_end_time = new Date(result.event_end_time).getTime().toString();
         this.eventsService.addEvent(result)
-          .subscribe((value) => {
-            this.snackBar.open('success', null, {
-              duration: 2000,
+            .subscribe((value) => {
+              this.snackBar.open('success', null, {
+                duration: 2000,
+              });
+            },         (error) => {
+              this.snackBar.open(error.body, null, {
+                duration: 2000,
+              });
             });
-          },         (error) => {
-            this.snackBar.open(error.body, null, {
-              duration: 2000,
-            });
-          });
       }
     });
   }

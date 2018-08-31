@@ -4,6 +4,7 @@ import { Error as GenericError } from 'tslint/lib/error';
 import { Error } from '../../models/error.interface';
 import { AlertService } from 'ngx-alerts';
 import { Observable } from 'rxjs/Observable';
+import { throwError } from 'rxjs';
 import 'rxjs-compat/add/observable/throw';
 
 @Injectable()
@@ -76,6 +77,6 @@ export class CustomErrorHandlerService {
   public handleError(error: GenericError): Observable<Error> {
     const parsedError = CustomErrorHandlerService.parseGenericError(error);
     this.showToast(parsedError);
-    return Observable.throwError(parsedError);
+    return throwError(parsedError);
   }
 }

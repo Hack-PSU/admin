@@ -8,7 +8,7 @@ import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar } from '@angular
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppConstants } from '../../helpers/AppConstants';
 import { EmailListService } from '../../services/email-list/email-list.service';
 
@@ -22,18 +22,10 @@ import { EmailListService } from '../../services/email-list/email-list.service';
 })
 
 export class RegistrationTableComponent implements OnInit, AfterViewInit {
-  get user(): firebase.User {
-    return this._user;
-  }
-
-  set user(value: firebase.User) {
-    this._user = value;
-  }
   private static regCols = ['select', 'firstname', 'lastname', 'email', 'university', 'academic_year',
     'gender', 'coding_experience',
     'major', 'shirt_size', 'dietary_restriction', 'allergies', 'travel_reimbursement', 'veteran',
     'first_hackathon', 'race', 'expectations', 'project', 'referral', 'resume', 'pin', 'uid'];
-  private _user: firebase.User;
 
   public displayedColumns = RegistrationTableComponent.regCols;
   public dataSource = new MatTableDataSource<any>([]);
@@ -44,16 +36,15 @@ export class RegistrationTableComponent implements OnInit, AfterViewInit {
 
   constructor(
     public adminService: HttpAdminService,
-    public afAuth: AngularFireAuth,
+    public activatedRoute: ActivatedRoute,
     public emailListService: EmailListService,
     private router: Router,
     private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
+    this.activatedRoute.data.subscribe((user) => {
       if (user) {
-        this._user = user;
         this.onRegistrationClick();
       } else {
         console.error('NO USER');
@@ -87,7 +78,7 @@ export class RegistrationTableComponent implements OnInit, AfterViewInit {
   }
 
   onRegistrationClick() {
-    this.adminService.getRegistrations(this._user).subscribe((data) => {
+    this.adminService.getRegistrations().subscribe((data) => {
       this.displayedColumns = RegistrationTableComponent.regCols;
       this.dataSource.data = data;
     },                                                       (error) => {

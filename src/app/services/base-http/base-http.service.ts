@@ -1,13 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService, CustomErrorHandlerService } from '../services';
 import { AppConstants } from '../../helpers/AppConstants';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { ApiRoute } from '../../models/ApiRoute';
-import { catchError, retry, switchMap } from 'rxjs/operators';
+import { catchError, switchMap, take } from 'rxjs/operators';
 
 export abstract class BaseHttpService {
   private static readonly BASE_URL = AppConstants.API_BASE_URL;
-  private readonly CACHE_SIZE = 3;
   protected memCache: Map<ApiRoute, Observable<any>>;
 
   protected constructor(
@@ -24,10 +23,13 @@ export abstract class BaseHttpService {
       if (apiRoute.needsAuthentication) {
         observable = this.authService.idToken
                          .pipe(
+                           take(1),
                            switchMap((idToken: string) => {
                              if (!idToken) {
-                               return Observable.throwError(new HttpErrorResponse({
-                                 error: 'You are not logged in. Redirecting now.',
+                               return throwError(new HttpErrorResponse({
+                                 error: {
+                                   message: 'You are not logged in. Redirecting now.',
+                                 },
                                  status: 401,
                                }));
                              }
@@ -40,23 +42,18 @@ export abstract class BaseHttpService {
                                });
                              }
                              return this.http.get<T>(
-                               `${BaseHttpService.BASE_URL}/${apiRoute.URL}`,
+                               `${BaseHttpService.BASE_URL}${apiRoute.URL}`,
                                { headers, params, reportProgress: true },
                              );
                            }),
                          );
       } else {
         observable = this.http.get<T>(
-          `${BaseHttpService.BASE_URL}/${apiRoute.URL}`,
+          `${BaseHttpService.BASE_URL}${apiRoute.URL}`,
           { reportProgress: true },
         );
       }
-      this.memCache.set(apiRoute, observable
-        .shareReplay(this.CACHE_SIZE, 10 * 1000)
-        .pipe(
-          retry(3),
-        ),
-      );
+      this.memCache.set(apiRoute, observable);
     }
     return this.memCache.get(apiRoute);
   }
@@ -64,9 +61,10 @@ export abstract class BaseHttpService {
   protected genericPost<T>(apiRoute: ApiRoute, data: any) {
     this.memCache.set(apiRoute, null);
     return this.authService.idToken.pipe(
+      take(1),
       switchMap((idToken: string) => {
         if (!idToken) {
-          return Observable.throwError('You are not logged in. Redirecting now.');
+          return throwError('You are not logged in. Redirecting now.');
         }
         let headers = new HttpHeaders();
         headers = headers.set('idtoken', idToken);
