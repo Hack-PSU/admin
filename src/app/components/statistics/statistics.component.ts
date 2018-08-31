@@ -7,6 +7,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
 import { Router } from '@angular/router';
 import { AppConstants } from '../../helpers/AppConstants';
+import {count} from 'rxjs/operator/count';
 
 @Component({
   selector: 'app-statistics',
@@ -28,7 +29,6 @@ export class StatisticsComponent implements OnInit {
 
   private _user: firebase.User;
 
-
   /*
    * Error array used to display error messages
    */
@@ -43,7 +43,7 @@ export class StatisticsComponent implements OnInit {
    *  4: Graduate
    */
   private academic_year = [];
-  
+
   /*
    * Index of array represents the Coding Experience
    * 0: None
@@ -147,3 +147,19 @@ export class StatisticsComponent implements OnInit {
   }
 
 }
+
+    var stats: number = 0;
+
+/*
+trytogetdata()
+{
+    /** trying to count the users based on their academic year. */
+/*
+    count()
+    {
+        const numofuser = this.user.length;
+        const numofacademicyear = this._user.academic_year.length;
+        return numofuser === numofacademicyear;
+    }
+}
+*/
