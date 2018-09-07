@@ -24,7 +24,7 @@ import { EmailListService } from '../../services/email-list/email-list.service';
 export class RegistrationTableComponent implements OnInit, AfterViewInit {
   get user(): firebase.User {
     return this._user;
-  }
+  } //a function to get user
 
   set user(value: firebase.User) {
     this._user = value;
@@ -88,6 +88,7 @@ export class RegistrationTableComponent implements OnInit, AfterViewInit {
 
   onRegistrationClick() {
     this.adminService.getRegistrations(this._user).subscribe((data) => {
+      console.log(data)
       this.displayedColumns = RegistrationTableComponent.regCols;
       this.dataSource.data = data;
     },                                                       (error) => {
@@ -97,6 +98,7 @@ export class RegistrationTableComponent implements OnInit, AfterViewInit {
   }
 
   sendEmail() {
+    this.emailListService.emailList = this.selection.selected;
     this.emailListService.emailList = this.selection.selected;
     this.router.navigate([AppConstants.EMAIL_ENDPOINT])
       .catch(e => console.error(e));

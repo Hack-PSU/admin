@@ -1,13 +1,14 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 
 
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { Router } from '@angular/router';
-import { AppConstants } from '../../helpers/AppConstants';
-import {count} from 'rxjs/operator/count';
+import { StatisticsModel } from '../../models/statistics-model';
+import * as firebase from 'firebase';
+
 
 @Component({
   selector: 'app-statistics',
@@ -15,9 +16,11 @@ import {count} from 'rxjs/operator/count';
     HttpAdminService,
   ],
   templateUrl: './statistics.component.html',
-  styleUrls: ['./statistics.component.css']
+  styleUrls: ['./statistics.component.css'],
 })
 export class StatisticsComponent implements OnInit {
+  private static tableCols = ['option', 'count'];
+  public displayedColumns: string[];
 
   get user(): firebase.User {
     return this._user;
@@ -26,6 +29,8 @@ export class StatisticsComponent implements OnInit {
   set user(value: firebase.User) {
     this._user = value;
   }
+
+  public StatData = new MatTableDataSource<StatisticsModel>([]); // [] = array
 
   private _user: firebase.User;
 
@@ -112,8 +117,6 @@ export class StatisticsComponent implements OnInit {
    */
   private veteran = [];
 
-
-
   constructor(
     public adminService: HttpAdminService,
     public afAuth: AngularFireAuth,
@@ -124,42 +127,42 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit() {
   	this.afAuth.auth.onAuthStateChanged((user) => {
-      if (user) {
-        this._user = user;
-        this.getStatData();
-      } else {
-        this.errors = new Error("Error: No user")
-        console.error('No User');
-      }
-    }, (error) => {
-        this.errors = new Error("Error: Issue with authentication of user")
-        console.error(error);
-    });
-  }
-
-  getStatData() {
-  	this.adminService.getStatistics(this._user).subscribe((data) => {
-      console.log(data);
-    },                                                       (error) => {
-      this.errors = new Error('Error: Issue with getting the number of users');
-      console.error(error);
-    });
-  }
-
-}
-
-    var stats: number = 0;
-
-/*
-trytogetdata()
-{
-    /** trying to count the users based on their academic year. */
-/*
-    count()
-    {
-        const numofuser = this.user.length;
-        const numofacademicyear = this._user.academic_year.length;
-        return numofuser === numofacademicyear;
+    if (user) {
+      this._user = user;
+      this.getStatData();
+    } else {
+      this.errors = new Error('Error: No user')
+      console.error('No User');
     }
+  },                                   (error) => {
+    this.errors = new Error('Error: Issue with authentication of user')
+    console.error(error);
+  });
+  }
+
+//calls the https://staging-dot-hackpsu18.appspot.com/v1/admin/statistics
+  getStatData() {
+  	this.adminService.getStatistics(this._user)
+        .subscribe((data) => {
+          console.log(data);
+          this.displayedColumns = StatisticsComponent.tableCols;
+          this.StatData.data = data.filter((data) => data.CATEGORY === 'shirt_size');
+        },        (error) => {
+           this.errors = new Error('Error: Issue with getting the number of users');
+           console.error(error);
+
+         });
+  }
+
+
+
+
+  shirtsizefilter() {
+    return this.StatData.data.filter((data) => data.CATEGORY === 'shirt_size');
+  }
+
 }
-*/
+
+
+
+
