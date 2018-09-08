@@ -50,10 +50,10 @@ export class UserDataComponent implements OnInit, AfterViewInit {
   /*
    * Local private integers representing the counts in the latest stats header.
    */
-  private preRegStatNumber = -1;
-  private regStatNumber = -1;
-  private rsvpStatNumber = -1;
-  private checkInStatNumber = -1;
+  public preRegStatNumber = -1;
+  public regStatNumber = -1;
+  public rsvpStatNumber = -1;
+  public checkInStatNumber = -1;
 
   /*
    * Boolean variables used to display the edit column in the user table
@@ -217,7 +217,7 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    * @param: user  User from the datasource
    */
   isPreRegistered(user) {
-    return !!user.uid;
+    return !!user.pre_uid;
   }
 
   /**
@@ -290,10 +290,11 @@ export class UserDataComponent implements OnInit, AfterViewInit {
   updateStatHeader() {
     this.adminService.getAllUserCount().subscribe((data) => {
       const countArray: CountModel[] = data;
-      this.preRegStatNumber = parseInt(countArray[0].pre_count, 10);
-      this.regStatNumber = parseInt(countArray[1].pre_count, 10);
-      this.rsvpStatNumber = parseInt(countArray[2].pre_count, 10);
-      this.checkInStatNumber = parseInt(countArray[3].pre_count, 10);
+      // TODO: Change server side to select columns and update CountModel using that.
+      this.preRegStatNumber = parseInt(countArray[0] ? countArray[0].pre_count : 'NA', 10);
+      this.regStatNumber = parseInt(countArray[1] ? countArray[1].pre_count : 'NA', 10);
+      this.rsvpStatNumber = parseInt(countArray[2] ? countArray[2].pre_count : 'NA', 10);
+      this.checkInStatNumber = parseInt(countArray[3] ? countArray[3].pre_count : 'NA', 10);
     },                                            (error) => {
       this.errors = new Error('Error: Issue with getting the number of users');
       console.error(error);

@@ -71,5 +71,9 @@ export class PreRegistrationTableComponent implements OnInit, AfterViewInit {
       duration: 2000,
     });
   }
+  
+  refreshData() {
+    this.onPreRegistrationClick();
+  }
 
 }

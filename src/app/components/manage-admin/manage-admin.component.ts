@@ -32,8 +32,6 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
   private static tableCols = ['location_name', 'uid', 'action_update', 'action_remove'];
   displayedColumns = ManageAdminComponent.tableCols;
   public dataSource = new MatTableDataSource<any>([]);
-  private user: firebase.User;
-
   /*
    * Error array used to display error messages
    */

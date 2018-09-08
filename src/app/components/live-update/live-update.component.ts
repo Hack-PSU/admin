@@ -28,27 +28,27 @@ export class LiveUpdateComponent implements OnInit {
 
   constructor(public liveUpdates: LiveUpdatesService, public afAuth: AngularFireAuth) {
     this.updates = [];
-    this.liveUpdates.subject(new Event('connected'))
-      .subscribe((ev) => {
-        this.updates = [];
-        this.error = null;
-        this.progress = null;
-      });
-    this.liveUpdates.subject(new Event('disconnected'))
-      .subscribe((ev) => {
-        this.updates = [];
-        this.loading = true;
-      });
-    this.afAuth.auth.onAuthStateChanged((user) => {
-      this.idtoken = Observable.from(user.getIdToken(true));
-      this.idtoken.subscribe((value) => {
-        this.liveUpdates.getUpdates(value).subscribe((message: UpdateModel[]) => {
-          message.forEach(m => this.updates.push(m));
-        });
-      },                     (error) => {
-        this.error = error;
-      });
-    });
+    // this.liveUpdates.subject(new Event('connected'))
+    //   .subscribe((ev) => {
+    //     this.updates = [];
+    //     this.error = null;
+    //     this.progress = null;
+    //   });
+    // this.liveUpdates.subject(new Event('disconnected'))
+    //   .subscribe((ev) => {
+    //     this.updates = [];
+    //     this.loading = true;
+    //   });
+    // this.afAuth.auth.onAuthStateChanged((user) => {
+    //   this.idtoken = Observable.from(user.getIdToken(true));
+    //   this.idtoken.subscribe((value) => {
+    //     this.liveUpdates.getUpdates(value).subscribe((message: UpdateModel[]) => {
+    //       message.forEach(m => this.updates.push(m));
+    //     });
+    //   },                     (error) => {
+    //     this.error = error;
+    //   });
+    // });
   }
 
   sendMessage() {

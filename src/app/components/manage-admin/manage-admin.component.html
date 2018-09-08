@@ -18,44 +18,44 @@
                 <mat-card-title>
                     <b>Live Update - Under Construction</b>
                 </mat-card-title>
-                <mat-card-content>
-                    <form class="registration-form container-fluid"
-                          (ngSubmit)="registrationModel.form.valid ? sendMessage() : error = registrationModel.form.errors"
-                          name="registrationFormDOM"
-                          #registrationModel="ngForm">
-                        <mat-form-field class="example-full-width row">
-                            <input matInput
-                                   type="text"
-                                   name="major"
-                                   [(ngModel)]="title"
-                                   #messageInput="ngModel"
-                                   id="autocomplete-input-title"
-                                   required
-                                   placeholder="Enter live update title"
-                                   class="validate required"
-                            >
-                        </mat-form-field>
-                        <div class="row">
-                            <mat-form-field class="example-full-width">
-                                <input matInput
-                                       type="text"
-                                       name="major"
-                                       [(ngModel)]="message"
-                                       #messageInput="ngModel"
-                                       id="autocomplete-input-major"
-                                       required
-                                       placeholder="Enter live update"
-                                       class="validate required"
-                                >
-                            </mat-form-field>
-                            <label class="data-error" *ngIf="!messageInput.valid">Required</label><br>
-                        </div>
-                        <mat-checkbox class="row" type="checkbox" [(ngModel)]="push_notification" name="push_notification">Send as a push
-                            notification?
-                        </mat-checkbox>
-                        <button mat-button type="submit" *ngIf="registrationModel.form.valid">Submit</button>
-                    </form>
-                </mat-card-content>
+                <!--<mat-card-content>-->
+                    <!--<form class="registration-form container-fluid"-->
+                          <!--(ngSubmit)="registrationModel.form.valid ? sendMessage() : error = registrationModel.form.errors"-->
+                          <!--name="registrationFormDOM"-->
+                          <!--#registrationModel="ngForm">-->
+                        <!--<mat-form-field class="example-full-width row">-->
+                            <!--<input matInput-->
+                                   <!--type="text"-->
+                                   <!--name="major"-->
+                                   <!--[(ngModel)]="title"-->
+                                   <!--#messageInput="ngModel"-->
+                                   <!--id="autocomplete-input-title"-->
+                                   <!--required-->
+                                   <!--placeholder="Enter live update title"-->
+                                   <!--class="validate required"-->
+                            <!--&gt;-->
+                        <!--</mat-form-field>-->
+                        <!--<div class="row">-->
+                            <!--<mat-form-field class="example-full-width">-->
+                                <!--<input matInput-->
+                                       <!--type="text"-->
+                                       <!--name="major"-->
+                                       <!--[(ngModel)]="message"-->
+                                       <!--#messageInput="ngModel"-->
+                                       <!--id="autocomplete-input-major"-->
+                                       <!--required-->
+                                       <!--placeholder="Enter live update"-->
+                                       <!--class="validate required"-->
+                                <!--&gt;-->
+                            <!--</mat-form-field>-->
+                            <!--<label class="data-error" *ngIf="!messageInput.valid">Required</label><br>-->
+                        <!--</div>-->
+                        <!--<mat-checkbox class="row" type="checkbox" [(ngModel)]="push_notification" name="push_notification">Send as a push-->
+                            <!--notification?-->
+                        <!--</mat-checkbox>-->
+                        <!--<button mat-button type="submit" *ngIf="registrationModel.form.valid">Submit</button>-->
+                    <!--</form>-->
+                <!--</mat-card-content>-->
             </mat-card>
         </div>
         <div class = "table-container">
@@ -90,7 +90,7 @@
                                              <!-- Location Name Column -->
                                             <ng-container matColumnDef="location_name">
                                                 <mat-header-cell *matHeaderCellDef class="name-column"> Location Name</mat-header-cell>
-                                                <mat-cell *matCellDef="let location" class="name-column"> 
+                                                <mat-cell *matCellDef="let location" class="name-column">
                                                     {{location.location_name}}
                                                 </mat-cell>
                                             </ng-container>
@@ -104,7 +104,7 @@
 
                                             <!-- Action Update Column -->
                                             <ng-container matColumnDef="action_update" class>
-                                                <mat-header-cell *matHeaderCellDef class="action-button"> 
+                                                <mat-header-cell *matHeaderCellDef class="action-button">
                                                     Update
                                                 </mat-header-cell>
                                                 <mat-cell *matCellDef="let location" class="action-button">
@@ -118,7 +118,7 @@
 
                                              <!-- Action Delete Column -->
                                             <ng-container matColumnDef="action_remove">
-                                                <mat-header-cell *matHeaderCellDef class="action-button"> 
+                                                <mat-header-cell *matHeaderCellDef class="action-button">
                                                     Remove
                                                 </mat-header-cell>
                                                 <mat-cell *matCellDef="let location" class="action-button">

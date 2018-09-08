@@ -136,4 +136,8 @@ export class LoginComponent {
     this.activatedRoute.queryParams
         .subscribe(callback);
   }
+
+  signUp() {
+    this.errorHandler.handleError(new Error('Not supported'));
+  }
 }

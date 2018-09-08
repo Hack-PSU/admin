@@ -113,5 +113,9 @@ export class ManageEventsComponent implements OnInit {
   getTimeString(time: string) {
     return new Date(parseInt(time, 10)).toLocaleTimeString();
   }
+
+  applyFilter(value) {
+    // TODO: Fill out.
+  }
 }
 
