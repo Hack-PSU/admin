@@ -1,0 +1,37 @@
+<mat-nav-list>
+    <mat-accordion *ngIf="afAuth.authState | async as user; else home">
+        <a mat-list-item routerLink="/dashboard">Dashboard</a>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Users
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <a mat-list-item routerLink="/userdata">User Data</a>
+            <a mat-list-item routerLink="/classes"> Extra Credit Classes</a>
+            <a mat-list-item routerLink="/users"> Upgrade User</a>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Admin
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <a mat-list-item routerLink="/events">Events</a>
+            <a mat-list-item routerLink="/locations">Locations</a>
+            <a mat-list-item routerLink="/live">Live Updates</a>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Analytics
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <a mat-list-item routerLink="/stats">Statistics</a>
+            <a mat-list-item routerLink="/vis">Visualization</a>
+        </mat-expansion-panel>  
+    </mat-accordion>
+</mat-nav-list>
+<ng-template #home>
+    <a mat-list-item routerLink="">Home</a>
+</ng-template>
