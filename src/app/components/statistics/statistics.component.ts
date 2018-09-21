@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
-import {BrowserModule} from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -10,6 +10,15 @@ import { StatisticsModel } from '../../models/statistics-model';
 import * as firebase from 'firebase';
 
 import { ChartsModule } from 'ng2-charts';
+import { ViewChild, ElementRef } from '@angular/core';
+
+@ViewChild('myCanvas') myCanvas: ElementRef;
+public context: CanvasRenderingContext2D;
+
+imports: [
+  ChartsModule,
+]
+
 
 @Component({
   selector: 'app-statistics',
@@ -20,6 +29,8 @@ import { ChartsModule } from 'ng2-charts';
   styleUrls: ['./statistics.component.css'],
 })
 export class StatisticsComponent implements OnInit {
+  @ViewChild('myCanvas') canvasRef: ElementRef;
+
     //construct a static table with two columns with heads option and count
   private static tableCols = ['option', 'count'];
   public displayedColumns: string[];
@@ -144,6 +155,9 @@ export class StatisticsComponent implements OnInit {
   }
 
   ngOnInit() {
+    const ctx: CanvasRenderingContext2D =
+          this.canvasRef.nativeElement.getContext('2d');
+
     this.afAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this._user = user;
@@ -158,6 +172,9 @@ export class StatisticsComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
+  }
 
 //calls the https://staging-dot-hackpsu18.appspot.com/v1/admin/statistics
   getStatData() {

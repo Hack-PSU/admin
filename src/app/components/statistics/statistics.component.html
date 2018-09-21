@@ -15,7 +15,7 @@
 
         <ng-container matColumnDef="option">
             <mat-header-cell *matHeaderCellDef> Shirt Size </mat-header-cell>
-            <mat-cell *matCellDef="let object"> {{object.OPTION}}  </mat-cell>
+            <mat-cell *matCellDef="let object"> "getStatData.data.map === 'tshirt_size'.CATEGORY "  </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="count">
@@ -27,20 +27,22 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
     </mat-table>
-    </div>
+
 
     //a pie chart for academic year
     <script src="node_modules/chart.js/src/chart.js"></script>
-    <canvas id="myCanvas" width="200" height="100"
+    <canvas #mycanvas="myCanvas" width="200" height="100"
             style="border:1px solid #000000;">
     </canvas>
     <div style="display: block">
         <canvas baseChart
-                [data]="getStatData.data.map === 'academic_year' "
+                [data]="pieChartData"="getStatData.data.map === 'academic_year' "
                 [labels]="pieChartLabels"
                 [chartType]="pieChartType"
                 (chartHover)="chartHovered($event)"
                 (chartClick)="chartClicked($event)"></canvas>
+    </div>
+
     </div>
 
     <!--<div class = "body-container">-->
