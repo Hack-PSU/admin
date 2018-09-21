@@ -24,10 +24,10 @@
     "@angular/platform-browser": "^5.2.6",
     "@angular/platform-browser-dynamic": "^5.2.6",
     "@angular/router": "^5.2.6",
-    "@swimlane/ngx-charts": "^7.1.1",
+    "@swimlane/ngx-charts": "^7.4.0",
     "angularfire2": "5.0.0-rc.5-next",
-    "compress.js": "1.1.2",
     "chart.js": "^2.7.2",
+    "compress.js": "1.1.2",
     "core-js": "^2.4.1",
     "d3": "^4.13.0",
     "firebase": "4.10.1",
@@ -36,8 +36,8 @@
     "ng2-charts": "^1.6.0",
     "rxjs": "^5.1.0",
     "tslint-config-airbnb": "5.7.0",
-    "zone.js": "^0.8.4",
-    "uuid": "latest"
+    "uuid": "latest",
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@angular/cli": "6.0.8",

@@ -6,12 +6,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyCpvAPdiIcqKV_NTyt6DZgDUNyjmA6kwzU',
-    authDomain: 'hackpsu18.firebaseapp.com',
-    databaseURL: 'https://hackpsu18-test.firebaseio.com',
-    projectId: 'hackpsu18',
-    storageBucket: 'hackpsu18.appspot.com',
-    messagingSenderId: '1002677206617',
+    apiKey: 'AIzaSyAWejnwBUrfUoULnMRumGFpOchYjjHlfTI',
+    authDomain: 'hackpsu18-staging.firebaseapp.com',
+    databaseURL: 'https://hackpsu18-staging.firebaseio.com',
+    projectId: 'hackpsu18-staging',
+    storageBucket: 'hackpsu18-staging.appspot.com',
+    messagingSenderId: '614592542726',
   },
   apiUrl: 'https://staging-dot-hackpsu18.appspot.com/v1/',
 };
