@@ -1,0 +1,41 @@
+export class CheckInModel {
+	academic_year: string;
+	active: boolean
+	allergies: string
+	base_pin: number
+	check_in_status: boolean = false
+	coding_experience: string
+	dietary_restriction: string
+	eighteenBeforeEvent: boolean
+	email: string
+	end_time: string
+	expectations: string
+	first_hackathon: boolean
+	firstname: string
+	gender: string
+	hackathon: string
+	lastname: string
+	major: string
+	mlh_coc: boolean
+	mlh_dcp: boolean
+	name: string
+	phone: string
+	pin: number
+	pre_uid: string
+	project: string
+	race: string
+	referral: string
+	resume: string
+	rsvp_status: boolean
+	rsvp_time: string
+	shirt_size: string
+	start_time: string
+	submitted: boolean
+	time: string
+	travel_reimbursement: boolean
+	uid: string
+	university: string
+	user_id: string
+	user_uid: string
+	veteran: string
+}

@@ -106,6 +106,14 @@ mat-icon.check-circle-green {
   color: green;
 }
 
+.check-in-button{
+  width: 24px;
+}
+
+.check-in-button:hover{
+  color: green;
+}
+
 .email-filter {
   margin: 10px;
   font-size: small;

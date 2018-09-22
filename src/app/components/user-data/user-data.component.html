@@ -164,7 +164,7 @@
                                     <mat-icon>panorama_fish_eye</mat-icon>
                                 </ng-template>
 
-                                <!-- RSVP -->
+                                <!-- RSVP --> 
                                 <ng-template [ngIf]="isRSVP(user)" [ngIfElse] = "rsvpEmpty">
                                     <mat-icon class="check-circle-green">check_circle</mat-icon>
                                 </ng-template>
@@ -177,7 +177,14 @@
                                     <mat-icon class="check-circle-green">check_circle</mat-icon>
                                 </ng-template>
                                 <ng-template #checkinEmpty>
-                                    <mat-icon>panorama_fish_eye</mat-icon>
+                                    <button mat-icon-button class = "check-in-button" (click) = "onClickCheckedIn(user)">
+                                        <ng-template [ngIf] = "user.check_in_status" [ngIfElse] = "unchecked">
+                                            <mat-icon class="check-circle-green">check_circle</mat-icon>
+                                        </ng-template>
+                                        <ng-template #unchecked>
+                                            <mat-icon>panorama_fish_eye</mat-icon>
+                                        </ng-template>
+                                    </button>
                                 </ng-template>
                             </mat-cell>
                         </ng-container>

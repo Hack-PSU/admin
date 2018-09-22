@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import * as uuid from 'uuid/v4';
 import 'rxjs/add/observable/throw';
 import { PreRegistrationModel } from '../../models/pre-registration-model';
 import { RegistrationModel } from '../../models/registration-model';
+import { CheckInModel } from '../../models/check-in-model'
 import { LocationModel } from '../../models/location-model';
 import { ClassesModel } from '../../models/classes-model';
 import { CountModel } from '../../models/count-model';
@@ -147,13 +149,25 @@ export class HttpAdminService extends BaseHttpService {
     return super.genericPost<{}>(apiRoute, { uid, cid });
   }
 
-  getAllUsers(limit?: number): Observable<PreRegistrationModel[]> {
+  setUserCheckedIn(uid: string) {
+    const rfid: string = `NO_BAND_${uuid()}`
+    const time: number = new Date().getTime();
+
+    const apiRoute = new ApiRoute(
+      '/admin/assignment/',
+      true,
+
+    );
+    return super.genericPost<{}>(apiRoute, {uid, rfid, time})
+  }
+
+  getAllUsers(limit?: number): Observable<CheckInModel[]> {
     const apiRoute = new ApiRoute(
       'admin/user_data',
       true,
       limit ? new Map<string, any>().set('limit', limit) : null,
     );
-    return super.genericGet<PreRegistrationModel[]>(apiRoute);
+    return super.genericGet<CheckInModel[]>(apiRoute);
   }
 
   getPreRegCount(limit?: number): Observable<CountModel[]> {

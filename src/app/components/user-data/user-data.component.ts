@@ -1,4 +1,4 @@
-/**
+  /**
  * User data component features a latest stats header and a user data table. The table serves
  * as a means of viewing, filtering, and modifying user data without directly accessing the database.
  * The latest stats header provides the reader with a count of the number of users in each category.
@@ -153,7 +153,7 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    * Call the admin service request to retrieve the user data. Then set the columns names to
    * the entries defined in tableCols and the datasource data to the request response data.
    *
-   * @exception: Failure with the admin service with cause an error to be displayed on the /userdata/ route page
+   * @exception: Failure with the admin service will cause an error to be displayed on the /userdata/ route page
    */
   loadTableData() {
     this.adminService.getAllUsers().subscribe((data) => {
@@ -245,6 +245,22 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    */
   isCheckedIn(user) {
     return !!user.user_uid;
+  }
+
+  /**
+   * Changes user status to checked in
+   *
+   * @param: user  User from the datasource
+   */
+  onClickCheckedIn(user) {
+    user.check_in_status = true;
+    this.adminService.setUserCheckedIn(user.uid)
+        .subscribe(() => {},
+          (error) => {
+            user.check_in_status = false;
+          this.errors = new Error('Error: Issue with manually checking user in');
+          console.error(error);
+        });
   }
 
   /**
