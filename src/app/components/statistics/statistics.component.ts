@@ -8,7 +8,6 @@ import * as firebase from 'firebase';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppConstants } from '../../helpers/AppConstants';
 
 @Component({
   selector: 'app-statistics',
@@ -19,7 +18,6 @@ import { AppConstants } from '../../helpers/AppConstants';
   styleUrls: ['./statistics.component.css'],
 })
 export class StatisticsComponent implements OnInit {
-
     //pie chart dimension and color
   view: any[] = [700, 500];
   showLegend = true;
@@ -46,7 +44,6 @@ export class StatisticsComponent implements OnInit {
   public StatData = new MatTableDataSource<StatisticsModel>([]); // [] = array
 
   private _user: firebase.User;
-
     /*
      * Error array used to display error messages
      */
@@ -155,14 +152,12 @@ export class StatisticsComponent implements OnInit {
         });
   }
 
-
 //calls the https://staging-dot-hackpsu18.appspot.com/v1/admin/statistics
   getStatData() {
     this.adminService.getStatistics()
             .subscribe((data) => {
               console.log(data);
               this.displayedColumns = StatisticsComponent.tableCols;
-
               data.map((value) => {
                 switch (value.CATEGORY) {
                   case 'shirt_size': {
@@ -187,21 +182,10 @@ export class StatisticsComponent implements OnInit {
             },         (error) => {
               this.errors = new Error('Error: Issue with getting the number of users');
               console.error(error);
-
             });
   }
-
-
     //filter only for shirt sizes, it specifies the category, technically it doesn't need it because of the filter in get data
   shirtsizefilter() {
     return this.StatData.data.filter((data) => data.CATEGORY === 'academic_year');
   }
-
-
-
 }
-
-
-
-
-

@@ -89,7 +89,6 @@ export class RegistrationTableComponent implements OnInit, AfterViewInit {
 
   sendEmail() {
     this.emailListService.emailList = this.selection.selected;
-    this.emailListService.emailList = this.selection.selected;
     this.router.navigate([AppConstants.EMAIL_ENDPOINT])
       .catch(e => console.error(e));
   }
