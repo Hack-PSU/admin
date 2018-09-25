@@ -1,5 +1,5 @@
 <div class="container">
-	<div class = "title-container">
+    <div class="title-container">
         <div class="section-title-word">
             <div class="section-title-letter white-text">S</div>
             <div class="section-title-letter white-text">T</div>
@@ -8,45 +8,37 @@
             <div class="section-title-letter white-text">S</div>
         </div>
     </div>
+
     <div class="container">
+        <mat-table [dataSource]="tshirt_size">
 
+            <ng-container matColumnDef="option">
+                <mat-header-cell *matHeaderCellDef> Shirt Size</mat-header-cell>
+                <mat-cell *matCellDef="let option"> {{option.OPTION}}</mat-cell>
+            </ng-container>
 
-    <mat-table [dataSource]="StatData">
+            <ng-container matColumnDef="count">
+                <mat-header-cell *matHeaderCellDef> Count</mat-header-cell>
+                <mat-cell *matCellDef="let count"> {{count.COUNT}}</mat-cell>
+            </ng-container>
 
-        <ng-container matColumnDef="option">
-            <mat-header-cell *matHeaderCellDef> Shirt Size </mat-header-cell>
-            <mat-cell *matCellDef="let object"> "getStatData.data.map === 'tshirt_size'.CATEGORY "  </mat-cell>
-        </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-        <ng-container matColumnDef="count">
-            <mat-header-cell *matHeaderCellDef> Count </mat-header-cell>
-            <mat-cell *matCellDef="let object"> {{object.COUNT}} </mat-cell>
-        </ng-container>
+        </mat-table>
 
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-    </mat-table>
-
-
-    //a pie chart for academic year
-    <script src="node_modules/chart.js/src/chart.js"></script>
-    <canvas #mycanvas="myCanvas" width="200" height="100"
-            style="border:1px solid #000000;">
-    </canvas>
-    <div style="display: block">
-        <canvas baseChart
-                [data]="pieChartData"="getStatData.data.map === 'academic_year' "
-                [labels]="pieChartLabels"
-                [chartType]="pieChartType"
-                (chartHover)="chartHovered($event)"
-                (chartClick)="chartClicked($event)"></canvas>
-    </div>
 
     </div>
+    <ngx-charts-pie-chart
+            [view]="view"
+            [scheme]="colorScheme"
+            [results]="result"
+            [legend]="showLegend"
+            [explodeSlices]="explodeSlices"
+            [labels]="showLabels"
+            [doughnut]="doughnut">
+    </ngx-charts-pie-chart>
 
-    <!--<div class = "body-container">-->
-        <!--<div *ngFor="let object of shirtsizefilter()"> {{object.CATEGORY}}{{object.OPTION}}{{object.COUNT}}</div>-->
-    <!--</div>-->
+
 </div>
 
