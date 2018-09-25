@@ -18,16 +18,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./statistics.component.css'],
 })
 export class StatisticsComponent implements OnInit {
-    //pie chart dimension and color
-  view: any[] = [700, 500];
-  showLegend = true;
-  colorScheme = {
+
+  pieDim: any[] = [700, 500];
+  piecolor = {
     domain: ['#007486', '#00743C', '#00AEBF', '#333333', '#004A68'],
   };
   showLabels = true;
-  explodeSlices = false;
-  doughnut = true;
-  result: { value: Number, name: string }[] = [];
+  dietarydata: { value: Number, name: string }[] = [];
 
   //construct a static table with two columns with heads option and count
   private static tableCols = ['option', 'count'];
@@ -156,7 +153,6 @@ export class StatisticsComponent implements OnInit {
   getStatData() {
     this.adminService.getStatistics()
             .subscribe((data) => {
-              console.log(data);
               this.displayedColumns = StatisticsComponent.tableCols;
               data.map((value) => {
                 switch (value.CATEGORY) {
@@ -166,7 +162,6 @@ export class StatisticsComponent implements OnInit {
                   }
                   case 'dietary_restriction': {
                     this.dietary_restriction.push(value);
-                    console.log(this.dietary_restriction);
                     break;
                   }
                   default: {
@@ -177,8 +172,6 @@ export class StatisticsComponent implements OnInit {
                     .filter(element => element.OPTION !== '' && element.OPTION !== null)
                     .map(element => ({ value: element.COUNT, name: element.OPTION }));
               });
-              console.log('THIS IS tshirt' + JSON.stringify(this.tshirt_size));
-
             },         (error) => {
               this.errors = new Error('Error: Issue with getting the number of users');
               console.error(error);
