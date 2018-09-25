@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { MatSelectChange, MatGridListModule } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-vis',
@@ -81,14 +82,13 @@ export class VisComponent implements OnInit {
     return accumulator;
   }
 
-  constructor(public adminService: HttpAdminService, public afAuth: AngularFireAuth) {
+  constructor(public adminService: HttpAdminService, public activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
+    this.activatedRoute.data.subscribe((user) => {
       if (user) {
-        this.user = user;
-        this.adminService.getRegistrations(this.user)
+        this.adminService.getRegistrations()
                     .subscribe((data: any[]) => {
                       this.data = data;
                       this.onOptionChange(null);
@@ -113,16 +113,16 @@ export class VisComponent implements OnInit {
                 // Friends
         const friend = this.data.filter(value => value.referral && value.referral.match(/friend/i));
         const friendObj = friend.reduce(VisComponent.reduceData, {});
-                //school|professor|teacher|class|course|department|PSU|major
+                // school|professor|teacher|class|course|department|PSU|major
         const school = this.data.filter(value => value.referral && value.referral.match(/school|professor|advisor|teacher|class|course|department|PSU|major/i));
         const schoolObj = school.reduce(VisComponent.reduceData, {});
-                //email
+                // email
         const email = this.data.filter(value => value.referral && value.referral.match(/email/i));
         const emailObj = email.reduce(VisComponent.reduceData, {});
-                //flyer|banner|poster
+                // flyer|banner|poster
         const ads = this.data.filter(value => value.referral && value.referral.match(/flyer|banner|poster/i));
         const adsObj = ads.reduce(VisComponent.reduceData, {});
-                //extra credit
+                // extra credit
         const excre = this.data.filter(value => value.referral && value.referral.match(/extra|cmpsc|compsc/i));
         const excreObj = excre.reduce(VisComponent.reduceData, {});
 
@@ -162,12 +162,12 @@ export class VisComponent implements OnInit {
         break;
 
       case 'gender':
-        //female
+        // female
         const female = this.data.filter(value => value.gender && value.gender.match(/female/i));
 
         const femaleObj = female.reduce(VisComponent.reduceData, {});
 
-        //male
+        // male
         const male = this.data.filter(value => value.gender && value.gender.match(/male/i));
         const maleObj = male.reduce(VisComponent.reduceData, {});
         this.multi = [

@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-manage-users',
@@ -22,14 +23,7 @@ export class ManageUsersComponent implements OnInit {
   set totalOptions(value: { value: number; text: string }[]) {
     this._totalOptions = value;
   }
-  get user(): firebase.User {
-    return this._user;
-  }
 
-  set user(value: firebase.User) {
-    this._user = value;
-  }
-  private _user: firebase.User;
   private _totalOptions = [
     { value: 1, text: 'Volunteer' },
     { value: 2, text: 'Team Member' },
@@ -42,19 +36,18 @@ export class ManageUsersComponent implements OnInit {
   public emailControl = new FormControl('', [Validators.required, Validators.email]);
   public options: { text, value }[]; // TODO: Refactor into proper model
 
-  constructor(public adminService: HttpAdminService, public afAuth: AngularFireAuth) {
+  constructor(public adminService: HttpAdminService, public activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
+    this.activatedRoute.data.subscribe((user) => {
       if (user) {
-        this._user = user;
-        this.adminService.getAdminStatus(user)
-          .subscribe((adminData) => {
-            this.options = this._totalOptions.slice(0, adminData.privilege);
-          },         (error) => { // TODO: Make better error handler
-            console.error(error);
-          });
+        this.adminService.getAdminStatus()
+            .subscribe((adminData) => {
+              this.options = this._totalOptions.slice(0, adminData.privilege);
+            },         (error) => { // TODO: Make better error handler
+              console.error(error);
+            });
       } else {
         console.error('NO USER');
       }
@@ -63,13 +56,14 @@ export class ManageUsersComponent implements OnInit {
 
   makeAdmin(email: string) {
     if (email != null) {
-      this.adminService.getUserUID(this._user, email).subscribe((user) => {
+      this.adminService.getUserUID(email).subscribe((user) => {
         console.log(user);
-        this.adminService.elevateUser(this._user, user.uid, this.level.toString()).subscribe((resp) => {
-        },                                                                                   (error) => {
-          console.error(error);
-        });
-      },                                                        (error) => {
+        this.adminService.elevateUser(user.uid, this.level.toString())
+            .subscribe((resp) => {
+            },         (error) => {
+              console.error(error);
+            });
+      },                                            (error) => {
         console.error(error);
       });
     }

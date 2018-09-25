@@ -1,0 +1,73 @@
+#007486 Slightly Dark Blue (Teal)
+#00743C Green (Dartmouth Green)
+#00AEBF Sky Blue (Pale Goldenrod)
+#333333 Coal Gray (Jet)
+#004A68 Slighty Darker Blue (Dark Imperial Blue
+#fce06a Sun Yellow (Orange-Yellow)
+
+
+$hackpsu-tiffany-blue: (
+  50: #E0F5F7,
+  100: #B3E7EC,
+  200: #80D7DF,
+  300: #4DC6D2,
+  400: #26BAC9,
+  500: #00AEBF, //Tiffany Blue - Secondary Color
+  600: #00A7B9,
+  700: #009DB1,
+  800: #0094A9,
+  900: #00849B,
+  A100: #C6F5FF,
+  A200: #93ECFF,
+  A400: #60E3FF,
+  A700: #47DFFF,
+  contrast: (
+    50: rgba(255, 255, 255, 0.55),
+    100: rgba(0, 0, 0, 0.55),
+    200: rgba(0, 0, 0, 0.58),
+    300: rgba(0, 0, 0, 0.60),
+    400: rgba(0, 0, 0, 0.63),
+    500: rgba(0, 0, 0, 1.00), 
+    600: rgba(0, 0, 0, 0.68),
+    700: rgba(0, 0, 0, 0.71),
+    800: rgba(0, 0, 0, 0.76),
+    900: rgba(0, 0, 0, 0.93),
+    A100: rgba(0, 0, 0, 0.55),
+    A200: rgba(0, 0, 0, 0.55),
+    A400: rgba(0, 0, 0, 0.56),
+    A700: rgba(0, 0, 0, 0.56),
+  )
+);
+
+$hackpsu-orange-yellow: (
+  50: #FFFBED,
+  100: #FEF6D2,
+  200: #FEF0B5,
+  300: #FDE997,
+  400: #FCE580,
+  500: #FCE06A, //Tiffany Blue- Warm Color
+  600: #FCDC62,
+  700: #FBD857,
+  800: #FBD34D,
+  900: #FACB3C,
+  A100: #FFFFFF,
+  A200: #FFFFFF,
+  A400: #FFF7DF,
+  A700: #FFF0C6,
+  contrast: (
+    50: rgba(255, 255, 255, 0.55),
+    100: rgba(0, 0, 0, 0.55),
+    200: rgba(0, 0, 0, 0.58),
+    300: rgba(0, 0, 0, 0.60),
+    400: rgba(0, 0, 0, 0.63),
+    500: rgba(0, 0, 0, 1.00), 
+    600: rgba(0, 0, 0, 0.68),
+    700: rgba(0, 0, 0, 0.71),
+    800: rgba(0, 0, 0, 0.76),
+    900: rgba(0, 0, 0, 0.93),
+    A100: rgba(0, 0, 0, 0.55),
+    A200: rgba(0, 0, 0, 0.55),
+    A400: rgba(0, 0, 0, 0.56),
+    A700: rgba(0, 0, 0, 0.56),
+  )
+);

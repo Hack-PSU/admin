@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { Router } from '@angular/router';
 import { StatisticsModel } from '../../models/statistics-model';
 
 import * as firebase from 'firebase';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 
-
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppConstants } from '../../helpers/AppConstants';
 
 @Component({
   selector: 'app-statistics',
@@ -133,33 +131,34 @@ export class StatisticsComponent implements OnInit {
      * 1: Yes, I am a veteran
      */
   private veteran = [];
-
-  constructor(public adminService: HttpAdminService,
-              public afAuth: AngularFireAuth,
-              private router: Router,
-              private snackBar: MatSnackBar,
-              public dialog: MatDialog) {
+  constructor(
+    public adminService: HttpAdminService,
+    public activatedRoute: ActivatedRoute,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog,
+  ) {
   }
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
-      if (user) {
-        this._user = user;
-        this.getStatData();
-      } else {
-        this.errors = new Error('Error: No user')
-        console.error('No User');
-      }
-    },                                  (error) => {
-      this.errors = new Error('Error: Issue with authentication of user');
-      console.error(error);
-    });
+    this.activatedRoute.data
+        .subscribe((user) => {
+          if (user) {
+            this.getStatData();
+          } else {
+            this.errors = new Error('Error: No user');
+            console.error('No User');
+          }
+        },         (error) => {
+          this.errors = new Error('Error: Issue with authentication of user');
+          console.error(error);
+        });
   }
 
 
 //calls the https://staging-dot-hackpsu18.appspot.com/v1/admin/statistics
   getStatData() {
-    this.adminService.getStatistics(this._user)
+    this.adminService.getStatistics()
             .subscribe((data) => {
               console.log(data);
               this.displayedColumns = StatisticsComponent.tableCols;

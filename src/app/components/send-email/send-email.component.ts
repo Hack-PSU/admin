@@ -10,6 +10,7 @@ import { htmlTemplate } from '../../../assets/email_template';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AddEmailDialogComponent } from './add-email-dialog';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-send-email',
@@ -30,7 +31,7 @@ export class SendEmailComponent implements OnInit {
   mDisabled = true;
 
   constructor(public emailListService: EmailListService, public dialog: MatDialog,
-              public adminService: HttpAdminService, public afAuth: AngularFireAuth,
+              public adminService: HttpAdminService, public activatedRoute: ActivatedRoute,
               private _formBuilder: FormBuilder) {
 
   }
@@ -76,7 +77,6 @@ export class SendEmailComponent implements OnInit {
     // Generate email sending request
     const generatedBody = this.generateEmailFromTemplate();
     this.adminService.sendEmail(
-      this.afAuth.auth.currentUser,
       generatedBody,
       this.emailSubject,
       this.emailListService.emailList.map((value) => {

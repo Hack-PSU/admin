@@ -11,7 +11,7 @@ import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserViewComponent } from './components/user-view/user-view.component';
-import { CustomMaterialModule } from './helpers/custom.materials'
+import { CustomMaterialModule } from './helpers/custom.materials';
 import { RegistrationTableComponent } from './components/registration-table/registration-table.component';
 import { ManageUsersComponent } from './components/manage-users/manage-users.component';
 import { PreRegistrationTableComponent } from './components/pre-registration-table/pre-registration-table.component';
@@ -39,6 +39,11 @@ import { ViewUserDataDialogComponent } from './components/user-data/view-user-da
 import { ManageAdminComponent } from './components/manage-admin/manage-admin.component';
 import { LocationDialogComponent } from './components/manage-admin/location-dialog';
 import { StatisticsComponent } from './components/statistics/statistics.component';
+import { AuthService, CustomErrorHandlerService } from './services/services';
+import { AlertModule } from 'ngx-alerts';
+import { NgProgressModule } from '@ngx-progressbar/core';
+import { UserResolver } from './helpers/resolvers/UserResolver/user.resolver';
+import { NgProgressHttpModule } from '@ngx-progressbar/http';
 
 @NgModule({
   declarations: [
@@ -79,9 +84,19 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
     AngularFireAuthModule,
     CustomMaterialModule,
     NgxChartsModule,
+    AlertModule.forRoot({ maxMessages: 5, timeout: 5000 }),
+    NgProgressModule.forRoot(),
+    NgProgressHttpModule,
   ],
-  entryComponents: [AddEmailDialogComponent, AddUserClassDialogComponent, AddEventDialogComponent, AddLocationDialogComponent, UpdateLocationDialogComponent, ViewUserDataDialogComponent, LocationDialogComponent],
-  providers: [EmailListService, HttpAdminService, AngularFireAuth],
+  entryComponents: [
+    AddEmailDialogComponent, AddUserClassDialogComponent, AddEventDialogComponent,
+    AddLocationDialogComponent, UpdateLocationDialogComponent,
+    ViewUserDataDialogComponent, LocationDialogComponent,
+  ],
+  providers: [
+    EmailListService, HttpAdminService, AngularFireAuth, AuthService,
+    CustomErrorHandlerService, UserResolver,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {

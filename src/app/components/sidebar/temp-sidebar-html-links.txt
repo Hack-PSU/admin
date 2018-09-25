@@ -1,0 +1,39 @@
+<mat-expansion-panel>
+<mat-expansion-panel-header>
+    <mat-panel-title>
+        Manage Registrations
+    </mat-panel-title>
+</mat-expansion-panel-header>
+<a mat-list-item routerLink="/preregistrations">Pre-Registration Data</a>      
+<a mat-list-item routerLink="/registrations">Registration Data</a>
+<a mat-list-item routerLink="/rsvp">RSVP Data</a>
+<a mat-list-item routerLink="/classes"> Extra Credit Classes</a>
+<a mat-list-item routerLink="/vis">Visualization</a>
+</mat-expansion-panel>
+<mat-expansion-panel>
+<mat-expansion-panel-header>
+    <mat-panel-title>
+        Manage Event
+    </mat-panel-title>
+</mat-expansion-panel-header>
+<a mat-list-item routerLink="/live">Live Updates</a>
+<a mat-list-item routerLink="/events">Manage Events</a>
+<a mat-list-item routerLink="/locations">Manage Locations</a>
+</mat-expansion-panel>
+<mat-expansion-panel>
+<mat-expansion-panel-header>
+    <mat-panel-title>
+        Manage Users
+    </mat-panel-title>
+</mat-expansion-panel-header>
+<a mat-list-item routerLink="/users"> Upgrade User</a>
+</mat-expansion-panel>
+
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Finance
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <a mat-list-item routerLink="/preregistrations">Finances</a> 
+</mat-expansion-panel>

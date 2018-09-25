@@ -6,12 +6,120 @@
 // **Be sure that you only ever include this mixin once!**
 @include mat-core();
 
+/**
+  Primary color: Dark Imperial Blue: #004A68
+  Secondary color: Tiffany Blue: #00AEBF
+  Warm Color: Orange-Yellow #fce06a
+  Other Colors:
+    Teal: #007486
+    Dartmouth Green: #00743C
+    Jet: #333333
+**/
 
+$hackpsu-dark-imperial-blue: (
+  50: #E0E9ED,
+  100: #B3C9D2,
+  200: #80A5B4,
+  300: #4D8095,
+  400: #26657F,
+  500: #004A68, //Dark Imperial Blue - Primary Color
+  600: #004360,
+  700: #003A55,
+  800: #00324B,
+  900: #00223A,
+  A100: #70B8FF,
+  A200: #3D9EFF,
+  A400: #0A85FF,
+  A700: #0078F0,
+  contrast: (
+    50: rgba(0, 0, 0, 0.55),
+    100: rgba(0, 0, 0, 0.59),
+    200: rgba(0, 0, 0, 0.66),
+    300: rgba(0, 0, 0, 0.59),
+    400: rgba(0, 0, 0, 0.90),
+    500: rgba(255, 255, 255, 1.00),
+    600: rgba(255, 255, 255, 0.57),
+    700: rgba(255, 255, 255, 0.54),
+    800: rgba(255, 255, 255, 0.52),
+    900: rgba(255, 255, 255, 0.48),
+    A100: rgba(0, 0, 0, 0.63),
+    A200: rgba(0, 0, 0, 0.74),
+    A400: rgba(255, 255, 255, 0.92),
+    A700: rgba(255, 255, 255, 0.84),
+  )
+);
+
+$hackpsu-tiffany-blue: (
+  50: #E0F5F7,
+  100: #B3E7EC,
+  200: #80D7DF,
+  300: #4DC6D2,
+  400: #26BAC9,
+  500: #00AEBF, //Tiffany Blue - Accent Color
+  600: #00A7B9,
+  700: #009DB1,
+  800: #0094A9,
+  900: #00849B,
+  A100: #C6F5FF,
+  A200: #93ECFF,
+  A400: #60E3FF,
+  A700: #47DFFF,
+  contrast: (
+    50: rgba(0, 0, 0, 0.55),
+    100: rgba(0, 0, 0, 0.59),
+    200: rgba(0, 0, 0, 0.66),
+    300: rgba(0, 0, 0, 0.59),
+    400: rgba(0, 0, 0, 0.90),
+    500: rgba(255, 255, 255, 1.00),
+    600: rgba(255, 255, 255, 0.57),
+    700: rgba(255, 255, 255, 0.54),
+    800: rgba(255, 255, 255, 0.52),
+    900: rgba(255, 255, 255, 0.48),
+    A100: rgba(0, 0, 0, 0.63),
+    A200: rgba(0, 0, 0, 0.74),
+    A400: rgba(255, 255, 255, 0.92),
+    A700: rgba(255, 255, 255, 0.84),
+  )
+);
+
+$hackpsu-orange-yellow: (
+  50: #FFFBED,
+  100: #FEF6D2,
+  200: #FEF0B5,
+  300: #FDE997,
+  400: #FCE580,
+  500: #FCE06A, //Orange Yellow - Warn Color
+  600: #FCDC62,
+  700: #FBD857,
+  800: #FBD34D,
+  900: #FACB3C,
+  A100: #FFFFFF,
+  A200: #FFFFFF,
+  A400: #FFF7DF,
+  A700: #FFF0C6,
+  contrast: (
+    50: rgba(0, 0, 0, 0.55),
+    100: rgba(0, 0, 0, 0.59),
+    200: rgba(0, 0, 0, 0.66),
+    300: rgba(0, 0, 0, 0.59),
+    400: rgba(0, 0, 0, 0.90),
+    500: rgba(255, 255, 255, 1.00),
+    600: rgba(255, 255, 255, 0.57),
+    700: rgba(255, 255, 255, 0.54),
+    800: rgba(255, 255, 255, 0.52),
+    900: rgba(255, 255, 255, 0.48),
+    A100: rgba(0, 0, 0, 0.63),
+    A200: rgba(0, 0, 0, 0.74),
+    A400: rgba(255, 255, 255, 0.92),
+    A700: rgba(255, 255, 255, 0.84),
+  )
+);
 
 // Define the default theme (same as the example above).
-$admin-app-primary: mat-palette($mat-blue, 200);
-$admin-app-accent:  mat-palette($mat-deep-orange, A200);
-$admin-app-theme:   mat-light-theme($admin-app-primary, $admin-app-accent);
+$admin-app-primary: mat-palette($hackpsu-dark-imperial-blue);
+$admin-app-accent:  mat-palette($hackpsu-tiffany-blue);
+$admin-app-warn:    mat-palette($hackpsu-orange-yellow);
+$admin-app-theme:   mat-light-theme($admin-app-primary, $admin-app-accent, $admin-app-warn);
 
 // Include the default theme styles.
 @include angular-material-theme($admin-app-theme);

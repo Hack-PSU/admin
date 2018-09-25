@@ -4,11 +4,16 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 
-import { MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
+import {
+  MatDialog,
+  MatPaginator,
+  MatSnackBar,
+  MatSort,
+  MatTableDataSource,
+} from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
 import { AddUserClassDialogComponent } from './add-user-class-dialog';
 
 @Component({
@@ -32,9 +37,9 @@ export class ExtraCreditClassesComponent implements OnInit, AfterViewInit {
   constructor(
     public adminService: HttpAdminService,
     public afAuth: AngularFireAuth,
-    private router: Router,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar,
+  ) {
   }
 
   ngOnInit() {
@@ -69,34 +74,37 @@ export class ExtraCreditClassesComponent implements OnInit, AfterViewInit {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.selection.clear() :
+    this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   onClassesClick() {
-    this.adminService.getExtraCreditClasses(this.user).subscribe((data) => {
-      this.displayedColumns = ExtraCreditClassesComponent.regCols;
-      this.dataSource.data = data;
-    },                                                           (error) => {
-      console.error(error);
-    });
+    this.adminService.getExtraCreditClasses()
+        .subscribe((data) => {
+          this.displayedColumns = ExtraCreditClassesComponent.regCols;
+          this.dataSource.data = data;
+        },         (error) => {
+          console.error(error);
+        });
   }
 
   insertLocation(locationValue: string) {
-  	const mLocationValue = locationValue.trim();
-    this.adminService.addNewLocation(this.user, mLocationValue).subscribe((resp) => {
-      this.refreshData();
-    },                                                                    (error) => {
-      console.error(error);
-    });
+    const mLocationValue = locationValue.trim();
+    this.adminService.addNewLocation(mLocationValue)
+        .subscribe((resp) => {
+          this.refreshData();
+        },         (error) => {
+          console.error(error);
+        });
   }
 
   removeLocation(uid: string) {
-    this.adminService.removeLocation(this.user, uid).subscribe((resp) => {
-      this.refreshData();
-    },                                                         (error) => {
-      console.error(error);
-    });
+    this.adminService.removeLocation(uid)
+        .subscribe((resp) => {
+          this.refreshData();
+        },         (error) => {
+          console.error(error);
+        });
   }
 
   refreshData() {
@@ -111,19 +119,21 @@ export class ExtraCreditClassesComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log(result);
       if (result) {
-        this.adminService.getUserUID(this.user, result).subscribe((resp) => {
-          for (let i = 0; i < this.selection.selected.length; i++) {
-            this.adminService.addUserToExtraClass(this.user, resp.uid, this.selection.selected[i].uid).subscribe((rest) => {
-              this.openSnackBar('Success: Added User', '');
-            },                                                                                                   (error) => {
+        this.adminService.getUserUID(result)
+            .subscribe((resp) => {
+              this.selection.selected.forEach(({ uid }) => {
+                this.adminService.addUserToExtraClass(resp.uid, uid)
+                .subscribe((rest) => {
+                  this.openSnackBar('Success: Added User', '');
+                },         (error) => {
+                  console.error(error);
+                  this.openSnackBar('Error: Failed to Add User', '');
+                });
+              });
+            },         (error) => {
               console.error(error);
-              this.openSnackBar('Error: Failed to Add User', '');
+              this.openSnackBar('Error: Issue with provided Email', '');
             });
-          }
-        },                                                        (error) => {
-          console.error(error);
-          this.openSnackBar('Error: Issue with provided Email', '');
-        });
       }
     });
   }

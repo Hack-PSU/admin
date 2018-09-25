@@ -1,7 +1,3 @@
-<div *ngIf="afAuth.authState | async as user; else showLogin">
-
-</div>
-<ng-template #showLogin>
     <!-- LOGIN FORM -->
     <div class="container-fluid login-container">
         <div class="logo text-center">Login</div>
@@ -47,10 +43,9 @@
                 <a class="btn btn-block btn-social btn-github" (click)="loginGithub()">
                     <span class="fa fa-github"></span> Sign in with Github
                 </a>
-                <a class="btn btn-block btn-social btn-email" (click)="signup()">
+                <a class="btn btn-block btn-social btn-email" (click)="signUp()">
                     <span class="fa fa-envelope"></span> Sign up with email
                 </a>
             </div>
         </div>
     </div>
-</ng-template>

@@ -8,7 +8,7 @@ import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar } from '@angular
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-rsvp',
@@ -21,15 +21,7 @@ import { Router } from '@angular/router';
 
 
 export class ManageRsvpComponent implements OnInit, AfterViewInit {
-  get user(): firebase.User {
-    return this._user;
-  }
-
-  set user(value: firebase.User) {
-    this._user = value;
-  }
   private static regCols = [/*'select',*/ 'firstname', 'lastname', 'email', 'pin', 'uid', 'rsvp_time'];
-  private _user: firebase.User;
 
   public displayedColumns = ManageRsvpComponent.regCols;
   public dataSource = new MatTableDataSource<any>([]);
@@ -49,15 +41,14 @@ export class ManageRsvpComponent implements OnInit, AfterViewInit {
 
   constructor(
     public adminService: HttpAdminService,
-    public afAuth: AngularFireAuth,
+    public activatedRoute: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
+    this.activatedRoute.data.subscribe((user) => {
       if (user) {
-        this._user = user;
         this.onRSVPClick();
       } else {
         console.error('NO USER');
@@ -90,7 +81,7 @@ export class ManageRsvpComponent implements OnInit, AfterViewInit {
   }
 
   onRSVPClick() {
-    this.adminService.getRSVP(this._user).subscribe((data) => {
+    this.adminService.getRSVP().subscribe((data) => {
       this.displayedColumns = ManageRsvpComponent.regCols;
       this.dataSource.data = data;
     },                                              (error) => {

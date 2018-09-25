@@ -1,271 +1,194 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { AppConstants } from '../../helpers/AppConstants';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
-import * as firebase from 'firebase';
 import { PreRegistrationModel } from '../../models/pre-registration-model';
 import { RegistrationModel } from '../../models/registration-model';
 import { LocationModel } from '../../models/location-model';
 import { ClassesModel } from '../../models/classes-model';
 import { CountModel } from '../../models/count-model';
 import { StatisticsModel } from '../../models/statistics-model';
+import 'rxjs-compat/add/observable/from';
+import { ApiRoute } from '../../models/ApiRoute';
+import { CustomErrorHandlerService } from '../custom-error-handler/custom-error-handler.service';
+import { BaseHttpService } from '../base-http/base-http.service';
+import { AuthService } from '../AuthService/auth.service';
 
 @Injectable()
-export class HttpAdminService {
+export class HttpAdminService extends BaseHttpService {
 
-  constructor(private http: HttpClient) {
-
+  constructor(http: HttpClient, authService: AuthService, errorHandler: CustomErrorHandlerService) {
+    super(http, authService, errorHandler);
   }
 
-  getAdminStatus(user: firebase.User) {
-    const API_ENDPOINT = 'users/';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let headers = new HttpHeaders();
-        headers = headers.set('idtoken', idToken);
-        return this.http.get<{ admin, privilege }>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { headers });
-      });
+  getAdminStatus(): Observable<{ admin, privilege }> {
+    const apiRoute = new ApiRoute('users/', true);
+    return super.genericGet<{ admin, privilege }>(apiRoute);
   }
 
-  getPreRegistrations(user: firebase.User, limit?: number): Observable<PreRegistrationModel[]> {
-    const API_ENDPOINT = 'admin/preregistered';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<PreRegistrationModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getPreRegistrations(limit?: number): Observable<PreRegistrationModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/preregistered',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<PreRegistrationModel[]>(apiRoute);
   }
 
-  getRegistrations(user: firebase.User, limit?: number): Observable<RegistrationModel[]> {
-    const API_ENDPOINT = 'admin/registered';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<RegistrationModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getRegistrations(limit?: number): Observable<RegistrationModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/registered',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<RegistrationModel[]>(apiRoute);
   }
 
-
-  getUserUID(user: firebase.User, email: string) {
-    const API_ENDPOINT = 'admin/userid';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        params = params.set('email', email);
-        return this.http.get<{ uid, displayName }>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getUserUID(email: string) {
+    const apiRoute = new ApiRoute(
+      'admin/userid',
+      true,
+      new Map().set('email', email),
+    );
+    return super.genericGet<{ uid, displayName }>(apiRoute);
   }
 
-  elevateUser(user: firebase.User, uid: string, privilege: string) {
-    const API_ENDPOINT = 'admin/makeadmin';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        const params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        return this.http.post(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { uid, privilege }, { headers: myHeader });
-      });
+  elevateUser(uid: string, privilege: string) {
+    const apiRoute = new ApiRoute(
+      'admin/makeadmin',
+      true,
+    );
+    return super.genericPost<{}>(apiRoute, { uid, privilege });
   }
 
-  sendEmail(user: firebase.User, emailBody: string, emailSubject: string, emailObjects: any[]): Observable<any> {
-    console.log(emailSubject, emailObjects);
-    const API_ENDPOINT = 'admin/email';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        const params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-
-        // CHECK THAT REPLACEMENTS ARE VALID
-        const replacements = emailBody.match(/\$\w+\$/g);
-        replacements.forEach((replacement) => {
-          emailObjects.forEach((object) => {
-            const key = replacement.replace(/\$/g, '');
-            if (!object.substitutions
-                || object.substitutions[key] === null
-                || typeof object.substitutions[key] === 'undefined') {
-              throw Observable.throw('Replacements are invalid: ' + key);
-            }
-          })
+  sendEmail(emailBody: string, emailSubject: string, emailObjects: any[]): Observable<any> {
+    const apiRoute = new ApiRoute(
+      'admin/email',
+      true,
+    );
+    // CHECK THAT REPLACEMENTS ARE VALID
+    const replacements = emailBody.match(/\$\w+\$/g);
+    try {
+      replacements.forEach((replacement) => {
+        emailObjects.forEach((object) => {
+          const key = replacement.replace(/\$/g, '');
+          if (!object.substitutions
+              || object.substitutions[key] === null
+              || typeof object.substitutions[key] === 'undefined') {
+            throw new Error('Replacements are invalid: ' + key);
+          }
         });
-        return this.http.post(AppConstants.API_BASE_URL.concat(API_ENDPOINT),
-                              { subject: emailSubject, html: emailBody, emails: emailObjects },
-                              { headers: myHeader });
       });
+    } catch (error) {
+      return Observable.throwError(error);
+    }
+    return super.genericPost<{}>(
+      apiRoute,
+      { subject: emailSubject, html: emailBody, emails: emailObjects },
+    );
   }
 
-  getRSVP(user: firebase.User, limit?: number): Observable<RegistrationModel[]> {
-    const API_ENDPOINT = 'admin/rsvp_list';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<RegistrationModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getRSVP(limit?: number): Observable<RegistrationModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/rsvp_list',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<RegistrationModel[]>(apiRoute);
   }
 
-  getLocations(user: firebase.User, limit?: number): Observable<LocationModel[]> {
-    const API_ENDPOINT = 'admin/location_list';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        //console.log(idToken);
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<LocationModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getLocations(limit?: number): Observable<LocationModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/location_list',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<LocationModel[]>(apiRoute);
   }
 
-  addNewLocation(user: firebase.User, locationName: string) {
-    const API_ENDPOINT = 'admin/create_location';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        const params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        return this.http.post(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { locationName }, { headers: myHeader });
-      });
+  addNewLocation(locationName: string) {
+    const apiRoute = new ApiRoute(
+      'admin/create_location',
+      true,
+    );
+    return super.genericPost<{}>(apiRoute, { locationName });
   }
 
-  removeLocation(user: firebase.User, uid: string) {
-    uid = uid.toString();
-    const API_ENDPOINT = 'admin/remove_location';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        const params = new HttpParams();
-        console.log(idToken);
-        myHeader = myHeader.set('idtoken', idToken);
-        return this.http.post(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { uid }, { headers: myHeader });
-      });
+  removeLocation(uid: string) {
+    const apiRoute = new ApiRoute(
+      'admin/remove_location',
+      true,
+    );
+    return super.genericPost<{}>(apiRoute, { uid });
   }
 
-  updateLocation(user: firebase.User, uid: string, location_name: string) {
-    uid = uid.toString();
-    const API_ENDPOINT = 'admin/update_location';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        const params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        return this.http.post(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { uid, location_name }, { headers: myHeader });
-      });
+  updateLocation(uid: string, location_name: string) {
+    const apiRoute = new ApiRoute(
+      'admin/update_location',
+      true,
+    );
+    return super.genericPost<{}>(apiRoute, { uid, locationName: location_name });
   }
 
-  getExtraCreditClasses(user: firebase.User, limit?: number): Observable<ClassesModel[]> {
-    const API_ENDPOINT = 'admin/extra_credit_list';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<ClassesModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getExtraCreditClasses(limit?: number): Observable<ClassesModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/extra_credit_list',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<ClassesModel[]>(apiRoute);
   }
 
-  addUserToExtraClass(user: firebase.User, uid: string, cid: string) {
-    const API_ENDPOINT = 'admin/assign_extra_credit';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        const params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        return this.http.post(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { uid, cid }, { headers: myHeader });
-      });
+  addUserToExtraClass(uid: string, cid: string) {
+    const apiRoute = new ApiRoute(
+      'admin/assign_extra_credit',
+      true,
+    );
+    return super.genericPost<{}>(apiRoute, { uid, cid });
   }
 
-  getAllUsers(user: firebase.User, limit?: number): Observable<PreRegistrationModel[]> {
-    const API_ENDPOINT = 'admin/user_data';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<PreRegistrationModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getAllUsers(limit?: number): Observable<PreRegistrationModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/user_data',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<PreRegistrationModel[]>(apiRoute);
   }
 
-  getPreRegCount(user: firebase.User, limit?: number): Observable<CountModel[]> {
-    const API_ENDPOINT = 'admin/prereg_count';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<CountModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getPreRegCount(limit?: number): Observable<CountModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/prereg_count',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<CountModel[]>(apiRoute);
   }
 
-  getRegCount(user: firebase.User, limit?: number): Observable<CountModel[]> {
-    const API_ENDPOINT = 'admin/reg_count';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<CountModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getRegCount(limit?: number): Observable<CountModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/reg_count',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<CountModel[]>(apiRoute);
   }
 
-  getAllUserCount(user: firebase.User, limit?: number): Observable<CountModel[]> {
-    const API_ENDPOINT = 'admin/user_count';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        console.log(idToken);
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<CountModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getAllUserCount(limit?: number): Observable<CountModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/user_count',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<CountModel[]>(apiRoute);
   }
 
-  getStatistics(user: firebase.User, limit?: number): Observable<StatisticsModel[]> {
-    const API_ENDPOINT = 'admin/statistics';
-    return Observable.fromPromise(user.getIdToken(true))
-      .switchMap((idToken: string) => {
-        let myHeader = new HttpHeaders();
-        let params = new HttpParams();
-        console.log(idToken);
-        myHeader = myHeader.set('idtoken', idToken);
-        if (limit) {
-          params = params.set('limit', limit.toString());
-        }
-        return this.http.get<StatisticsModel[]>(AppConstants.API_BASE_URL.concat(API_ENDPOINT), { params, headers: myHeader });
-      });
+  getStatistics(limit?: number): Observable<StatisticsModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/statistics',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<StatisticsModel[]>(apiRoute);
   }
 }
