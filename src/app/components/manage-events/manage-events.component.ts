@@ -1,28 +1,32 @@
 /**
  * TODO: Add docstring explaining component
  */
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { EventModel } from '../../models/event-model';
-import { EventsService } from '../../services/events/events.service';
-import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
-import * as uuid from 'uuid/v4';
-import { Observable } from 'rxjs/Observable';
-import { AngularFireAuth } from 'angularfire2/auth';
+import {
+  MatDialog,
+  MatPaginator,
+  MatSnackBar,
+  MatSort,
+  MatTableDataSource,
+} from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppConstants } from '../../helpers/AppConstants';
 import { AddEventDialogComponent } from './add-event-dialog';
+import { HttpAdminService } from '../../services/services';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-manage-events',
   templateUrl: './manage-events.component.html',
   styleUrls: ['./manage-events.component.css'],
   providers: [
-    EventsService,
     MatSnackBar,
   ],
 })
 // TODO: Revamp this
-export class ManageEventsComponent implements OnInit {
+export class ManageEventsComponent implements OnInit, AfterViewInit {
 
   static get regCols(): string[] {
     return this._regCols;
@@ -35,7 +39,7 @@ export class ManageEventsComponent implements OnInit {
   private static _regCols =
     [
       'location_name',
-      'uid',
+      // 'uid',
       'event_start_time',
       'event_end_time',
       'event_title',
@@ -48,8 +52,11 @@ export class ManageEventsComponent implements OnInit {
   public newEvent: EventModel;
   public dataSource = new MatTableDataSource<EventModel>([]);
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) table: MatSort;
+
   constructor(
-    private eventsService: EventsService,
+    private httpService: HttpAdminService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
@@ -59,18 +66,10 @@ export class ManageEventsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.eventsService.subject(new Event('connected'))
-        .subscribe(() => {
-          this.dataSource.data = [];
-        });
-    this.eventsService.subject(new Event('disconnected'))
-        .subscribe(() => {
-          this.dataSource.data = [];
-        });
     this.activatedRoute.data
         .subscribe((user) => {
           if (user) {
-            this.eventsService.getEvents('').subscribe((events: EventModel[]) => {
+            this.httpService.getEvents().subscribe((events: EventModel[]) => {
               this.dataSource.data = this.dataSource.data.concat(events);
             });
           } else {
@@ -79,39 +78,54 @@ export class ManageEventsComponent implements OnInit {
         });
   }
 
+  /**
+   * After the initilization of all angular components, set the variables
+   *
+   * After the component view has been initialized, set the local data source paginiator property
+   * to the new instance of pagninator. Similar effect with sort.
+   *
+   */
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.table;
+  }
+
   refreshData() {
-    this.eventsService.getEvents('').subscribe((events: EventModel[]) => {
-      this.dataSource.data = this.dataSource.data.concat(events);
+    this.httpService.getEvents().subscribe((events: EventModel[]) => {
+      this.dataSource.data = this.dataSource.data = events;
     });
   }
 
   addLocation() {
     const dialogRef = this.dialog.open(AddEventDialogComponent, {
-      width: '350px',
+      width: '400px',
       data: Object.keys(this.newEvent),
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
-      if (result) {
-        result.uid = uuid();
-        result.event_start_time = new Date(result.event_start_time).getTime().toString();
-        result.event_end_time = new Date(result.event_end_time).getTime().toString();
-        this.eventsService.addEvent(result)
-            .subscribe((value) => {
-              this.snackBar.open('success', null, {
-                duration: 2000,
-              });
-            },         (error) => {
-              this.snackBar.open(error.body, null, {
-                duration: 2000,
-              });
-            });
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(
+        switchMap((result: EventModel) => {
+          if (result) {
+            result.event_start_time = new Date(result.event_start_time).getTime();
+            result.event_end_time = new Date(result.event_end_time).getTime();
+            return this.httpService.addEvent(result);
+          }
+          return of(new Error('Add a valid event'));
+        }),
+      )
+      .subscribe(() => {
+        this.snackBar.open('success', null, {
+          duration: 2000,
+        });
+      },         (error) => {
+        this.snackBar.open(error.body, null, {
+          duration: 2000,
+        });
+      });
   }
 
   getTimeString(time: string) {
-    return new Date(parseInt(time, 10)).toLocaleTimeString();
+    return new Date(parseInt(time, 10)).toLocaleTimeString('nu', { day: 'numeric', month: 'short' });
   }
 
   applyFilter(value) {

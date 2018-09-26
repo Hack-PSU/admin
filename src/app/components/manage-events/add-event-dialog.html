@@ -1,8 +1,32 @@
-<h1 mat-dialog-title>Add Recipient</h1>
+<h1 mat-dialog-title>Add Event</h1>
 <div mat-dialog-content>
-    <p>Add new recipient</p>
-    <mat-form-field *ngFor="let input of data">
-        <input matInput [(ngModel)]="outData[input]" placeholder="{{input}}">
+    <mat-form-field>
+        <input [matAutocomplete]="auto" matInput [(ngModel)]="outData.event_location" placeholder="Event Location">
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of locationList | async" [value]="option.uid.toString()">
+                {{option.location_name}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [(ngModel)]="outData.event_start_time" placeholder="Start date [Format: December 17, 1995 03:24:00]">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [(ngModel)]="outData.event_end_time" placeholder="End date [Format: December 17, 1995 03:24:00]">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [(ngModel)]="outData.event_title" placeholder="Event Title">
+    </mat-form-field>
+    <mat-form-field>
+        <textarea matInput [(ngModel)]="outData.event_description" placeholder="Event description"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+        <input [matAutocomplete]="autoType" matInput [(ngModel)]="outData.event_type" placeholder="Event type">
+        <mat-autocomplete #autoType="matAutocomplete">
+            <mat-option value="food">Food</mat-option>
+            <mat-option value="workshop">Workshop</mat-option>
+            <mat-option value="activity">Activity</mat-option>
+        </mat-autocomplete>
     </mat-form-field>
 </div>
 <div mat-dialog-actions>

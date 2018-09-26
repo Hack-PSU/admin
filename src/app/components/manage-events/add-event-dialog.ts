@@ -1,5 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { EventModel } from '../../models/event-model';
+import { HttpAdminService } from '../../services/services';
+import { LocationModel } from '../../models/location-model';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-event-dialog',
@@ -8,11 +13,19 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 })
 export class AddEventDialogComponent {
 
-  public outData: any;
+  public outData: EventModel;
+  public locationList: Observable<LocationModel[]>;
 
-  constructor(public dialogRef: MatDialogRef<AddEventDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.outData = {};
+  constructor(
+    public dialogRef: MatDialogRef<AddEventDialogComponent>,
+    private httpService: HttpAdminService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {
+    this.outData = new EventModel();
+    this.locationList = this.httpService.getLocations()
+                            .pipe(
+                              take(1),
+                            );
     data.forEach(d => this.outData[d] = '');
   }
 }

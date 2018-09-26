@@ -35,12 +35,6 @@
                 <mat-cell *matCellDef="let user"> {{user.location_name}}</mat-cell>
             </ng-container>
 
-            <!-- UID Column -->
-            <ng-container matColumnDef="uid">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> UID</mat-header-cell>
-                <mat-cell *matCellDef="let user"> {{user.uid}}</mat-cell>
-            </ng-container>
-
             <!-- Event start time Column -->
             <ng-container matColumnDef="event_start_time">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Event Start Time</mat-header-cell>
@@ -73,17 +67,17 @@
 
             <ng-container matColumnDef="button">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Action</mat-header-cell>
-                <mat-cell *matCellDef="let user">
+                <mat-cell *matCellDef="let event">
                     <div class="action-menu">
                         <button mat-icon-button [matMenuTriggerFor]="crud_menu">
                             <mat-icon>settings</mat-icon>
                         </button>
                         <mat-menu #crud_menu="matMenu">
                             <button mat-menu-item (click)="refreshData()">
-                                <mat-icon>refresh</mat-icon>
+                                <mat-icon>edit</mat-icon>
                                 <span>Update Event</span>
                             </button>
-                            <button mat-menu-item (click)="removeLocation(user.uid)">
+                            <button mat-menu-item (click)="removeEvent(event.uid)">
                                 <mat-icon>delete</mat-icon>
                                 <span>Remove Event</span>
                             </button>

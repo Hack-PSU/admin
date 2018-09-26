@@ -13,6 +13,7 @@ import { ApiRoute } from '../../models/ApiRoute';
 import { CustomErrorHandlerService } from '../custom-error-handler/custom-error-handler.service';
 import { BaseHttpService } from '../base-http/base-http.service';
 import { AuthService } from '../AuthService/auth.service';
+import { EventModel } from '../../models/event-model';
 
 @Injectable()
 export class HttpAdminService extends BaseHttpService {
@@ -42,6 +43,23 @@ export class HttpAdminService extends BaseHttpService {
       limit ? new Map<string, any>().set('limit', limit) : null,
     );
     return super.genericGet<RegistrationModel[]>(apiRoute);
+  }
+
+  getEvents(limit?: number): Observable<EventModel[]> {
+    const apiRoute = new ApiRoute(
+      'live/events',
+      true,
+      limit ? new Map<string, any>().set('limit', limit) : null,
+    );
+    return super.genericGet<EventModel[]>(apiRoute);
+  }
+
+  addEvent(event: EventModel): Observable<{}> {
+    const apiRoute = new ApiRoute(
+    'live/event',
+    true,
+    );
+    return super.genericPost<{}>(apiRoute, event.restRepr());
   }
 
   getUserUID(email: string) {
