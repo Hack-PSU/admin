@@ -21,12 +21,13 @@ export class StatisticsComponent implements OnInit {
 
   pieDim: any[] = [700, 500];
   piecolor = {
-    domain: ['#007486', '#00743C', '#00AEBF', '#333333', '#004A68'],
+    domain: ['#007486', '#00743C', '#00AEBF', '#333333', '#004A68', '#EBF5FB'],
   };
-  showLabels = true;
+  //legend = true;
+  labels = true;
   dietarydata: { value: Number, name: string }[] = [];
 
-  //construct a static table with two columns with heads option and count
+  // construct a static table with two columns with heads option and count
   private static tableCols = ['option', 'count'];
   public displayedColumns: string[];
 
@@ -101,7 +102,7 @@ export class StatisticsComponent implements OnInit {
      * 4: X-Large
      * 5: XX-Large
      */
-  private tshirt_size = [];
+  public tshirt_size = [];
 
     /*
      * Index of the array represents the gender they identify with
@@ -168,7 +169,7 @@ export class StatisticsComponent implements OnInit {
                     break;
                   }
                 }
-                this.result = this.dietary_restriction
+                this.dietarydata = this.dietary_restriction
                     .filter(element => element.OPTION !== '' && element.OPTION !== null)
                     .map(element => ({ value: element.COUNT, name: element.OPTION }));
               });
