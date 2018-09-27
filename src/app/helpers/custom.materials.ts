@@ -21,7 +21,7 @@ import {
   MatStepperModule,
   MatToolbarModule,
   MatGridListModule,
-  MatSnackBarModule, MatAutocompleteModule,
+  MatSnackBarModule, MatAutocompleteModule, MatBottomSheetModule,
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -34,7 +34,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatButtonModule, MatInputModule, NoopAnimationsModule, MatPaginatorModule,
     MatTooltipModule, MatSelectModule, MatSortModule, MatCheckboxModule,
     MatExpansionModule, MatGridListModule, MatSlideToggleModule, MatSnackBarModule,
-    MatAutocompleteModule,
+    MatAutocompleteModule, MatBottomSheetModule,
   ],
   exports: [
     MatToolbarModule, MatCardModule, MatDialogModule, MatStepperModule, MatListModule,
@@ -43,7 +43,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatFormFieldModule, MatButtonModule, MatInputModule, NoopAnimationsModule,
     MatPaginatorModule, MatTooltipModule, MatSelectModule, MatSortModule,
     MatCheckboxModule, MatExpansionModule, MatGridListModule, MatSlideToggleModule,
-    MatSnackBarModule, MatAutocompleteModule,
+    MatSnackBarModule, MatAutocompleteModule, MatBottomSheetModule,
   ],
 })
 export class CustomMaterialModule {

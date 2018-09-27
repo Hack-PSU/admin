@@ -1,0 +1,44 @@
+.table-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.email-filter {
+    display: block;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mat-header-row {
+    position: sticky;
+    top: 0;
+    background: white;
+}
+
+.mat-card-title {
+    display: flex;
+}
+
+.card-title {
+    flex: 5;
+}
+
+.context-menu {
+    float: right;
+}
+
+.action-menu {
+
+}
+
+.item-selected {
+    background-color: rgba(170, 202, 204, 0.3);
+    color: #6C88B7;
+    font-size: small;
+}
+
+.item-selected p {
+    margin: 10px;
+}

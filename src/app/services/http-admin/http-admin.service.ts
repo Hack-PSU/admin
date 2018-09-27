@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
+import { map } from 'rxjs/operators';
+import { CheckoutInstanceModel } from '../../models/checkout-instance-model';
+import { ItemCheckoutModel } from '../../models/item-checkout-model';
 import { PreRegistrationModel } from '../../models/pre-registration-model';
 import { RegistrationModel } from '../../models/registration-model';
 import { LocationModel } from '../../models/location-model';
@@ -208,5 +211,44 @@ export class HttpAdminService extends BaseHttpService {
       limit ? new Map<string, any>().set('limit', limit) : null,
     );
     return super.genericGet<StatisticsModel[]>(apiRoute);
+  }
+
+  getAvailableCheckoutItems(): Observable<ItemCheckoutModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/checkout/items/availability',
+      true,
+      null,
+    );
+    return super.genericGet<{}[]>(apiRoute)
+      .pipe(
+        map(jsonArray => jsonArray.map(json => ItemCheckoutModel.parseFromJson(json))),
+      );
+  }
+
+  addCheckoutRequest(itemId: string, userId: string) {
+    const apiRoute = new ApiRoute(
+      'admin/checkout',
+      true,
+    );
+    return super.genericPost<{}>(apiRoute, { itemId, userId });
+  }
+
+  getCurrentCheckedOutItems(): Observable<CheckoutInstanceModel[]> {
+    const apiRoute = new ApiRoute(
+      'admin/checkout',
+      true,
+    );
+    return super.genericGet<{}[]>(apiRoute)
+      .pipe(
+        map(jsonArray => jsonArray.map(json => CheckoutInstanceModel.parseFromJson(json))),
+      );
+  }
+
+  returnCheckoutItem(data: CheckoutInstanceModel) {
+    const apiRoute = new ApiRoute(
+      'admin/checkout/return',
+      true,
+    );
+    return super.genericPost<{}>(apiRoute, { checkoutId: data.uid });
   }
 }

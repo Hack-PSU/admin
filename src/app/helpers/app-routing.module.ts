@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ItemCheckoutComponent } from '../components/item-checkout/item-checkout.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RegistrationTableComponent } from '../components/registration-table/registration-table.component';
 import { ManageUsersComponent } from '../components/manage-users/manage-users.component';
@@ -41,6 +42,13 @@ const routes: Routes = [
     component: ManageAdminComponent,
     canActivate: [AuthGuard],
     data: { privilegeLevel: PRIVILEGE_LEVEL.TECHNOLOGY_ADMIN },
+    resolve: { UserResolver },
+  },
+  {
+    path: 'checkout',
+    component: ItemCheckoutComponent,
+    canActivate: [AuthGuard],
+    data: { privilegeLevel: PRIVILEGE_LEVEL.TEAM_MEMBER },
     resolve: { UserResolver },
   },
   {

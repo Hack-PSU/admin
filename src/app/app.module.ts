@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
+import { AddCheckoutRequestDialogComponent } from './components/item-checkout/add-checkout-request-dialog.component';
+import { ReturnCheckoutSheetComponent } from './components/item-checkout/return-checkout-sheet.component';
 import { LoginComponent } from './components/login/login.component';
 import { AppRoutingModule } from './helpers/app-routing.module';
 import { AngularFireAuth, AngularFireAuthModule } from 'angularfire2/auth';
@@ -44,6 +46,7 @@ import { AlertModule } from 'ngx-alerts';
 import { NgProgressModule } from '@ngx-progressbar/core';
 import { UserResolver } from './helpers/resolvers/UserResolver/user.resolver';
 import { NgProgressHttpModule } from '@ngx-progressbar/http';
+import { ItemCheckoutComponent } from './components/item-checkout/item-checkout.component';
 
 @NgModule({
   declarations: [
@@ -65,13 +68,16 @@ import { NgProgressHttpModule } from '@ngx-progressbar/http';
     UpdateLocationDialogComponent,
     ExtraCreditClassesComponent,
     AddUserClassDialogComponent,
+    AddCheckoutRequestDialogComponent,
     VisComponent,
+    ReturnCheckoutSheetComponent,
     UserDataComponent,
     DashboardComponent,
     ViewUserDataDialogComponent,
     ManageAdminComponent,
     LocationDialogComponent,
     StatisticsComponent,
+    ItemCheckoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -92,6 +98,7 @@ import { NgProgressHttpModule } from '@ngx-progressbar/http';
     AddEmailDialogComponent, AddUserClassDialogComponent, AddEventDialogComponent,
     AddLocationDialogComponent, UpdateLocationDialogComponent,
     ViewUserDataDialogComponent, LocationDialogComponent,
+    AddCheckoutRequestDialogComponent, ReturnCheckoutSheetComponent,
   ],
   providers: [
     EmailListService, HttpAdminService, AngularFireAuth, AuthService,
