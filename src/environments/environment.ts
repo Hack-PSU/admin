@@ -15,4 +15,3 @@ export const environment = {
   },
   apiUrl: 'https://staging-dot-hackpsu18.appspot.com/v1/',
 };
-``
