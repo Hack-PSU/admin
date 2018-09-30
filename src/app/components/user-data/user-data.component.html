@@ -178,7 +178,7 @@
                                 </ng-template>
                                 <ng-template #checkinEmpty>
                                     <button mat-icon-button class = "check-in-button" (click) = "onClickCheckedIn(user)">
-                                        <ng-template [ngIf] = "user.check_in_status" [ngIfElse] = "unchecked">
+                                        <ng-template [ngIf]="user.check_in_status" [ngIfElse] = "unchecked">
                                             <mat-icon class="check-circle-green">check_circle</mat-icon>
                                         </ng-template>
                                         <ng-template #unchecked>

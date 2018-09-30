@@ -154,11 +154,11 @@ export class HttpAdminService extends BaseHttpService {
     const time: number = new Date().getTime();
 
     const apiRoute = new ApiRoute(
-      '/admin/assignment/',
+      'admin/assignment',
       true,
 
     );
-    return super.genericPost<{}>(apiRoute, {uid, rfid, time})
+    return super.genericPost<{}>(apiRoute, [{ uid, rfid, time }]);
   }
 
   getAllUsers(limit?: number): Observable<CheckInModel[]> {

@@ -256,8 +256,8 @@ export class UserDataComponent implements OnInit, AfterViewInit {
     user.check_in_status = true;
     this.adminService.setUserCheckedIn(user.uid)
         .subscribe(() => {},
-          (error) => {
-            user.check_in_status = false;
+               (error) => {
+          user.check_in_status = false;
           this.errors = new Error('Error: Issue with manually checking user in');
           console.error(error);
         });
