@@ -1,5 +1,5 @@
 <div class="container">
-	<div class = "title-container">
+    <div class="title-container">
         <div class="section-title-word">
             <div class="section-title-letter white-text">S</div>
             <div class="section-title-letter white-text">T</div>
@@ -8,6 +8,39 @@
             <div class="section-title-letter white-text">S</div>
         </div>
     </div>
-    <div class = "body-container">
+
+    <div class="container">
+        <div class="section-title-letter white-text">Shirt Size Count</div>
+        <mat-table [dataSource]="tshirt_size">
+
+            <ng-container matColumnDef="option">
+                <mat-header-cell *matHeaderCellDef> Shirt Size</mat-header-cell>
+                <mat-cell *matCellDef="let option"> {{option.OPTION}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="count">
+                <mat-header-cell *matHeaderCellDef> Count</mat-header-cell>
+                <mat-cell *matCellDef="let count"> {{count.COUNT}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        </mat-table>
+
+
     </div>
+    <div class="section-title-letter white-text">Dietary Restriction distribution</div>
+    <ngx-charts-pie-chart
+            [view]="pieDim"
+            [scheme]="piecolor"
+            [results]="dietarydata"
+            [legend]="true"
+            [explodeSlices]="false"
+            [labels]="true"
+            [doughnut]="true">
+    </ngx-charts-pie-chart>
+
+
 </div>
+
