@@ -41,7 +41,8 @@
     "rxjs-compat": "^6.0.0-rc.0",
     "tslint-config-airbnb": "5.7.0",
     "uuid": "latest",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.4",
+    "lodash": "latest"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.8",

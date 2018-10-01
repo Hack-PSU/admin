@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import * as uuid from 'uuid/v4';
 import 'rxjs/add/observable/throw';
@@ -19,6 +20,7 @@ import { CustomErrorHandlerService } from '../custom-error-handler/custom-error-
 import { BaseHttpService } from '../base-http/base-http.service';
 import { AuthService } from '../AuthService/auth.service';
 import { EventModel } from '../../models/event-model';
+import * as _ from 'lodash';
 
 @Injectable()
 export class HttpAdminService extends BaseHttpService {
@@ -85,6 +87,7 @@ export class HttpAdminService extends BaseHttpService {
   }
 
   sendEmail(emailBody: string, emailSubject: string, emailObjects: any[]): Observable<any> {
+    const chunkedEmails = _.chunk(emailObjects, 100);
     const apiRoute = new ApiRoute(
       'admin/email',
       true,
@@ -105,10 +108,10 @@ export class HttpAdminService extends BaseHttpService {
     } catch (error) {
       return Observable.throwError(error);
     }
-    return super.genericPost<{}>(
+    return forkJoin(...chunkedEmails.map(batchedEmails => super.genericPost<{}>(
       apiRoute,
-      { subject: emailSubject, html: emailBody, emails: emailObjects },
-    );
+      { subject: emailSubject, html: emailBody, emails: batchedEmails },
+    )));
   }
 
   getRSVP(limit?: number): Observable<RegistrationModel[]> {

@@ -32,12 +32,14 @@ export class SendEmailComponent implements OnInit {
 
   constructor(public emailListService: EmailListService, public dialog: MatDialog,
               public adminService: HttpAdminService, public activatedRoute: ActivatedRoute,
-              private _formBuilder: FormBuilder) {
+              private _formBuilder: FormBuilder,
+  ) {
 
   }
 
   ngOnInit() {
-    this.keys = Object.keys(this.emailListService.emailList[0] ? this.emailListService.emailList[0] : { email: '' });
+    this.keys = Object.keys(this.emailListService.emailList[0] ?
+                            this.emailListService.emailList[0] : { email: '' });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
       subjectCtrl: ['', Validators.required],
@@ -49,7 +51,10 @@ export class SendEmailComponent implements OnInit {
     const removalIndices = emailsDOMRef.selectedOptions.selected.map((location) => {
       return emailsDOMRef.options._results.findIndex(index => index === location);
     });
-    this.emailListService.emailList = this.emailListService.emailList.filter((v, i) => removalIndices.indexOf(i) === -1);
+    this.emailListService.emailList = this.emailListService.emailList.filter((
+      v,
+      i,
+    ) => removalIndices.indexOf(i) === -1);
   }
 
   addNew() {
@@ -59,7 +64,7 @@ export class SendEmailComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.emailListService.emailList.push(result)
+        this.emailListService.emailList.push(result);
       }
     });
   }
@@ -69,7 +74,7 @@ export class SendEmailComponent implements OnInit {
     if (id === 'forgot_url') {
       this.emailListService.emailList.forEach((object) => {
         object.forgot_url = 'https://app.hackpsu.org/forgot/?email='.concat(object.email);
-      })
+      });
     }
   }
 
@@ -85,23 +90,26 @@ export class SendEmailComponent implements OnInit {
           name: value.firstname ? value.firstname : '',
           substitutions: generatedBody.match(/\$\w+\$/g).reduce((substitution, arrValue) => {
             const key = arrValue.replace(/\$/g, '');
-            substitution[key] = value[key];
+            substitution[key] = value[key].toString();
             return substitution;
           },                                                    {}),
-        }
-      })).subscribe((value) => {
-        console.log(value);
-      },            err => console.error(err));
+        };
+      }),
+    ).subscribe((value) => {
+      console.log(value);
+    },          err => console.error(err));
   }
 
   generateEmailFromTemplate() {
-    return this.customHTML ? this.uploadedHTML : htmlTemplate.replace(/\$\$BODY\$\$/g, this.emailBody.replace(/\n/g, '<br>'));
+    return this.customHTML ? this.uploadedHTML :
+           htmlTemplate.replace(/\$\$BODY\$\$/g, this.emailBody.replace(/\n/g, '<br>'));
   }
 
   loadPreview() {
     const subHtml = this.generateEmailFromTemplate();
     if (document.getElementById('email-preview')) {
-      const doc =  this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
+      const doc = this.iframe.nativeElement.contentDocument ||
+                  this.iframe.nativeElement.contentWindow;
       doc.open();
       doc.write(subHtml);
       doc.close();
