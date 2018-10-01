@@ -38,15 +38,6 @@
   overflow: visible;
 }
 
-mat-header-cell, mat-cell {
-  display: inline-block;
-  width: 200px;
-}
-
-mat-header-row, mat-row {
-  display: inline-flex;
-}
-
 mat-cell {
     padding: 10px;
 }

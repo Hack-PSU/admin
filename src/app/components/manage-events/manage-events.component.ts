@@ -13,6 +13,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppConstants } from '../../helpers/AppConstants';
 import { AddEventDialogComponent } from './add-event-dialog';
+import { UpdateEventDialogComponent } from './update-event-dialog';
 import { HttpAdminService } from '../../services/services';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -96,7 +97,7 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  addLocation() {
+  addEvent() {
     const dialogRef = this.dialog.open(AddEventDialogComponent, {
       width: '400px',
       data: Object.keys(this.newEvent),
@@ -109,6 +110,37 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
             result.event_start_time = new Date(result.event_start_time).getTime();
             result.event_end_time = new Date(result.event_end_time).getTime();
             return this.httpService.addEvent(result);
+          }
+          return of(new Error('Add a valid event'));
+        }),
+      )
+      .subscribe(() => {
+        this.snackBar.open('success', null, {
+          duration: 2000,
+        });
+      },         (error) => {
+        this.snackBar.open(error.body, null, {
+          duration: 2000,
+        });
+      });
+  }
+
+  updateEvent(event: EventModel) {
+    console.log(event);
+    const dialogRef = this.dialog.open(UpdateEventDialogComponent, {
+      width: '400px',
+      data: event,
+    });
+    dialogRef
+      .afterClosed()
+      .pipe(
+        switchMap((result: EventModel) => {
+          if (result) {
+            result.event_start_time = new Date(result.event_start_time).getTime();
+            result.event_end_time = new Date(result.event_end_time).getTime();
+            console.log(result);
+            
+            return this.httpService.updateEvent(result);
           }
           return of(new Error('Add a valid event'));
         }),

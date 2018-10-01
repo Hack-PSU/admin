@@ -254,6 +254,7 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    */
   onClickCheckedIn(user) {
     user.check_in_status = true;
+    console.log(user);
     this.adminService.setUserCheckedIn(user.uid)
         .subscribe(() => {},
                (error) => {
@@ -305,12 +306,10 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    */
   updateStatHeader() {
     this.adminService.getAllUserCount().subscribe((data) => {
-      const countArray: CountModel[] = data;
-      // TODO: Change server side to select columns and update CountModel using that.
-      this.preRegStatNumber = parseInt(countArray[0] ? countArray[0].pre_count : 'NA', 10);
-      this.regStatNumber = parseInt(countArray[1] ? countArray[1].pre_count : 'NA', 10);
-      this.rsvpStatNumber = parseInt(countArray[2] ? countArray[2].pre_count : 'NA', 10);
-      this.checkInStatNumber = parseInt(countArray[3] ? countArray[3].pre_count : 'NA', 10);
+      this.preRegStatNumber = data.pre_count;
+      this.regStatNumber = data.reg_count;
+      this.rsvpStatNumber = data.rsvp_count;
+      this.checkInStatNumber = data.checkin_count;
     },                                            (error) => {
       this.errors = new Error('Error: Issue with getting the number of users');
       console.error(error);

@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data
       .subscribe((user) => {
-        console.log(user);
+        
       });
   }
 }

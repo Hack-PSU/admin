@@ -31,6 +31,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { VisComponent } from './components/vis/vis.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AddEventDialogComponent } from './components/manage-events/add-event-dialog';
+import { UpdateEventDialogComponent } from './components/manage-events/update-event-dialog';
 import { AddUserClassDialogComponent } from './components/extra-credit-classes/add-user-class-dialog';
 import { AddLocationDialogComponent } from './components/manage-locations/add-location-dialog';
 import { UpdateLocationDialogComponent } from './components/manage-locations/update-location-dialog';
@@ -61,6 +62,7 @@ import { ItemCheckoutComponent } from './components/item-checkout/item-checkout.
     SendEmailComponent,
     AddEmailDialogComponent,
     AddEventDialogComponent,
+    UpdateEventDialogComponent,
     ManageEventsComponent,
     ManageRsvpComponent,
     ManageLocationsComponent,
@@ -99,6 +101,7 @@ import { ItemCheckoutComponent } from './components/item-checkout/item-checkout.
     AddLocationDialogComponent, UpdateLocationDialogComponent,
     ViewUserDataDialogComponent, LocationDialogComponent,
     AddCheckoutRequestDialogComponent, ReturnCheckoutSheetComponent,
+    UpdateEventDialogComponent,
   ],
   providers: [
     EmailListService, HttpAdminService, AngularFireAuth, AuthService,

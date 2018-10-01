@@ -64,9 +64,17 @@ export class HttpAdminService extends BaseHttpService {
     'live/event',
     true,
     );
-    return super.genericPost<{}>(apiRoute, event.restRepr());
+    return super.genericPut<{}>(apiRoute, event.restRepr());
   }
 
+  updateEvent(event: EventModel): Observable<{}> {
+    const apiRoute = new ApiRoute(
+    'live/event',
+    true,
+    );
+    return super.genericPut<{}>(apiRoute, event.restRepr());
+  }
+  
   getUserUID(email: string) {
     const apiRoute = new ApiRoute(
       'admin/userid',
@@ -146,11 +154,12 @@ export class HttpAdminService extends BaseHttpService {
   }
 
   updateLocation(uid: string, location_name: string) {
+    console.log(location_name);
     const apiRoute = new ApiRoute(
-      'admin/update_location',
+      'admin/location/update',
       true,
     );
-    return super.genericPost<{}>(apiRoute, { uid, locationName: location_name });
+    return super.genericPost<{}>(apiRoute, { uid, location_name: location_name });
   }
 
   getExtraCreditClasses(limit?: number): Observable<ClassesModel[]> {
@@ -179,7 +188,7 @@ export class HttpAdminService extends BaseHttpService {
       true,
 
     );
-    return super.genericPost<{}>(apiRoute, [{ uid, rfid, time }]);
+    return super.genericPost<{}>(apiRoute, {assignments: [{ uid, rfid, time }]});
   }
 
   getAllUsers(limit?: number): Observable<CheckInModel[]> {
@@ -209,13 +218,13 @@ export class HttpAdminService extends BaseHttpService {
     return super.genericGet<CountModel[]>(apiRoute);
   }
 
-  getAllUserCount(limit?: number): Observable<CountModel[]> {
+  getAllUserCount(limit?: number): Observable<CountModel> {
     const apiRoute = new ApiRoute(
       'admin/user_count',
       true,
       limit ? new Map<string, any>().set('limit', limit) : null,
     );
-    return super.genericGet<CountModel[]>(apiRoute);
+    return super.genericGet<CountModel>(apiRoute);
   }
 
   getStatistics(limit?: number): Observable<StatisticsModel[]> {

@@ -19,7 +19,7 @@
                     <mat-icon>refresh</mat-icon>
                     <span>Refresh Data</span>
                 </button>
-                <button mat-menu-item (click)="addLocation()">
+                <button mat-menu-item (click)="addEvent()">
                     <mat-icon>add</mat-icon>
                     <span>Add Event</span>
                 </button>
@@ -73,7 +73,7 @@
                             <mat-icon>settings</mat-icon>
                         </button>
                         <mat-menu #crud_menu="matMenu">
-                            <button mat-menu-item (click)="refreshData()">
+                            <button mat-menu-item (click)="updateEvent(event)">
                                 <mat-icon>edit</mat-icon>
                                 <span>Update Event</span>
                             </button>

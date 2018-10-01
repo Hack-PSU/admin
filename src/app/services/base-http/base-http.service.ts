@@ -77,4 +77,24 @@ export abstract class BaseHttpService {
       catchError(err => this.errorHandler.handleHttpError(err)),
     );
   }
+
+  protected genericPut<T>(apiRoute: ApiRoute, data: any) {
+    this.memCache.set(apiRoute, null);
+    return this.authService.idToken.pipe(
+      take(1),
+      switchMap((idToken: string) => {
+        if (!idToken) {
+          return throwError('You are not logged in. Redirecting now.');
+        }
+        let headers = new HttpHeaders();
+        headers = headers.set('idtoken', idToken);
+        return this.http.put(
+          `${AppConstants.API_BASE_URL}${apiRoute.URL}`,
+          data,
+          { headers, reportProgress: true },
+        );
+      }),
+      catchError(err => this.errorHandler.handleHttpError(err)),
+    );
+  }
 }

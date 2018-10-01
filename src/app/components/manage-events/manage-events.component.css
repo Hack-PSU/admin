@@ -34,8 +34,15 @@
     margin-right: auto;
 }
 
-.mat-column-select {
-    overflow: visible;
+.mat-column-button {
+  overflow: visible;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 9999;
 }
 
 mat-header-cell, mat-cell {
