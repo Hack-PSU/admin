@@ -134,7 +134,6 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
   updateLocation(locationValue: string, uid: string) {
     const mLocationValue = locationValue.trim();
     console.log(mLocationValue);
-    console.log(uid);
     this.adminService.updateLocation(uid, mLocationValue).subscribe((resp) => {
       this.refreshData();
       this.openSnackBar('Success: Updated location', '');

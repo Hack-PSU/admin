@@ -218,11 +218,10 @@ export class HttpAdminService extends BaseHttpService {
     return super.genericGet<CountModel[]>(apiRoute);
   }
 
-  getAllUserCount(limit?: number): Observable<CountModel> {
+  getAllUserCount(): Observable<CountModel> {
     const apiRoute = new ApiRoute(
       'admin/user_count',
       true,
-      limit ? new Map<string, any>().set('limit', limit) : null,
     );
     return super.genericGet<CountModel>(apiRoute);
   }
