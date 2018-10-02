@@ -5,9 +5,9 @@
 <!--<img src="{{update.update_image}}" height="100px" width="100px">-->
 <!--</div>-->
 
-<h1> Live Updates </h1>
+<h1 class="title"> Live Updates </h1>
 <form class="registration-form container-fluid"
-      (ngSubmit)="registrationModel.form.valid ? sendMessage() : error = registrationModel.form.errors"
+      (ngSubmit)="registrationModel.form.valid ? sendMessage() : showError(registrationModel.form.errors)"
       name="registrationFormDOM"
       #registrationModel="ngForm">
     <mat-form-field class="example-full-width row">
@@ -40,5 +40,5 @@
     <mat-checkbox class="row" type="checkbox" [(ngModel)]="push_notification" name="push_notification">Send as a push
         notification?
     </mat-checkbox>
-    <button mat-button type="submit" *ngIf="registrationModel.form.valid">Submit</button>
+    <button mat-button type="submit" [disabled]="message == '' || title == ''">Submit</button>
 </form>

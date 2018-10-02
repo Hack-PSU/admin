@@ -5,3 +5,9 @@
 .row {
     padding: 10px;
 }
+
+.title, .mat-button, .mat-checkbox {
+    display: block;
+    text-align: center;
+    margin: auto;
+}

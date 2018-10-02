@@ -274,4 +274,12 @@ export class HttpAdminService extends BaseHttpService {
     );
     return super.genericPost<{}>(apiRoute, { checkoutId: data.uid });
   }
+
+  sendLiveUpdate(message: string, title: string, pushNotification: boolean) {
+    const apiRoute = new ApiRoute(
+      'live/updates',
+      true,
+    );
+    return super.genericPost<{}>(apiRoute, { pushNotification, updateTitle: title, updateText: message });
+  }
 }
