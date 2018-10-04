@@ -58,7 +58,10 @@ export class HttpAdminService extends BaseHttpService {
       true,
       limit ? new Map<string, any>().set('limit', limit) : null,
     );
-    return super.genericGet<EventModel[]>(apiRoute);
+    return super.genericGet<{}[]>(apiRoute)
+      .pipe(
+        map(events => events.map(event => EventModel.parseJSON(event))),
+      )
   }
 
   addEvent(event: EventModel): Observable<{}> {
@@ -66,7 +69,7 @@ export class HttpAdminService extends BaseHttpService {
     'live/event',
     true,
     );
-    return super.genericPut<{}>(apiRoute, event.restRepr());
+    return super.genericPost<{}>(apiRoute, event.restRepr());
   }
 
   updateEvent(event: EventModel): Observable<{}> {
@@ -74,9 +77,9 @@ export class HttpAdminService extends BaseHttpService {
     'live/event',
     true,
     );
-    return super.genericPut<{}>(apiRoute, event.restRepr());
+    return super.genericPut<{}>(apiRoute, { event: event.restRepr() });
   }
-  
+
   getUserUID(email: string) {
     const apiRoute = new ApiRoute(
       'admin/userid',

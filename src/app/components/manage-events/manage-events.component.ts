@@ -139,7 +139,6 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
             result.event_start_time = new Date(result.event_start_time).getTime();
             result.event_end_time = new Date(result.event_end_time).getTime();
             console.log(result);
-            
             return this.httpService.updateEvent(result);
           }
           return of(new Error('Add a valid event'));
