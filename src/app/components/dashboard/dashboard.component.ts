@@ -9,32 +9,30 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
-  providers: [
-               HttpAdminService,
-             ],
+  providers: [HttpAdminService],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(
-    public adminService: HttpAdminService,
-    private activatedRoute: ActivatedRoute
-    ) {
-  }
-
   /*
    * Local private integers representing the counts in the latest stats header.
    */
-  public preRegStatNumber = -1;
-  public regStatNumber = -1;
-  public rsvpStatNumber = -1;
-  public checkInStatNumber = -1;
-  
+  private preRegStatNumber = -1;
+  private regStatNumber = -1;
+  private rsvpStatNumber = -1;
+  private checkInStatNumber = -1;
+
   /*
    * Error array used to display error messages
    */
-  public errors: Error = null;
+  private errors: Error = null;
+
+  constructor(
+    public adminService: HttpAdminService,
+    private activatedRoute: ActivatedRoute,
+    ) {
+  }
 
   /**
    * On the initilization of all angular components, execute the functions
@@ -48,25 +46,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data
       .subscribe((user) => {
-        this.updateStatHeader();
       });
-  }
-
-  /**
-   * Updates the latest users card with the current counts
-   *
-   * @exception: Failure with the admin service with cause an error to be displayed on the /userdata/ route page
-   */
-  updateStatHeader() {
-    this.adminService.getAllUserCount().subscribe((data: ICountModel) => {
-      this.preRegStatNumber = data.preregistration_count;
-      this.regStatNumber = data.registration_count;
-      this.rsvpStatNumber = data.rsvp_count;
-      this.checkInStatNumber = data.checkin_count;
-    },                                            (error) => {
-      this.errors = new Error('Error: Issue with getting the number of users');
-      console.error(error);
-    });
   }
 }
 

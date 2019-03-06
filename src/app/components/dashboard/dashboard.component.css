@@ -1,6 +1,6 @@
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-	.container {
+	.main-container {
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
@@ -34,7 +34,7 @@
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-	.container {
+	.main-container {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
@@ -70,7 +70,7 @@
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-	.container {
+	.main-container {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
@@ -106,7 +106,7 @@
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-	.container {
+	.main-container {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
@@ -142,7 +142,7 @@
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-	.container {
+	.main-container {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;

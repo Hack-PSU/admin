@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserDataComponent } from './user-data.component';
+import { HackerDataComponent } from './hacker-data.component';
 
-describe('UserDataComponent', () => {
-  let component: UserDataComponent;
-  let fixture: ComponentFixture<UserDataComponent>;
+describe('HackerDataComponent', () => {
+  let component: HackerDataComponent;
+  let fixture: ComponentFixture<HackerDataComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserDataComponent ]
+      declarations: [ HackerDataComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserDataComponent);
+    fixture = TestBed.createComponent(HackerDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

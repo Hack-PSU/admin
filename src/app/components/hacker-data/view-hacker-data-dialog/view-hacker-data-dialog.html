@@ -1,0 +1,774 @@
+<mat-card>
+	<mat-card-title>
+		<div class="title-container">
+			<p>{{user_data.firstname}} {{user_data.lastname}}</p>
+			<button mat-raised-button color="primary" (click)="onSubmitButtonClick()">Submit Registration Data Changes</button>
+			<div>
+				<mat-slide-toggle name="editToggle" style="margin-left: 5px;" color="accent" (change)="onChange($event)" [disabled]="editToggleDisable">Edit</mat-slide-toggle>
+				<button mat-icon-button color="primary" (click)="onResetHackerDataClick()" style="margin-left: 5px;"><mat-icon aria-label="Refresh button with refresh icon">refresh</mat-icon></button>
+			</div>
+		</div>
+	</mat-card-title>
+	<mat-card-content>
+		<ng-container *ngIf="editToggleState; else noedit"></ng-container>
+		<!-- Edit Toggle Enabled -->
+		<ng-template [ngIf]="editToggleState">
+			<table>
+				<tr>
+					<th>User Property</th>
+					<th>User Response</th>
+				</tr>
+				<tr>
+					<td>First Name</td>
+					<td>
+						<mat-form-field color="accent" appearance="outline">
+							<input matInput [(ngModel)]="hacker.firstname" placeholder={{user_data.firstname}}>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Last Name</td>
+					<td>
+						<mat-form-field color="accent" appearance="outline">
+							<input matInput [(ngModel)]="hacker.lastname" placeholder={{user_data.lastname}}>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td>
+						<mat-form-field color="accent" appearance="outline">
+							<input matInput [(ngModel)]="hacker.email" placeholder={{user_data.email}}>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Gender</td>
+					<td>
+						<mat-form-field color="accent" appearance="outline">
+							<mat-select placeholder="Gender" [(ngModel)]="hacker.gender" name="gender">
+								<mat-option *ngFor="let gender of genderOptions" [value]="gender.value">
+									{{gender.viewValue}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>University</td>
+					<td>
+						<mat-form-field class="university-form-field" color="accent" appearance="outline">
+							<input matInput placeholder={{user_data.university}} [formControl]="schoolFormControl" [matAutocomplete]="autoUniveristy">
+							<mat-autocomplete #autoUniveristy="matAutocomplete">
+								<mat-option *ngFor="let university of filteredSchoolOptions | async" [value]="university">
+									{{university}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Academic Year</td>
+					<td>
+						<mat-form-field color="accent" appearance="outline">
+							<mat-select placeholder="Academic Year" [(ngModel)]="hacker.academic_year" name="academic">
+								<mat-option *ngFor="let year of academicYearOptions" [value]="year.value">
+									{{year.viewValue}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Major</td>
+					<td>
+						<mat-form-field class="major-form-field" color="accent" appearance="outline">
+							<input matInput placeholder={{user_data.major}} [formControl]="majorFormControl" [matAutocomplete]="autoMajor">
+							<mat-autocomplete #autoMajor="matAutocomplete">
+								<mat-option *ngFor="let major of filteredMajorOptions | async" [value]="major">
+									{{major}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Shirt Size</td>
+					<td>
+						<mat-form-field color="accent" appearance="outline">
+							<mat-select placeholder="Shirt Size" [(ngModel)]="hacker.shirt_size" name="shirt">
+								<mat-option *ngFor="let size of shirtSizeOptions" [value]="size.value">
+									{{size.viewValue}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Dietary Restrictions</td>
+					<td>
+						<div class="diet-res-container">
+							<div class="diet-res-select-container">
+								<ng-template [ngIf]="editToggleState" >
+									<mat-form-field color="accent" appearance="outline">
+										<mat-select placeholder="Dietary Restriction" [(value)]="dietaryResSelection" name="dietary">
+											<mat-option></mat-option>
+											<mat-option *ngFor="let option of dietaryRestrictionOptions" [value]="option.value">
+												{{option.viewValue}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</ng-template>
+							</div>
+							<ng-template [ngIf]="dietaryResSelection === 'other'">
+								<mat-form-field color="accent" appearance="outline">
+									<input matInput [(ngModel)]="hacker.dietary_restriction" placeholder={{user_data.dietary_restriction}}>
+								</mat-form-field>
+							</ng-template>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Allergies</td>
+					<td>
+						<mat-form-field color="accent" appearance="outline">
+							<input matInput [(ngModel)]="hacker.allergies" placeholder={{user_data.allergies}}>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Travel Reimbursement</td>
+					<td>
+						No
+						<mat-slide-toggle name="travelReim" [color]="accent" (change)="onChange($event)" [checked]="travelReimToggle"></mat-slide-toggle>
+						Yes
+					</td>
+				</tr>
+				<tr>
+					<td>First Hackathon</td>
+					<td>
+						No
+						<mat-slide-toggle name="firstHack" [color]="accent" (change)="onChange($event)" [checked]="firstHackToggle"></mat-slide-toggle>
+						Yes
+					</td>
+				</tr>
+				<tr>
+					<td>Phone Number</td>
+					<td>
+						<mat-form-field color="accent" appearance="outline">
+							<input matInput [(ngModel)]="hacker.phone" placeholder={{user_data.phone}}>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Race</td>
+					<td>
+						<mat-form-field class="race-form-field" color="accent" appearance="outline">
+							<mat-select placeholder="Race" [(ngModel)]="hacker.race" name="race">
+								<mat-option *ngFor="let race of raceOptions" [value]="race.value">
+									{{race.viewValue}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Resume</td>
+					<td>
+						<div>
+							Feature not implemented!
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Coding Experience</td>
+					<td>
+						<mat-form-field class="coding-form-field" color="accent" appearance="outline">
+							<mat-select placeholder="Coding" [(ngModel)]="hacker.coding_experience" name="coding">
+								<mat-option *ngFor="let option of codingOptions" [value]="option.value">
+									{{option.viewValue}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Eighteen Before Event</td>
+					<td>
+						No
+						<mat-slide-toggle name="eighteenBefore" [color]="accent" (change)="onChange($event)" [checked]="eighteenBeforeToggle"></mat-slide-toggle>
+						Yes
+					</td>
+				</tr>
+				<tr>
+					<td>MLH Code of Conduct (coc)</td>
+					<td>
+						No
+						<mat-slide-toggle name="mlhCoc" [color]="accent" (change)="onChange($event)" [checked]="mlhCocToggle"></mat-slide-toggle>
+						Yes
+					</td>
+				</tr>
+				<tr>
+					<td>MLH DCP (dcp)</td>
+					<td>
+						No
+						<mat-slide-toggle name="mlhDcp" [color]="accent" (change)="onChange($event)" [checked]="mlhDcpToggle"></mat-slide-toggle>
+						Yes
+					</td>
+				</tr>
+				<tr>
+					<td>Referral Source</td>
+					<td>
+						<mat-form-field class="referral-form-field" color="accent" appearance="outline">
+							<input matInput placeholder={{user_data.referral}} [formControl]="referralFormControl" [matAutocomplete]="autoReferral">
+							<mat-autocomplete #autoReferral="matAutocomplete">
+								<mat-option *ngFor="let source of filteredReferralOptions | async" [value]="source">
+									{{source}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Project Description</td>
+					<td>
+						<mat-form-field class="project-form-field" color="accent" appearance="outline">
+							<textarea matInput [(ngModel)]="hacker.project" placeholder={{user_data.project}}></textarea>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Expectations</td>
+					<td>
+						<mat-form-field class="expectation-form-field" color="accent" appearance="outline">
+							<textarea matInput [(ngModel)]="hacker.expectations" placeholder={{user_data.expectations}}></textarea>
+						</mat-form-field>
+					</td>
+				</tr>
+				<tr>
+					<td>Veteran Status</td>
+					<td>
+						No
+						<mat-slide-toggle name="veteran" [color]="accent" (change)="onChange($event)" [checked]="veteranToggle"></mat-slide-toggle>
+						Yes
+					</td>
+				</tr>
+				<tr>
+					<td>Pin Number</td>
+					<td>
+						Feature not implemented!
+					</td>
+				</tr>
+				<tr>
+					<td>Hackathon ID</td>
+					<td>
+						Feature not implemented!
+					</td>
+				</tr>
+				<tr>
+					<td>Pre-Registration ID</td>
+					<td>
+						Feature not implemented!
+					</td>
+				</tr>
+				<tr>
+					<td>Registration ID</td>
+					<td>
+						Feature not implemented!
+					</td>
+				</tr>
+				<tr>
+					<td>RSVP ID</td>
+					<td>
+						Feature Not Implemented!
+					</td>
+				</tr>
+				<tr>
+					<td>Scan User ID</td>
+					<td>
+						Feature Not Implemented!
+					</td>
+				</tr>
+			</table>
+		</ng-template>
+
+		<!-- Edit Toggle Disabled -->
+		<ng-template #noedit>
+			<table>
+				<tr>
+					<th>User Property</th>
+					<th>User Response</th>
+				</tr>
+				<tr>
+					<td>First Name</td>
+					<td>
+						<ng-template [ngIf]="user_data.firstname" [ngIfElse]="firstNA">
+							<div>
+								{{user_data.firstname}}
+							</div>
+						</ng-template>
+						<ng-template #firstNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Last Name</td>
+					<td>
+						<ng-template [ngIf]="user_data.lastname" [ngIfElse]="secondNA">
+							<div>
+								{{user_data.lastname}}
+							</div>
+						</ng-template>
+						<ng-template #secondNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td>
+						<ng-template [ngIf]="user_data.email" [ngIfElse]="emailNA">
+							<div>
+								{{user_data.email}}
+							</div>
+						</ng-template>
+						<ng-template #emailNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Gender</td>
+					<td>
+						<ng-template [ngIf]="user_data.gender" [ngIfElse]="genderNA">
+							<div>
+								{{capitalizeFirstLetter(user_data.gender)}}
+							</div>
+						</ng-template>
+						<ng-template #genderNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>University</td>
+					<td>
+						<ng-template [ngIf]="user_data.university" [ngIfElse]="universityNA">
+							<div>
+								{{user_data.university}}
+							</div>
+						</ng-template>
+						<ng-template #universityNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Academic Year</td>
+					<td>
+						<ng-template [ngIf]="user_data.academic_year" [ngIfElse]="acadYearNA">
+							<div>
+								{{capitalizeFirstLetter(user_data.academic_year)}}
+							</div>
+						</ng-template>
+						<ng-template #acadYearNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Major</td>
+					<td>
+						<ng-template [ngIf]="user_data.major" [ngIfElse]="majorNA">
+							<div>
+								{{user_data.major}}
+							</div>
+						</ng-template>
+						<ng-template #majorNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Shirt Size</td>
+					<td>
+						<ng-template [ngIf]="user_data.shirt_size" [ngIfElse]="shirtNa">
+							<div>
+								{{getSizeText(user_data.shirt_size)}}
+							</div>
+						</ng-template>
+						<ng-template #shirtNa>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Dietary Restrictions</td>
+					<td>
+						<ng-template [ngIf]="user_data.dietary_restriction" [ngIfElse]="dietResNA">
+							<div>
+								{{user_data.dietary_restriction}}
+							</div>
+						</ng-template>
+						<ng-template #dietResNA>
+							<ng-template [ngIf]="user_data.dietary_restriction===false" [ngIfElse]='dietResNAA'>
+								<div>
+									False
+								</div>
+							</ng-template>
+							<ng-template #dietResNAA>
+								<div>
+									N/A
+								</div>
+							</ng-template>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Allergies</td>
+					<td>
+						<ng-template [ngIf]="user_data.allergies" [ngIfElse]="allegeryNA">
+							<div>
+								{{user_data.allergies}}
+							</div>
+						</ng-template>
+						<ng-template #allegeryNA>
+							<ng-template [ngIf]="user_data.allergies===false" [ngIfElse]='allegeryNAA'>
+								<div>
+									False
+								</div>
+							</ng-template>
+							<ng-template #allegeryNAA>
+								<div>
+									N/A
+								</div>
+							</ng-template>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Travel Reimbursement</td>
+					<td>
+						<ng-template [ngIf]="user_data.travel_reimbursement" [ngIfElse]="travelNA">
+							<div>
+								{{capitalizeFirstLetter(user_data.travel_reimbursement.toString())}}
+							</div>
+						</ng-template>
+						<ng-template #travelNA>
+							<ng-template [ngIf]="user_data.travel_reimbursement===false" [ngIfElse]='travelNAA'>
+								<div>
+									False
+								</div>
+							</ng-template>
+							<ng-template #travelNAA>
+								<div>
+									N/A
+								</div>
+							</ng-template>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>First Hackathon</td>
+					<td>
+						<ng-template [ngIf]="user_data.first_hackathon" [ngIfElse]="firstHackNA">
+							<div>
+								{{capitalizeFirstLetter(user_data.first_hackathon.toString())}}
+							</div>
+						</ng-template>
+						<ng-template #firstHackNA>
+							<ng-template [ngIf]="user_data.first_hackathon===false" [ngIfElse]='firstHackNAA'>
+								<div>
+									False
+								</div>
+							</ng-template>
+							<ng-template #firstHackNAA>
+								<div>
+									N/A
+								</div>
+							</ng-template>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Phone Number</td>
+					<td>
+						<ng-template [ngIf]="user_data.phone" [ngIfElse]="phoneNA">
+							<div>
+								{{formatPhoneNumber(user_data.phone)}}
+							</div>
+						</ng-template>
+						<ng-template #phoneNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Race</td>
+					<td>
+						<ng-template [ngIf]="user_data.race" [ngIfElse]="raceNA">
+							<div>
+								{{capitalizeFirstLetter(user_data.race)}}
+							</div>
+						</ng-template>
+						<ng-template #raceNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Resume</td>
+					<td>
+						<ng-template [ngIf]="user_data.resume" [ngIfElse]="resumeNA">
+							<a href={{user_data.resume}} *ngIf="user_data.resume" target="_blank">
+								<mat-icon color="accent" style="text-decoration: none;">
+									file_download
+								</mat-icon>
+							</a>
+						</ng-template>
+						<ng-template #resumeNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Coding Experience</td>
+					<td>
+						<ng-template [ngIf]="user_data.coding_experience" [ngIfElse]="codingNA">
+							<div>
+								{{capitalizeFirstLetter(user_data.coding_experience)}}
+							</div>
+						</ng-template>
+						<ng-template #codingNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Eighteen Before Event</td>
+					<td>
+						<ng-template [ngIf]="user_data.eighteenBeforeEvent" [ngIfElse]="eighteenNA">
+							<div>
+								{{capitalizeFirstLetter(user_data.eighteenBeforeEvent.toString())}}
+							</div>
+						</ng-template>
+						<ng-template #eighteenNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>MLH Code of Conduct (coc)</td>
+					<td>
+						<ng-template [ngIf]="user_data.mlh_coc" [ngIfElse]="cocNA">
+							<div>
+								{{user_data.mlh_coc}}
+							</div>
+						</ng-template>
+						<ng-template #cocNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>MLH DCP (dcp)</td>
+					<td>
+						<ng-template [ngIf]="user_data.mlh_dcp" [ngIfElse]="dcpNA">
+							<div>
+								{{user_data.mlh_dcp}}
+							</div>
+						</ng-template>
+						<ng-template #dcpNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Referral Source</td>
+					<td>
+						<ng-template [ngIf]="user_data.referral" [ngIfElse]="referralNA">
+							<div>
+								{{user_data.referral}}
+							</div>
+						</ng-template>
+						<ng-template #referralNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Project Description</td>
+					<td>
+						<ng-template [ngIf]="user_data.project" [ngIfElse]="projectNA">
+							<div>
+								{{user_data.project}}
+							</div>
+						</ng-template>
+						<ng-template #projectNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Expectations</td>
+					<td>
+						<ng-template [ngIf]="user_data.expectations" [ngIfElse]="expectationNA">
+							<div>
+								{{user_data.expectations}}
+							</div>
+						</ng-template>
+						<ng-template #expectationNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Veteran Status</td>
+					<td>
+						<ng-template [ngIf]="user_data.veteran" [ngIfElse]="veteranNA">
+							<div>
+								{{user_data.veteran}}
+							</div>
+						</ng-template>
+						<ng-template #veteranNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Pin Number</td>
+					<td>
+						<ng-template [ngIf]="user_data.pin" [ngIfElse]="pinNA">
+							<div>
+								{{user_data.pin}}
+							</div>
+						</ng-template>
+						<ng-template #pinNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Hackathon ID</td>
+					<td>
+						<ng-template [ngIf]="user_data.hackathon" [ngIfElse]="hackathonNA">
+							<div>
+								{{user_data.hackathon}}
+							</div>
+						</ng-template>
+						<ng-template #hackathonNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Pre-Registration ID</td>
+					<td>
+						<ng-template [ngIf]="user_data.pre_uid" [ngIfElse]="preRegIdNA">
+							<div>
+								{{user_data.pre_uid}}
+							</div>
+						</ng-template>
+		
+						<ng-template #preRegIdNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Registration ID</td>
+					<td>
+						<ng-template [ngIf]="user_data.uid" [ngIfElse]="regIdNA">
+							<div>
+								{{user_data.uid}}
+							</div>
+						</ng-template>
+		
+						<ng-template #regIdNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>RSVP ID</td>
+					<td>
+						<ng-template [ngIf]="user_data.user_id" [ngIfElse]="rsvpIdNA">
+							<div>
+								{{user_data.user_id}}
+							</div>
+						</ng-template>
+		
+						<ng-template #rsvpIdNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+				<tr>
+					<td>Scan User ID</td>
+					<td>
+						<ng-template [ngIf]="user_data.user_uid" [ngIfElse]="scanIdNA">
+							<div>
+								{{user_data.user_uid}}
+							</div>
+						</ng-template>
+		
+						<ng-template #scanIdNA>
+							<div>
+								N/A
+							</div>
+						</ng-template>
+					</td>
+				</tr>
+			</table>
+		</ng-template>
+	</mat-card-content>
+</mat-card>

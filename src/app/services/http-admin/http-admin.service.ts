@@ -18,7 +18,6 @@ import { ItemCheckoutModel } from '../../models/item-checkout-model';
 import { LocationModel } from '../../models/location-model';
 import { PreRegistrationModel } from '../../models/pre-registration-model';
 import { RegistrationModel } from '../../models/registration-model';
-//import { CheckInModel } from '../../models/check-in-model'
 
 import { ApiRoute } from '../../models/ApiRoute';
 import { AuthService } from '../AuthService/auth.service';
@@ -378,7 +377,7 @@ export class HttpAdminService extends BaseHttpService {
     );
     return super.genericGet<IStatisticsModel[]>(apiRoute);
   }
-  
+
   /**
    * Gets the list of available items to checkout for Item Checkout during the hackathon
    * 
@@ -440,11 +439,27 @@ export class HttpAdminService extends BaseHttpService {
     return super.genericPost<{}>(apiRoute, { pushNotification, updateTitle: title, updateText: message });
   }
 
+  /**
+   * Updates the Hacker's Registration Data
+   * 
+   * @param data Updated Registration data for a Hacker
+   */
   updateHackerRegistration(data: IHackerRegistrationModel) {
     const apiRoute = new ApiRoute(
       'admin/register/update',
       true,
     );
-    return super.genericPost<{}>(apiRoute, data);
+    return super.genericPost<{}>(apiRoute, { registration: data });
+  }
+
+  getHackathons() {
+    const apiRoute = new ApiRoute(
+      'admin/hackathon',
+      true,
+    );
+    return super.genericGet<IApiResponseModel<{}>>(apiRoute)
+    .pipe(
+      map(response => response.body.data),
+    );
   }
 }

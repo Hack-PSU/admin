@@ -162,7 +162,7 @@ export class LoginComponent {
   /**
    * Reads the route requested in the query params and routes accordingly
    * 
-   * @param callback 
+   * @param callback
    */
   protected readRouteAndNavigate(callback) {
     this.progressBar.complete();

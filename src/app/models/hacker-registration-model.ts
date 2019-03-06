@@ -1,5 +1,5 @@
 export interface IHackerRegistrationModel {
-firstName: string;
+  firstName: string;
   lastName: string;
   gender: string;
   shirtSize: string;
@@ -23,4 +23,5 @@ firstName: string;
   projectDesc: string | null;
   expectations: string | null;
   veteran: string | null;
+  hackathon: string;
 }

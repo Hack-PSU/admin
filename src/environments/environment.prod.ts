@@ -8,5 +8,5 @@ export const environment = {
     storageBucket: 'hackpsu18.appspot.com',
     messagingSenderId: '1002677206617',
   },
-  apiUrl: 'https://api.hackpsu.org/v1/',
+  apiUrl: 'https://api.hackpsu.org/v2/',
 };

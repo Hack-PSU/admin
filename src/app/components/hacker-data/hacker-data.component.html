@@ -1,10 +1,11 @@
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<div class = "container">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<div class = "main-container">
     <div class = "title-container">
         <div class="section-title-word">
-            <div class="section-title-letter white-text">U</div>
-            <div class="section-title-letter white-text">S</div>
+            <div class="section-title-letter white-text">H</div>
+            <div class="section-title-letter white-text">A</div>
+            <div class="section-title-letter white-text">C</div>
+            <div class="section-title-letter white-text">K</div>
             <div class="section-title-letter white-text">E</div>
             <div class="section-title-letter white-text">R</div>
         </div>
@@ -47,7 +48,7 @@
         <div class = "table-container">
             <mat-card>
                 <mat-card-title>
-                    <b>Users</b>
+                    <b>Hackers</b>
                     <div class = "table-title-container">
                         <div *ngIf="selection.isEmpty(); else showSelection" class="card-title">
                             <p> Registration Data </p>
@@ -157,7 +158,7 @@
                             <mat-cell *matCellDef="let user" class = "display-cell">
 
                                 <!-- Pre-Registered -->
-                                <ng-template [ngIf]="isPreRegistered(user)" [ngIfElse] = "preRegisterEmpty">
+                                <ng-template [ngIf]="checkHackerStatus(user, 'PreReg')" [ngIfElse] = "preRegisterEmpty">
                                     <mat-icon class="check-circle-green">check_circle</mat-icon>
                                 </ng-template>
                                 <ng-template #preRegisterEmpty>
@@ -165,7 +166,7 @@
                                 </ng-template>
 
                                 <!-- Registered -->
-                                <ng-template [ngIf]="isRegistered(user)" [ngIfElse] = "registerEmpty">
+                                <ng-template [ngIf]="checkHackerStatus(user, 'Reg')" [ngIfElse] = "registerEmpty">
                                     <mat-icon class="check-circle-green">check_circle</mat-icon>
                                 </ng-template>
                                 <ng-template #registerEmpty>
@@ -173,7 +174,7 @@
                                 </ng-template>
 
                                 <!-- RSVP --> 
-                                <ng-template [ngIf]="isRSVP(user)" [ngIfElse] = "rsvpEmpty">
+                                <ng-template [ngIf]="checkHackerStatus(user, 'RSVP')" [ngIfElse] = "rsvpEmpty">
                                     <mat-icon class="check-circle-green">check_circle</mat-icon>
                                 </ng-template>
                                 <ng-template #rsvpEmpty>
@@ -181,7 +182,7 @@
                                 </ng-template>
 
                                 <!-- Check-In -->
-                                <ng-template [ngIf]="isCheckedIn(user)" [ngIfElse] = "checkinEmpty">
+                                <ng-template [ngIf]="checkHackerStatus(user, 'CheckIn')" [ngIfElse] = "checkinEmpty">
                                     <mat-icon class="check-circle-green">check_circle</mat-icon>
                                 </ng-template>
                                 <ng-template #checkinEmpty>

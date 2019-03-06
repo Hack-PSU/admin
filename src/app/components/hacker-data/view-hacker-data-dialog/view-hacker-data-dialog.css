@@ -11,9 +11,9 @@ td, th {
     overflow: auto;
 }
 
-tr:nth-child(even) {
-    /*background-color: #;*/
-}
+/* tr:nth-child(even) {
+    background-color: #;
+} */
 
 a href {
 	text-decoration: none;
@@ -27,4 +27,14 @@ a href {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.university-form-field, .major-form-field, .race-form-field, .coding-form-field, 
+.referral-form-field, .project-form-field, .expectation-form-field {
+    width: 100%;
+}
+
+.diet-res-container {
+    display: flex;
+    flex-direction: column;
 }

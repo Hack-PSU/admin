@@ -36,9 +36,9 @@ import { AddUserClassDialogComponent } from './components/extra-credit-classes/a
 import { AddLocationDialogComponent } from './components/manage-locations/add-location-dialog';
 import { UpdateLocationDialogComponent } from './components/manage-locations/update-location-dialog';
 import { AddEmailDialogComponent } from './components/send-email/add-email-dialog';
-import { UserDataComponent } from './components/user-data/user-data.component';
+import { HackerDataComponent } from './components/hacker-data/hacker-data.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ViewUserDataDialogComponent } from './components/user-data/view-user-data-dialog';
+import { ViewHackerDataDialogComponent } from './components/hacker-data/view-hacker-data-dialog/view-hacker-data-dialog';
 import { ManageAdminComponent } from './components/manage-admin/manage-admin.component';
 import { LocationDialogComponent } from './components/manage-admin/location-dialog';
 import { StatisticsComponent } from './components/statistics/statistics.component';
@@ -75,9 +75,9 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
     AddCheckoutRequestDialogComponent,
     VisComponent,
     ReturnCheckoutSheetComponent,
-    UserDataComponent,
+    HackerDataComponent,
     DashboardComponent,
-    ViewUserDataDialogComponent,
+    ViewHackerDataDialogComponent,
     ManageAdminComponent,
     LocationDialogComponent,
     StatisticsComponent,
@@ -103,7 +103,7 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
   entryComponents: [
     AddEmailDialogComponent, AddUserClassDialogComponent, AddEventDialogComponent,
     AddLocationDialogComponent, UpdateLocationDialogComponent,
-    ViewUserDataDialogComponent, LocationDialogComponent,
+    ViewHackerDataDialogComponent, LocationDialogComponent,
     AddCheckoutRequestDialogComponent, ReturnCheckoutSheetComponent,
     UpdateEventDialogComponent,
   ],

@@ -1,11 +1,11 @@
-  /**
+/**
  * User data component features a latest stats header and a user data table. The table serves
  * as a means of viewing, filtering, and modifying user data without directly accessing the database.
  * The latest stats header provides the reader with a count of the number of users in each category.
  */
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { HttpAdminService } from '../../services/http-admin/http-admin.service';
-
+import { NgProgress } from '@ngx-progressbar/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   MatDialog,
   MatPaginator,
@@ -13,35 +13,37 @@ import {
   MatTableDataSource,
   MatSnackBar,
 } from '@angular/material';
-import { FormControl, Validators } from '@angular/forms';
-import { AngularFireAuth } from 'angularfire2/auth';
-
 import { SelectionModel } from '@angular/cdk/collections';
-import { ActivatedRoute, Router } from '@angular/router';
+import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { AppConstants } from '../../helpers/AppConstants';
 import { EmailListService } from '../../services/email-list/email-list.service';
-
 import { IHackerDataModel } from '../../models/hacker-model';
+import { ViewHackerDataDialogComponent } from './view-hacker-data-dialog/view-hacker-data-dialog';
+import { AlertService } from 'ngx-alerts';
+import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
 
-import { ViewUserDataDialogComponent } from './view-user-data-dialog';
-import { NgProgress } from '@ngx-progressbar/core';
-import { map } from 'd3';
+enum HackerStatus {
+  PreReg = 'pre_uid',
+  Reg = 'uid',
+  RSVP = 'user_id',
+  CheckIn = 'user_uid',
+}
 
 @Component({
   selector: 'app-user-data',
   providers: [
     HttpAdminService,
   ],
-  templateUrl: './user-data.component.html',
-  styleUrls: ['./user-data.component.css'],
+  templateUrl: './hacker-data.component.html',
+  styleUrls: ['./hacker-data.component.css'],
 })
 
-export class UserDataComponent implements OnInit, AfterViewInit {
+export class HackerDataComponent implements OnInit, AfterViewInit {
   private static tableCols = [
     'select', 'name', 'email', 'university', 'academic_year', 'pin', 'display',
   ];
 
-  public displayedColumns = UserDataComponent.tableCols;
+  public displayedColumns = HackerDataComponent.tableCols;
   public dataSource = new MatTableDataSource<any>([]);
   public selection = new SelectionModel<any>(true, []);
 
@@ -49,18 +51,17 @@ export class UserDataComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) table: MatSort;
 
   /*
-   * Local private integers representing the counts in the latest stats header.
+   * Local private integers representing the counts in the latest stats header
    */
-  public preRegStatNumber = -1;
+  public preRegStatNumber = 0;
   public regStatNumber = -1;
-  public rsvpStatNumber = -1;
+  public rsvpStatNumber = 0;
   public checkInStatNumber = -1;
 
   /*
-   * Boolean variables used to display the edit column in the user table
+   * Boolean variable for user editing Hacker Data
    */
-  // private displayEditCol = false;
-  private editToggleDisable = true;
+  private canEditHackerData = false;
 
   /*
    * Error array used to display error messages
@@ -82,6 +83,7 @@ export class UserDataComponent implements OnInit, AfterViewInit {
     public adminService: HttpAdminService,
     public activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
+    public alertsService: AlertService,
   ) {
   }
 
@@ -101,6 +103,7 @@ export class UserDataComponent implements OnInit, AfterViewInit {
         this.checkUserPermissions();
         this.updateStatHeader();
         this.loadTableData();
+        // this.getHackathons();
         this.orgFilterPredicate = this.dataSource.filterPredicate
       } else {
         this.errors = new Error('Error: No user');
@@ -111,6 +114,15 @@ export class UserDataComponent implements OnInit, AfterViewInit {
       console.error(error);
     });
   }
+
+  /**
+   * TODO Add ability to view table data by hackathon
+   */
+  // getHackathons() {
+  //   this.adminService.getHackathons().subscribe((data) => {
+  //     console.log(data);
+  //   });
+  // }
 
   /**
    * After the initilization of all angular components, set the variables
@@ -132,22 +144,20 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    * @param: filterValue  String to filter the datasource
    */
   applyFilter(filterValue: string) {
-    console.log(this.filterSelect);
     const mFilterValue = filterValue.trim().toLowerCase();
     this.dataSource.filter = mFilterValue;
   }
 
+  /**
+   * Sets the filter category for the search/filter box.
+   */
   onFilterSelection() {
-    console.log('Before is my filterSelect: ' + this.filterSelect);
     if (this.filterSelect) {
       const filterProperty = this.filterSelect;
-      console.log('Hit the predicate');
-      console.log('After is my filterSelect: ' + filterProperty);
       this.dataSource.filterPredicate =
         (data: IHackerDataModel, filter: string) =>
-        data ? data[filterProperty].toString().trim().toLowerCase().indexOf(filter) !== -1 : false;
+        data ? (data[filterProperty] ? data[filterProperty].toString().trim().toLowerCase().indexOf(filter) !== -1 : false) : false;
     } else {
-      //On Selection - None
       this.dataSource.filterPredicate = this.orgFilterPredicate;
     }
   }
@@ -180,14 +190,13 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    */
   loadTableData() {
     this.adminService.getAllHackers().subscribe((resp) => {
-      this.displayedColumns = UserDataComponent.tableCols;
+      this.displayedColumns = HackerDataComponent.tableCols;
       this.dataSource.data = resp.body.data;
       this.progressService.complete();
       let dataNames = Object.getOwnPropertyNames(resp.body.data[0]);
       dataNames = dataNames.filter(option => !option.includes('id'));
-      //this.searchFilterOptions.push({value: "None"});
       dataNames.forEach((field) => {
-        let tempObj = { value: field, viewValue: field }
+        const tempObj = { value: field, viewValue: field }
         this.searchFilterOptions.push(tempObj);
       });
 
@@ -209,9 +218,10 @@ export class UserDataComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Abstraction for refreshing the data in a table, executes the loadTableData function
+   * Abstraction for refreshing the data in a table
    */
   refreshData() {
+    this.errors = null;
     this.loadTableData();
   }
 
@@ -243,39 +253,24 @@ export class UserDataComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Determines if the user has preregistered based on if their property id exists (id > 0)
+   * Returns the status of a hacker for Pre-Registration, Registration, RSVP, and Check-In
    *
-   * @param: user  User from the datasource
+   * @param user Firebase User
+   * @param status Hacker Status
    */
-  isPreRegistered(user) {
-    return !!user.pre_uid;
-  }
-
-  /**
-   * Determines if the user has registered based on if their property uid exists (uid > 0)
-   *
-   * @param: user  User from the datasource
-   */
-  isRegistered(user) {
-    return !!user.uid;
-  }
-
-  /**
-   * Determines if the user has rsvp'd based on if their property user_id exists (user_id > 0)
-   *
-   * @param: user  User from the datasource
-   */
-  isRSVP(user) {
-    return !!user.user_id;
-  }
-
-  /**
-   * Determines if the user has checked in based on if their property user_uid exists (user_uid > 0)
-   *
-   * @param: user  User from the datasource
-   */
-  isCheckedIn(user) {
-    return !!user.user_uid;
+  checkHackerStatus(user, status: string) {
+    let hs: HackerStatus;
+    switch (status) {
+      case 'PreReg': hs = HackerStatus.PreReg; break;
+      case 'Reg': hs = HackerStatus.Reg; break;
+      case 'RSVP': hs = HackerStatus.RSVP; break;
+      case 'CheckIn': hs = HackerStatus.CheckIn; break;
+      default: status = '';
+    }
+    if (status !== '') {
+      return !!user[hs];
+    }
+    return false;
   }
 
   /**
@@ -288,14 +283,14 @@ export class UserDataComponent implements OnInit, AfterViewInit {
     this.adminService.setHackerCheckedIn(user.uid)
         .subscribe(() => {},
                    (error) => {
-                 user.check_in_status = false;
-                 this.errors = new Error('Error: Issue with manually checking user in');
-                 console.error(error);
-               });
+                     user.check_in_status = false;
+                     this.errors = new Error('Error: Issue with manually checking user in');
+                     console.error(error);
+                   });
   }
 
   /**
-   * Locally determines the permission level of the user and enables the edit toggle feature if
+   * Locally determines the permission level of the user and enables editing of hacker registration data if
    * they are above the threshold: privilege level > 3
    *
    * @exception: Failure with the admin service with cause an error to be displayed on the /userdata/ route page
@@ -304,7 +299,9 @@ export class UserDataComponent implements OnInit, AfterViewInit {
     this.adminService.getAdminStatus()
         .subscribe((resp) => {
           if (resp.body.data.privilege > 3) {
-            this.editToggleDisable = false;
+            this.canEditHackerData = true;
+          } else {
+            this.canEditHackerData = false;
           }
         },         (error) => {
           this.errors = new Error('Error: Issue with getting the privilege level of the user');
@@ -319,9 +316,9 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    */
   updateStatHeader() {
     this.adminService.getAllUserCount().subscribe((data) => {
-      this.preRegStatNumber = data.preregistration_count;
+      // this.preRegStatNumber = data.preregistration_count;
       this.regStatNumber = data.registration_count;
-      this.rsvpStatNumber = data.rsvp_count;
+      // this.rsvpStatNumber = data.rsvp_count;
       this.checkInStatNumber = data.checkin_count;
     },                                            (error) => {
       this.errors = new Error('Error: Issue with getting the number of users');
@@ -335,12 +332,27 @@ export class UserDataComponent implements OnInit, AfterViewInit {
    * @param: user  single user data
    */
   viewAdditionalUserData(user) {
-    user['admin_edit_permission'] = this.editToggleDisable;
-    const dialogRef = this.dialog.open(ViewUserDataDialogComponent, {
+    const editPermission = this.canEditHackerData;
+    const dt = { editPermission, user };
+    const dialogRef = this.dialog.open(ViewHackerDataDialogComponent, {
       height: '600px',
       width: '750px',
-      data: user,
+      data: dt,
       autoFocus: false,
     });
+    dialogRef.afterClosed().subscribe((result: IHackerRegistrationModel) => {
+      if (result) {
+        this.progressService.start();
+        this.adminService.updateHackerRegistration(result)
+        .subscribe((resp) => {
+          const hacker_name = result.firstName + ' ' + result.lastName;
+          this.alertsService.success('Update Hacker Information for ' +  hacker_name);
+          this.refreshData();
+        },         (err) => {
+          console.log(err);
+          this.alertsService.danger('There was an issue with updating Hacker Information');
+        });
+      }
+    })
   }
 }
