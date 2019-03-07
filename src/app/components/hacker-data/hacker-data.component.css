@@ -115,3 +115,9 @@ mat-cell a {
 mat-cell a:hover {
   color: #6C88B7;
 }
+
+.change-hackathon-container {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}

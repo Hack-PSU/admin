@@ -12,11 +12,7 @@ import { map, startWith, toArray } from 'rxjs/operators';
 import * as SchoolList from '../../../../assets/schools.json';
 import * as MajorList from '../../../../assets/majors.json';
 import * as ReferralList from '../../../../assets/referral_sources.json';
-
-export interface ISelectionModel {
-  value: string,
-  viewValue: string,
-}
+import { IMatSelectionModel } from '../../../models/interfaces/mat-selection-interface'
 
 @Component({
   selector: 'app-view-hacker-data-dialog',
@@ -31,12 +27,12 @@ export class ViewHackerDataDialogComponent implements OnInit {
   private editToggleState: boolean;
   private hacker: IHackerDataModel;
 
-  private genderOptions: ISelectionModel[];
-  private academicYearOptions: ISelectionModel[];
-  private shirtSizeOptions: ISelectionModel[];
-  private dietaryRestrictionOptions: ISelectionModel[];
-  private raceOptions: ISelectionModel[];
-  private codingOptions: ISelectionModel[];
+  private genderOptions: IMatSelectionModel[];
+  private academicYearOptions: IMatSelectionModel[];
+  private shirtSizeOptions: IMatSelectionModel[];
+  private dietaryRestrictionOptions: IMatSelectionModel[];
+  private raceOptions: IMatSelectionModel[];
+  private codingOptions: IMatSelectionModel[];
 
   private schools: string[];
   private schoolFormControl = new FormControl();

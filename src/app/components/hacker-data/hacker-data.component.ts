@@ -21,6 +21,8 @@ import { IHackerDataModel } from '../../models/hacker-model';
 import { ViewHackerDataDialogComponent } from './view-hacker-data-dialog/view-hacker-data-dialog';
 import { AlertService } from 'ngx-alerts';
 import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
+import { IMatSelectionModel } from '../../models/interfaces/mat-selection-interface';
+import { IHackathonModel } from '../../models/hackathon-model';
 
 enum HackerStatus {
   PreReg = 'pre_uid',
@@ -75,6 +77,10 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   private filterSelect = '';
   private orgFilterPredicate: (data: IHackerDataModel, filter: string) => boolean;
 
+  private activeHackathon: IHackathonModel;
+  private hackathonOptions: IMatSelectionModel[];
+  private selectedHackathon: IMatSelectionModel;
+
   constructor(
     public emailListService: EmailListService,
     private router: Router,
@@ -98,12 +104,11 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    *              on the /userdata/ route page
    */
   ngOnInit() {
+    this.activeHackathon = null;
     this.activatedRoute.data.subscribe((user) => {
       if (user) {
         this.checkUserPermissions();
-        this.updateStatHeader();
-        this.loadTableData();
-        // this.getHackathons();
+        this.getHackathons();
         this.orgFilterPredicate = this.dataSource.filterPredicate
       } else {
         this.errors = new Error('Error: No user');
@@ -118,11 +123,29 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   /**
    * TODO Add ability to view table data by hackathon
    */
-  // getHackathons() {
-  //   this.adminService.getHackathons().subscribe((data) => {
-  //     console.log(data);
-  //   });
-  // }
+  getHackathons() {
+    this.adminService.getHackathons().subscribe((data: IHackathonModel[]) => {
+      this.hackathonOptions = [];
+      for (let i = 0; i < data.length; i = i + 1) {
+        if (data[i]) {
+          if (data[i].active) {
+            this.activeHackathon = data[i];
+            data[i].name = data[i].name +  ' - Current';
+          }
+          this.hackathonOptions.push({
+            value: data[i].uid, viewValue: data[i].name,
+          });
+        }
+      }
+      this.loadTableData(this.activeHackathon.uid);
+      this.updateStatHeader(this.activeHackathon.uid);
+    },                                          (error) => {
+      this.hackathonOptions = [];
+      this.hackathonOptions.push({ value: 'error', viewValue: 'Error Occurred' });
+      this.errors = new Error('Error: Issue with loading the hackathon options. Please refresh the page.');
+      console.error(error);
+    });
+  }
 
   /**
    * After the initilization of all angular components, set the variables
@@ -188,8 +211,8 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    *
    * @exception: Failure with the admin service will cause an error to be displayed on the /userdata/ route page
    */
-  loadTableData() {
-    this.adminService.getAllHackers().subscribe((resp) => {
+  loadTableData(hackathonUid?: string) {
+    this.adminService.getAllHackers(null, hackathonUid).subscribe((resp) => {
       this.displayedColumns = HackerDataComponent.tableCols;
       this.dataSource.data = resp.body.data;
       this.progressService.complete();
@@ -200,7 +223,7 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
         this.searchFilterOptions.push(tempObj);
       });
 
-    },                                          (error) => {
+    },                                                            (error) => {
       this.errors = new Error('Error: Issue with loading the user table. Please refresh the page.');
       console.error(error);
     });
@@ -220,9 +243,25 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   /**
    * Abstraction for refreshing the data in a table
    */
-  refreshData() {
+  refreshData(hackathon?: IMatSelectionModel) {
     this.errors = null;
-    this.loadTableData();
+    this.updateStatHeader();
+    if (hackathon) {
+      this.loadTableData(hackathon.value);
+      this.updateStatHeader(hackathon.value);
+    } else {
+      this.loadTableData(this.activeHackathon.uid);
+      this.updateStatHeader(this.activeHackathon.uid);
+    }
+  }
+
+  changeSelectedHackathon() {
+    if (this.selectedHackathon) {
+      console.log(this.selectedHackathon);
+      this.refreshData(this.selectedHackathon);
+    } else {
+      this.refreshData();
+    }
   }
 
   /**
@@ -314,13 +353,13 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    *
    * @exception: Failure with the admin service with cause an error to be displayed on the /userdata/ route page
    */
-  updateStatHeader() {
-    this.adminService.getAllUserCount().subscribe((data) => {
+  updateStatHeader(hackathonUid?: string) {
+    this.adminService.getAllUserCount(hackathonUid).subscribe((data) => {
       // this.preRegStatNumber = data.preregistration_count;
       this.regStatNumber = data.registration_count;
       // this.rsvpStatNumber = data.rsvp_count;
       this.checkInStatNumber = data.checkin_count;
-    },                                            (error) => {
+    },                                                        (error) => {
       this.errors = new Error('Error: Issue with getting the number of users');
       console.error(error);
     });

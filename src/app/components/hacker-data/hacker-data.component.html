@@ -1,6 +1,5 @@
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<div class = "main-container">
-    <div class = "title-container">
+<div class="main-container">
+    <div class="title-container">
         <div class="section-title-word">
             <div class="section-title-letter white-text">H</div>
             <div class="section-title-letter white-text">A</div>
@@ -16,11 +15,20 @@
             <div class="section-title-letter white-text">A</div>
         </div>
     </div>
-    <div class = "body-container">
+    <div class='change-hackathon-container'>
+        <mat-form-field color="primary">
+            <mat-select placeholder="View hackathon" (selectionChange)="changeSelectedHackathon()" [(ngModel)]="selectedHackathon" name="hackathon">
+                <mat-option *ngFor="let hackathon of hackathonOptions" [value]="hackathon">
+                    {{hackathon.viewValue}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="body-container">
             <div *ngIf="errors" class="alert alert-danger">
                 {{ errors.message }}
             </div>
-        <div class = "latest-container">
+        <div class="latest-container">
             <mat-card>
                 <mat-card-title>
                     <b>Latest Stats</b>
@@ -45,11 +53,11 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class = "table-container">
+        <div class="table-container">
             <mat-card>
                 <mat-card-title>
                     <b>Hackers</b>
-                    <div class = "table-title-container">
+                    <div class="table-title-container">
                         <div *ngIf="selection.isEmpty(); else showSelection" class="card-title">
                             <p> Registration Data </p>
                         </div>
@@ -96,7 +104,6 @@
                     </div>
                 </mat-card-title>
                 <mat-card-content>
-
                     <mat-table #table [dataSource]="dataSource" matSort>
                         <!-- Select Column -->
                         <ng-container matColumnDef="select">

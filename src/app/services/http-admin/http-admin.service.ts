@@ -26,6 +26,8 @@ import { CustomErrorHandlerService } from '../custom-error-handler/custom-error-
 
 import * as _ from 'lodash';
 import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
+import { stringify } from '@angular/compiler/src/util';
+import { query } from '@angular/core/src/render3/query';
 
 
 @Injectable()
@@ -308,11 +310,15 @@ export class HttpAdminService extends BaseHttpService {
    * @param limit Maximun integer number of hacker entries to fetch
    * @returns Array of extra credit classes for the hackathon in the ClassesModel format
    */
-  getAllHackers(limit?: number): Observable<IApiResponseModel<IHackerDataModel[]>> {
+  getAllHackers(limit?: number, hackathon?: string): Observable<IApiResponseModel<IHackerDataModel[]>> {
+    const queryParams = new Map<string, any>();
+    queryParams.set('byHackathon', true);
+    if (limit != null) { queryParams.set('limit', limit); };
+    if (hackathon != null) { queryParams.set('hackathon', hackathon); };
     const apiRoute = new ApiRoute(
       'admin/data/?type=registration_stats',
       true,
-      limit ? new Map<string, any>().set('limit', limit) : null,
+      queryParams,
     );
     return super.genericGet<IApiResponseModel<IHackerDataModel[]>>(apiRoute)
   }
@@ -351,11 +357,13 @@ export class HttpAdminService extends BaseHttpService {
    * @param limit Maximun integer number Pre/Reg/RSVP/CheckedIn Count entries to fetch
    * @returns Integer number count of hackers who have Pre/Reg/RSVP/CheckedIn in the ICountModel format
    */
-  getAllUserCount(): Observable<ICountModel> {
+  getAllUserCount(hackathon?: string): Observable<ICountModel> {
+    const queryParams = new Map<string, any>();
+    if (hackathon) { queryParams.set('hackathon', hackathon); }
     const apiRoute = new ApiRoute(
       'admin/data/?type=stats_count',
       true,
-      new Map<string, any>().set('byHackathon', true),
+      queryParams,
     );
     return super.genericGet<IApiResponseModel<ICountModel>>(apiRoute)
       .pipe(
