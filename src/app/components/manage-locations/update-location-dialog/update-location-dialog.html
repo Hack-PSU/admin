@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Update Location</h1>
+<div mat-dialog-content>
+	<div class="content-container">
+		<div style="display: block;">
+			<p><b>Current Location Name</b></p>
+			<p>{{passed_data}}</p>
+		</div>
+		<div style="display: block;">
+			<p><b>Enter new Location name</b></p>
+			<mat-form-field class="update-location" class="col-sm-6 col-sm-offset-3">
+				<input matInput #updateLocation placeholder={{passed_data}} id="update-location">
+			</mat-form-field>
+		</div>
+	</div>
+</div>
+<div mat-dialog-actions>
+	<button mat-button mat-dialog-close>No Thanks</button>
+	<button mat-button [mat-dialog-close]="updateLocation.value"> Update Location </button>
+</div>
+    

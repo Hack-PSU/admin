@@ -1,92 +1,76 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Manage Locations</title>
-</head>
-<body>
-    <mat-card>
-        <mat-card-title>
-            <b>Locations</b>
-            <div class = "table-title-container">
-                <div *ngIf="selection.isEmpty(); else showSelection" class="card-title">
-                    <p>
-                    Location Data
-                    </p>
-                </div>
-                <ng-template #showSelection>
-                    <div class="item-selected card-title">
-                        <p>
-                        {{selection.selected.length === 1 ? selection.selected.length + " row selected" :
-                        selection.selected.length + " rows selected"}}
-                        <p>
-                    </div>
-                </ng-template>
-                <mat-form-field class="email-filter">
-                        <input matInput (keydown)="applyFilter($event.target.value)" placeholder="Search" id="email-filter">
-                    </mat-form-field>
-                <div class="context-menu">
-                    <button mat-icon-button [matMenuTriggerFor]="menu">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="refreshData()">
-                            <mat-icon>refresh</mat-icon>
-                            <span>Refresh Data</span>
-                        </button>
-                        <button mat-menu-item (click)="showInsertDialog()">
-                            <mat-icon>add</mat-icon>
-                            <span>Add Location</span>
-                        </button>
-                    </mat-menu>
-                </div>
+<mat-card>
+    <mat-card-title>
+        <b>Locations</b>
+        <div class="table-title-container">
+            <div *ngIf="selection.isEmpty(); else showSelection" class="card-title">
+                <h4>Location Data</h4>
             </div>
-        </mat-card-title>
-        <mat-card-content>
-            <mat-table #table [dataSource]="dataSource" matSort>
+            <ng-template #showSelection>
+                <div class="item-selected card-title">
+                    <p>
+                    {{selection.selected.length === 1 ? selection.selected.length + " row selected" :
+                    selection.selected.length + " rows selected"}}
+                    <p>
+                </div>
+            </ng-template>
+            <mat-form-field class="location-filter">
+                <input matInput (keydown)="applyFilter($event.target.value)" placeholder="Search" id="email-filter">
+            </mat-form-field>
+            <div class="context-menu">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="refreshData()">
+                        <mat-icon>refresh</mat-icon>
+                        <span>Refresh Data</span>
+                    </button>
+                    <button mat-menu-item (click)="showInsertDialog()">
+                        <mat-icon>add</mat-icon>
+                        <span>Add Location</span>
+                    </button>
+                </mat-menu>
+            </div>
+        </div>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-table #table [dataSource]="dataSource" matSort>
 
-                <!--  Location Name Column -->
-                <ng-container matColumnDef="location_name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Location Name</mat-header-cell>
-                    <mat-cell *matCellDef="let user"> {{user.location_name}}</mat-cell>
-                </ng-container>
+            <!--  Location Name Column -->
+            <ng-container matColumnDef="location_name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Location Name</mat-header-cell>
+                <mat-cell *matCellDef="let location"> {{location.location_name}}</mat-cell>
+            </ng-container>
 
-                <!-- UID Column -->
-                <ng-container matColumnDef="uid">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> UID</mat-header-cell>
-                    <mat-cell *matCellDef="let user"> {{user.uid}}</mat-cell>
-                </ng-container>
+            <!-- UID Column -->
+            <ng-container matColumnDef="uid">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> UID</mat-header-cell>
+                <mat-cell *matCellDef="let location"> {{location.uid}}</mat-cell>
+            </ng-container>
 
-                <!-- Button Column -->
-                <ng-container matColumnDef="button">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Action</mat-header-cell>
-                    <mat-cell *matCellDef="let user">
-                        <div class="action-menu">
-                            <button mat-icon-button [matMenuTriggerFor]="crud_menu">
-                                <mat-icon>settings</mat-icon>
-                            </button>
-                            <mat-menu #crud_menu="matMenu">
-                                <button mat-menu-item (click)="showUpdateDialog(user.uid)">
-                                    <mat-icon>edit</mat-icon>
-                                    <span>Update Location</span>
-                                </button>
-                                <button mat-menu-item (click)="removeLocation(user.uid)">
-                                    <mat-icon>delete</mat-icon>
-                                    <span>Remove Location</span>
-                                </button>
-                            </mat-menu>
-                        </div>
+            <!-- Update Button Column-->
+            <ng-container matColumnDef="updateButton">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Update</mat-header-cell>
+                    <mat-cell *matCellDef="let location">
+                        <button mat-raised-button color="accent" (click)="showUpdateDialog(location.location_name, location.uid)">Update</button>
                     </mat-cell>
-                </ng-container>
+            </ng-container>
 
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            </mat-table>
-            <mat-paginator #paginator
-                        [pageSize]="10"
-                        [pageSizeOptions]="[50,100,500]"
-                        [showFirstLastButtons]="true">
-            </mat-paginator>
-        </mat-card-content>
-    </mat-card>
-</body>
-</html>
+            <!-- Remove Button Column-->
+            <ng-container matColumnDef="removeButton">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Remove</mat-header-cell>
+                <mat-cell *matCellDef="let location">
+                    <button mat-raised-button color="warn" (click)="showRemoveDialog(location.location_name, location.uid)">Remove</button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator
+                    [pageSize]="10"
+                    [pageSizeOptions]="[50,100,500]"
+                    [showFirstLastButtons]="true">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>

@@ -245,7 +245,6 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    */
   refreshData(hackathon?: IMatSelectionModel) {
     this.errors = null;
-    this.updateStatHeader();
     if (hackathon) {
       this.loadTableData(hackathon.value);
       this.updateStatHeader(hackathon.value);
