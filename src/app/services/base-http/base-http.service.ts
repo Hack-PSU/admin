@@ -33,7 +33,6 @@ export abstract class BaseHttpService {
                                  status: 401,
                                }));
                              }
-                             console.log(idToken);
                              let headers = new HttpHeaders();
                              headers = headers.set('idtoken', idToken);
                              let params = new HttpParams();
