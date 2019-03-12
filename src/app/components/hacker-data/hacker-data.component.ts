@@ -20,7 +20,7 @@ import { EmailListService } from '../../services/email-list/email-list.service';
 import { IHackerDataModel } from '../../models/hacker-model';
 import { ViewHackerDataDialogComponent } from './view-hacker-data-dialog/view-hacker-data-dialog';
 import { AlertService } from 'ngx-alerts';
-import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
+import { IHackerRegistrationModel } from '../../models/hacker-registration-model';
 import { IMatSelectionModel } from '../../models/interfaces/mat-selection-interface';
 import { IHackathonModel } from '../../models/hackathon-model';
 
@@ -120,9 +120,6 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
     });
   }
 
-  /**
-   * TODO Add ability to view table data by hackathon
-   */
   getHackathons() {
     this.adminService.getHackathons().subscribe((data: IHackathonModel[]) => {
       this.hackathonOptions = [];
@@ -256,7 +253,6 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
 
   changeSelectedHackathon() {
     if (this.selectedHackathon) {
-      console.log(this.selectedHackathon);
       this.refreshData(this.selectedHackathon);
     } else {
       this.refreshData();
@@ -354,9 +350,9 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    */
   updateStatHeader(hackathonUid?: string) {
     this.adminService.getAllUserCount(hackathonUid).subscribe((data) => {
-      // this.preRegStatNumber = data.preregistration_count;
+      this.preRegStatNumber = data.preregistration_count;
       this.regStatNumber = data.registration_count;
-      // this.rsvpStatNumber = data.rsvp_count;
+      this.rsvpStatNumber = data.rsvp_count;
       this.checkInStatNumber = data.checkin_count;
     },                                                        (error) => {
       this.errors = new Error('Error: Issue with getting the number of users');
