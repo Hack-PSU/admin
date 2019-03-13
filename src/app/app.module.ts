@@ -33,8 +33,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AddEventDialogComponent } from './components/manage-events/add-event-dialog';
 import { UpdateEventDialogComponent } from './components/manage-events/update-event-dialog';
 import { AddUserClassDialogComponent } from './components/extra-credit-classes/add-user-class-dialog';
-import { AddLocationDialogComponent } from './components/manage-locations/add-location-dialog';
-import { UpdateLocationDialogComponent } from './components/manage-locations/update-location-dialog';
+import { AddLocationDialogComponent } from './components/manage-locations/add-location-dialog/add-location-dialog';
+import { UpdateLocationDialogComponent } from './components/manage-locations/update-location-dialog/update-location-dialog';
+import { RemoveLocationDialogComponent } from './components/manage-locations/remove-location-dialog/remove-location-dialog';
 import { AddEmailDialogComponent } from './components/send-email/add-email-dialog';
 import { HackerDataComponent } from './components/hacker-data/hacker-data.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -70,6 +71,7 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
     ManageLocationsComponent,
     AddLocationDialogComponent,
     UpdateLocationDialogComponent,
+    RemoveLocationDialogComponent,
     ExtraCreditClassesComponent,
     AddUserClassDialogComponent,
     AddCheckoutRequestDialogComponent,
@@ -102,7 +104,7 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
   ],
   entryComponents: [
     AddEmailDialogComponent, AddUserClassDialogComponent, AddEventDialogComponent,
-    AddLocationDialogComponent, UpdateLocationDialogComponent,
+    AddLocationDialogComponent, UpdateLocationDialogComponent, RemoveLocationDialogComponent,
     ViewHackerDataDialogComponent, LocationDialogComponent,
     AddCheckoutRequestDialogComponent, ReturnCheckoutSheetComponent,
     UpdateEventDialogComponent,

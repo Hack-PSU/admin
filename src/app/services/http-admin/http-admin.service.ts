@@ -129,13 +129,13 @@ export class HttpAdminService extends BaseHttpService {
    * @param email Firebase user email address
    * @returns 
    */
-  getUserUID(email: string): Observable<IApiResponseModel<{uid}>> {
+  getUserUID(email: string): Observable<IApiResponseModel<{uid: string}>> {
     const apiRoute = new ApiRoute(
       'admin/userid',
       true,
       new Map().set('email', email),
     );
-    return super.genericGet<IApiResponseModel<{uid}>>(apiRoute);
+    return super.genericGet<IApiResponseModel<{uid: string}>>(apiRoute);
   }
 
   /**
@@ -209,12 +209,17 @@ export class HttpAdminService extends BaseHttpService {
    * @returns Array of events for the hackathon in the EventModel format
    */
   getLocations(limit?: number): Observable<LocationModel[]> {
+    const apiParams = new Map<string, any>();
+    if (limit > 0) { apiParams.set('limit', limit); }
     const apiRoute = new ApiRoute(
-      'admin/location_list',
+      'admin/location',
       true,
-      limit ? new Map<string, any>().set('limit', limit) : null,
+      apiParams,
     );
-    return super.genericGet<LocationModel[]>(apiRoute);
+    return super.genericGet<IApiResponseModel<LocationModel[]>>(apiRoute)
+    .pipe(
+      map(response => response.body.data),
+    );
   }
 
   /**
@@ -224,7 +229,7 @@ export class HttpAdminService extends BaseHttpService {
    */
   addNewLocation(locationName: string) {
     const apiRoute = new ApiRoute(
-      'admin/create_location',
+      'admin/location',
       true,
     );
     return super.genericPost<{}>(apiRoute, { locationName });
@@ -237,7 +242,7 @@ export class HttpAdminService extends BaseHttpService {
    */
   removeLocation(uid: string) {
     const apiRoute = new ApiRoute(
-      'admin/remove_location',
+      'admin/location/delete',
       true,
     );
     return super.genericPost<{}>(apiRoute, { uid });
@@ -250,12 +255,12 @@ export class HttpAdminService extends BaseHttpService {
    * @param uid Unique identifier (UID) for the location
    * @param location_name New name for the location
    */
-  updateLocation(uid: string, location_name: string) {
+  updateLocation(uid: string, locationName: string) {
     const apiRoute = new ApiRoute(
       'admin/location/update',
       true,
     );
-    return super.genericPost<{}>(apiRoute, { uid, location_name });
+    return super.genericPost<{}>(apiRoute, { uid, locationName });
   }
 
   /**

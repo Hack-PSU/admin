@@ -6,3 +6,8 @@
     float: right;
     width: 100%;
 }
+
+.name-container {
+    display: inline-flex;
+    flex-direction: row;
+}

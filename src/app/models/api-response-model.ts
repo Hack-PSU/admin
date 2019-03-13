@@ -3,6 +3,6 @@ export interface IApiResponseModel<T> {
   status: number;
   body: {
     result: string;
-    data: T
+    data: T;
   }
 }
