@@ -84,29 +84,34 @@ export class HttpAdminService extends BaseHttpService {
    * @returns Array of events for the hackathon in the EventModel format
    */
   getEvents(limit?: number): Observable<EventModel[]> {
+    const apiParams = new Map<string, any>();
+    apiParams.set('ignoreCache', true);
+    if (limit != null) { apiParams.set('limit', limit); }
     const apiRoute = new ApiRoute(
       'live/events',
       true,
-      limit ? new Map<string, any>().set('limit', limit) : null,
+      apiParams,
     );
-    return super.genericGet<{}[]>(apiRoute)
+    return super.genericGet<IApiResponseModel<EventModel[]>>(apiRoute)
       .pipe(
-        map(events => events.map(event => EventModel.parseJSON(event))),
-      )
+        map(response => response.body.data),
+      );
   }
 
   /**
    * Adds a new event to the list of available events for the hackathon
    * 
-   * @param event New EvenModel format event to add
+   * @param event New EventModel format event to add
    * @returns Response containing success message
    */
   addEvent(event: EventModel): Observable<{}> {
+
+
     const apiRoute = new ApiRoute(
-    'live/event',
-    true,
+      'live/events',
+      true,
     );
-    return super.genericPut<{}>(apiRoute, event.restRepr());
+    return super.genericPost<IApiResponseModel<{}>>(apiRoute, event.restRepr());
   }
 
   /**
@@ -117,10 +122,11 @@ export class HttpAdminService extends BaseHttpService {
    */
   updateEvent(event: EventModel): Observable<{}> {
     const apiRoute = new ApiRoute(
-    'live/event',
+    'live/events/update',
     true,
     );
-    return super.genericPut<{}>(apiRoute, { event: event.restRepr() });
+    console.log(event.restRepr());
+    return super.genericPost<{}>(apiRoute, event.restRepr());
   }
 
   /**

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Update Event</h1>
 <div mat-dialog-content>
     <mat-form-field>
-        <input [matAutocomplete]="auto" matInput [(ngModel)]="outData.event_location" placeholder="Event Location">
+        <input [matAutocomplete]="auto" matInput [(ngModel)]="updatedEvent.event_location" placeholder="Event Location">
         <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let option of locationList | async" [value]="option.uid.toString()">
                 {{option.location_name}}
@@ -9,19 +9,19 @@
         </mat-autocomplete>
     </mat-form-field>
     <mat-form-field>
-        <input matInput [(ngModel)]="outData.event_start_time" placeholder="Start date [Format: December 17, 1995 03:24:00]">
+        <input matInput [(ngModel)]="eventStartTime" placeholder="Start date [Format: December 17, 1995 03:24:00]">
     </mat-form-field>
     <mat-form-field>
-        <input matInput [(ngModel)]="outData.event_end_time" placeholder="End date [Format: December 17, 1995 03:24:00]">
+        <input matInput [(ngModel)]="eventEndTime" placeholder="End date [Format: December 17, 1995 03:24:00]">
     </mat-form-field>
     <mat-form-field>
-        <input matInput [(ngModel)]="outData.event_title" placeholder="Event Title">
+        <input matInput [(ngModel)]="updatedEvent.event_title" placeholder="Event Title">
     </mat-form-field>
     <mat-form-field>
-        <textarea matInput [(ngModel)]="outData.event_description" placeholder="Event description"></textarea>
+        <textarea matInput [(ngModel)]="updatedEvent.event_description" placeholder="Event description"></textarea>
     </mat-form-field>
     <mat-form-field>
-        <input [matAutocomplete]="autoType" matInput [(ngModel)]="outData.event_type" placeholder="Event type">
+        <input [matAutocomplete]="autoType" matInput [(ngModel)]="updatedEvent.event_type" placeholder="Event type">
         <mat-autocomplete #autoType="matAutocomplete">
             <mat-option value="food">Food</mat-option>
             <mat-option value="workshop">Workshop</mat-option>
@@ -31,5 +31,5 @@
 </div>
 <div mat-dialog-actions>
     <button mat-button mat-dialog-close>No Thanks</button>
-    <button mat-button [mat-dialog-close]="outData" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="dateToNumber()" [mat-dialog-close]="updatedEvent" cdkFocusInitial>Ok</button>
 </div>

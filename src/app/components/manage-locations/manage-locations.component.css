@@ -13,6 +13,13 @@
   color: black;
 }
 
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 999;
+}
+
 .h4 {
   display: block;
   width: 80%;
