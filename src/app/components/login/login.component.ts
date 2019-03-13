@@ -12,7 +12,6 @@ import { NgProgress } from '@ngx-progressbar/core';
 import { AuthProviders } from '../../services/AuthService/auth.service';
 import { AppConstants } from '../../helpers/AppConstants';
 import { AlertService } from 'ngx-alerts';
-import { IApiResponseModel } from '../../models/api-response-model';
 
 @Component({
   selector: 'app-login',
@@ -114,8 +113,8 @@ export class LoginComponent {
       return;
     }
     this.httpService.getAdminStatus()
-        .subscribe((result: IApiResponseModel<{admin: boolean, privilege: number}>) => {
-          if (!result.body.data.admin) {
+        .subscribe((result: {admin: boolean, privilege: number}) => {
+          if (!result.admin) {
             const error = Error(
               'You do not have the necessary permission to login here. Please contact an administrator.',
             );

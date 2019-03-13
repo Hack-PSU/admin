@@ -1,7 +1,7 @@
 <mat-card>
 	<mat-card-title>
 		<div class="title-container">
-			<p>{{user_data.firstname}} {{user_data.lastname}}</p>
+			<p>{{hacker_data.firstname}} {{hacker_data.lastname}}</p>
 			<button mat-raised-button color="primary" (click)="onSubmitButtonClick()">Submit Registration Data Changes</button>
 			<div>
 				<mat-slide-toggle name="editToggle" style="margin-left: 5px;" color="accent" (change)="onChange($event)" [disabled]="editToggleDisable">Edit</mat-slide-toggle>
@@ -22,7 +22,7 @@
 					<td>First Name</td>
 					<td>
 						<mat-form-field color="accent" appearance="outline">
-							<input matInput [(ngModel)]="hacker.firstname" placeholder={{user_data.firstname}}>
+							<input matInput [(ngModel)]="hacker.firstname" placeholder={{hacker_data.firstname}}>
 						</mat-form-field>
 					</td>
 				</tr>
@@ -30,7 +30,7 @@
 					<td>Last Name</td>
 					<td>
 						<mat-form-field color="accent" appearance="outline">
-							<input matInput [(ngModel)]="hacker.lastname" placeholder={{user_data.lastname}}>
+							<input matInput [(ngModel)]="hacker.lastname" placeholder={{hacker_data.lastname}}>
 						</mat-form-field>
 					</td>
 				</tr>
@@ -38,7 +38,7 @@
 					<td>Email</td>
 					<td>
 						<mat-form-field color="accent" appearance="outline">
-							<input matInput [(ngModel)]="hacker.email" placeholder={{user_data.email}}>
+							<input matInput [(ngModel)]="hacker.email" placeholder={{hacker_data.email}}>
 						</mat-form-field>
 					</td>
 				</tr>
@@ -58,7 +58,7 @@
 					<td>University</td>
 					<td>
 						<mat-form-field class="university-form-field" color="accent" appearance="outline">
-							<input matInput placeholder={{user_data.university}} [formControl]="schoolFormControl" [matAutocomplete]="autoUniveristy">
+							<input matInput placeholder={{hacker_data.university}} [formControl]="schoolFormControl" [matAutocomplete]="autoUniveristy">
 							<mat-autocomplete #autoUniveristy="matAutocomplete">
 								<mat-option *ngFor="let university of filteredSchoolOptions | async" [value]="university">
 									{{university}}
@@ -83,7 +83,7 @@
 					<td>Major</td>
 					<td>
 						<mat-form-field class="major-form-field" color="accent" appearance="outline">
-							<input matInput placeholder={{user_data.major}} [formControl]="majorFormControl" [matAutocomplete]="autoMajor">
+							<input matInput placeholder={{hacker_data.major}} [formControl]="majorFormControl" [matAutocomplete]="autoMajor">
 							<mat-autocomplete #autoMajor="matAutocomplete">
 								<mat-option *ngFor="let major of filteredMajorOptions | async" [value]="major">
 									{{major}}
@@ -122,7 +122,7 @@
 							</div>
 							<ng-template [ngIf]="dietaryResSelection === 'other'">
 								<mat-form-field color="accent" appearance="outline">
-									<input matInput [(ngModel)]="hacker.dietary_restriction" placeholder={{user_data.dietary_restriction}}>
+									<input matInput [(ngModel)]="hacker.dietary_restriction" placeholder={{hacker_data.dietary_restriction}}>
 								</mat-form-field>
 							</ng-template>
 						</div>
@@ -132,7 +132,7 @@
 					<td>Allergies</td>
 					<td>
 						<mat-form-field color="accent" appearance="outline">
-							<input matInput [(ngModel)]="hacker.allergies" placeholder={{user_data.allergies}}>
+							<input matInput [(ngModel)]="hacker.allergies" placeholder={{hacker_data.allergies}}>
 						</mat-form-field>
 					</td>
 				</tr>
@@ -156,7 +156,7 @@
 					<td>Phone Number</td>
 					<td>
 						<mat-form-field color="accent" appearance="outline">
-							<input matInput [(ngModel)]="hacker.phone" placeholder={{user_data.phone}}>
+							<input matInput [(ngModel)]="hacker.phone" placeholder={{hacker_data.phone}}>
 						</mat-form-field>
 					</td>
 				</tr>
@@ -220,7 +220,7 @@
 					<td>Referral Source</td>
 					<td>
 						<mat-form-field class="referral-form-field" color="accent" appearance="outline">
-							<input matInput placeholder={{user_data.referral}} [formControl]="referralFormControl" [matAutocomplete]="autoReferral">
+							<input matInput placeholder={{hacker_data.referral}} [formControl]="referralFormControl" [matAutocomplete]="autoReferral">
 							<mat-autocomplete #autoReferral="matAutocomplete">
 								<mat-option *ngFor="let source of filteredReferralOptions | async" [value]="source">
 									{{source}}
@@ -233,7 +233,7 @@
 					<td>Project Description</td>
 					<td>
 						<mat-form-field class="project-form-field" color="accent" appearance="outline">
-							<textarea matInput [(ngModel)]="hacker.project" placeholder={{user_data.project}}></textarea>
+							<textarea matInput [(ngModel)]="hacker.project" placeholder={{hacker_data.project}}></textarea>
 						</mat-form-field>
 					</td>
 				</tr>
@@ -241,7 +241,7 @@
 					<td>Expectations</td>
 					<td>
 						<mat-form-field class="expectation-form-field" color="accent" appearance="outline">
-							<textarea matInput [(ngModel)]="hacker.expectations" placeholder={{user_data.expectations}}></textarea>
+							<textarea matInput [(ngModel)]="hacker.expectations" placeholder={{hacker_data.expectations}}></textarea>
 						</mat-form-field>
 					</td>
 				</tr>
@@ -302,9 +302,9 @@
 				<tr>
 					<td>First Name</td>
 					<td>
-						<ng-template [ngIf]="user_data.firstname" [ngIfElse]="firstNA">
+						<ng-template [ngIf]="hacker_data.firstname" [ngIfElse]="firstNA">
 							<div>
-								{{user_data.firstname}}
+								{{hacker_data.firstname}}
 							</div>
 						</ng-template>
 						<ng-template #firstNA>
@@ -317,9 +317,9 @@
 				<tr>
 					<td>Last Name</td>
 					<td>
-						<ng-template [ngIf]="user_data.lastname" [ngIfElse]="secondNA">
+						<ng-template [ngIf]="hacker_data.lastname" [ngIfElse]="secondNA">
 							<div>
-								{{user_data.lastname}}
+								{{hacker_data.lastname}}
 							</div>
 						</ng-template>
 						<ng-template #secondNA>
@@ -332,9 +332,9 @@
 				<tr>
 					<td>Email</td>
 					<td>
-						<ng-template [ngIf]="user_data.email" [ngIfElse]="emailNA">
+						<ng-template [ngIf]="hacker_data.email" [ngIfElse]="emailNA">
 							<div>
-								{{user_data.email}}
+								{{hacker_data.email}}
 							</div>
 						</ng-template>
 						<ng-template #emailNA>
@@ -347,9 +347,9 @@
 				<tr>
 					<td>Gender</td>
 					<td>
-						<ng-template [ngIf]="user_data.gender" [ngIfElse]="genderNA">
+						<ng-template [ngIf]="hacker_data.gender" [ngIfElse]="genderNA">
 							<div>
-								{{capitalizeFirstLetter(user_data.gender)}}
+								{{capitalizeFirstLetter(hacker_data.gender)}}
 							</div>
 						</ng-template>
 						<ng-template #genderNA>
@@ -362,9 +362,9 @@
 				<tr>
 					<td>University</td>
 					<td>
-						<ng-template [ngIf]="user_data.university" [ngIfElse]="universityNA">
+						<ng-template [ngIf]="hacker_data.university" [ngIfElse]="universityNA">
 							<div>
-								{{user_data.university}}
+								{{hacker_data.university}}
 							</div>
 						</ng-template>
 						<ng-template #universityNA>
@@ -377,9 +377,9 @@
 				<tr>
 					<td>Academic Year</td>
 					<td>
-						<ng-template [ngIf]="user_data.academic_year" [ngIfElse]="acadYearNA">
+						<ng-template [ngIf]="hacker_data.academic_year" [ngIfElse]="acadYearNA">
 							<div>
-								{{capitalizeFirstLetter(user_data.academic_year)}}
+								{{capitalizeFirstLetter(hacker_data.academic_year)}}
 							</div>
 						</ng-template>
 						<ng-template #acadYearNA>
@@ -392,9 +392,9 @@
 				<tr>
 					<td>Major</td>
 					<td>
-						<ng-template [ngIf]="user_data.major" [ngIfElse]="majorNA">
+						<ng-template [ngIf]="hacker_data.major" [ngIfElse]="majorNA">
 							<div>
-								{{user_data.major}}
+								{{hacker_data.major}}
 							</div>
 						</ng-template>
 						<ng-template #majorNA>
@@ -407,9 +407,9 @@
 				<tr>
 					<td>Shirt Size</td>
 					<td>
-						<ng-template [ngIf]="user_data.shirt_size" [ngIfElse]="shirtNa">
+						<ng-template [ngIf]="hacker_data.shirt_size" [ngIfElse]="shirtNa">
 							<div>
-								{{getSizeText(user_data.shirt_size)}}
+								{{getSizeText(hacker_data.shirt_size)}}
 							</div>
 						</ng-template>
 						<ng-template #shirtNa>
@@ -422,13 +422,13 @@
 				<tr>
 					<td>Dietary Restrictions</td>
 					<td>
-						<ng-template [ngIf]="user_data.dietary_restriction" [ngIfElse]="dietResNA">
+						<ng-template [ngIf]="hacker_data.dietary_restriction" [ngIfElse]="dietResNA">
 							<div>
-								{{user_data.dietary_restriction}}
+								{{hacker_data.dietary_restriction}}
 							</div>
 						</ng-template>
 						<ng-template #dietResNA>
-							<ng-template [ngIf]="user_data.dietary_restriction===false" [ngIfElse]='dietResNAA'>
+							<ng-template [ngIf]="hacker_data.dietary_restriction===false" [ngIfElse]='dietResNAA'>
 								<div>
 									False
 								</div>
@@ -444,13 +444,13 @@
 				<tr>
 					<td>Allergies</td>
 					<td>
-						<ng-template [ngIf]="user_data.allergies" [ngIfElse]="allegeryNA">
+						<ng-template [ngIf]="hacker_data.allergies" [ngIfElse]="allegeryNA">
 							<div>
-								{{user_data.allergies}}
+								{{hacker_data.allergies}}
 							</div>
 						</ng-template>
 						<ng-template #allegeryNA>
-							<ng-template [ngIf]="user_data.allergies===false" [ngIfElse]='allegeryNAA'>
+							<ng-template [ngIf]="hacker_data.allergies===false" [ngIfElse]='allegeryNAA'>
 								<div>
 									False
 								</div>
@@ -466,13 +466,13 @@
 				<tr>
 					<td>Travel Reimbursement</td>
 					<td>
-						<ng-template [ngIf]="user_data.travel_reimbursement" [ngIfElse]="travelNA">
+						<ng-template [ngIf]="hacker_data.travel_reimbursement" [ngIfElse]="travelNA">
 							<div>
-								{{capitalizeFirstLetter(user_data.travel_reimbursement.toString())}}
+								{{capitalizeFirstLetter(hacker_data.travel_reimbursement.toString())}}
 							</div>
 						</ng-template>
 						<ng-template #travelNA>
-							<ng-template [ngIf]="user_data.travel_reimbursement===false" [ngIfElse]='travelNAA'>
+							<ng-template [ngIf]="hacker_data.travel_reimbursement===false" [ngIfElse]='travelNAA'>
 								<div>
 									False
 								</div>
@@ -488,13 +488,13 @@
 				<tr>
 					<td>First Hackathon</td>
 					<td>
-						<ng-template [ngIf]="user_data.first_hackathon" [ngIfElse]="firstHackNA">
+						<ng-template [ngIf]="hacker_data.first_hackathon" [ngIfElse]="firstHackNA">
 							<div>
-								{{capitalizeFirstLetter(user_data.first_hackathon.toString())}}
+								{{capitalizeFirstLetter(hacker_data.first_hackathon.toString())}}
 							</div>
 						</ng-template>
 						<ng-template #firstHackNA>
-							<ng-template [ngIf]="user_data.first_hackathon===false" [ngIfElse]='firstHackNAA'>
+							<ng-template [ngIf]="hacker_data.first_hackathon===false" [ngIfElse]='firstHackNAA'>
 								<div>
 									False
 								</div>
@@ -510,9 +510,9 @@
 				<tr>
 					<td>Phone Number</td>
 					<td>
-						<ng-template [ngIf]="user_data.phone" [ngIfElse]="phoneNA">
+						<ng-template [ngIf]="hacker_data.phone" [ngIfElse]="phoneNA">
 							<div>
-								{{formatPhoneNumber(user_data.phone)}}
+								{{formatPhoneNumber(hacker_data.phone)}}
 							</div>
 						</ng-template>
 						<ng-template #phoneNA>
@@ -525,9 +525,9 @@
 				<tr>
 					<td>Race</td>
 					<td>
-						<ng-template [ngIf]="user_data.race" [ngIfElse]="raceNA">
+						<ng-template [ngIf]="hacker_data.race" [ngIfElse]="raceNA">
 							<div>
-								{{capitalizeFirstLetter(user_data.race)}}
+								{{capitalizeFirstLetter(hacker_data.race)}}
 							</div>
 						</ng-template>
 						<ng-template #raceNA>
@@ -540,8 +540,8 @@
 				<tr>
 					<td>Resume</td>
 					<td>
-						<ng-template [ngIf]="user_data.resume" [ngIfElse]="resumeNA">
-							<a href={{user_data.resume}} *ngIf="user_data.resume" target="_blank">
+						<ng-template [ngIf]="hacker_data.resume" [ngIfElse]="resumeNA">
+							<a href={{hacker_data.resume}} *ngIf="hacker_data.resume" target="_blank">
 								<mat-icon color="accent" style="text-decoration: none;">
 									file_download
 								</mat-icon>
@@ -557,9 +557,9 @@
 				<tr>
 					<td>Coding Experience</td>
 					<td>
-						<ng-template [ngIf]="user_data.coding_experience" [ngIfElse]="codingNA">
+						<ng-template [ngIf]="hacker_data.coding_experience" [ngIfElse]="codingNA">
 							<div>
-								{{capitalizeFirstLetter(user_data.coding_experience)}}
+								{{capitalizeFirstLetter(hacker_data.coding_experience)}}
 							</div>
 						</ng-template>
 						<ng-template #codingNA>
@@ -572,9 +572,9 @@
 				<tr>
 					<td>Eighteen Before Event</td>
 					<td>
-						<ng-template [ngIf]="user_data.eighteenBeforeEvent" [ngIfElse]="eighteenNA">
+						<ng-template [ngIf]="hacker_data.eighteenBeforeEvent" [ngIfElse]="eighteenNA">
 							<div>
-								{{capitalizeFirstLetter(user_data.eighteenBeforeEvent.toString())}}
+								{{capitalizeFirstLetter(hacker_data.eighteenBeforeEvent.toString())}}
 							</div>
 						</ng-template>
 						<ng-template #eighteenNA>
@@ -587,9 +587,9 @@
 				<tr>
 					<td>MLH Code of Conduct (coc)</td>
 					<td>
-						<ng-template [ngIf]="user_data.mlh_coc" [ngIfElse]="cocNA">
+						<ng-template [ngIf]="hacker_data.mlh_coc" [ngIfElse]="cocNA">
 							<div>
-								{{user_data.mlh_coc}}
+								{{hacker_data.mlh_coc}}
 							</div>
 						</ng-template>
 						<ng-template #cocNA>
@@ -602,9 +602,9 @@
 				<tr>
 					<td>MLH DCP (dcp)</td>
 					<td>
-						<ng-template [ngIf]="user_data.mlh_dcp" [ngIfElse]="dcpNA">
+						<ng-template [ngIf]="hacker_data.mlh_dcp" [ngIfElse]="dcpNA">
 							<div>
-								{{user_data.mlh_dcp}}
+								{{hacker_data.mlh_dcp}}
 							</div>
 						</ng-template>
 						<ng-template #dcpNA>
@@ -617,9 +617,9 @@
 				<tr>
 					<td>Referral Source</td>
 					<td>
-						<ng-template [ngIf]="user_data.referral" [ngIfElse]="referralNA">
+						<ng-template [ngIf]="hacker_data.referral" [ngIfElse]="referralNA">
 							<div>
-								{{user_data.referral}}
+								{{hacker_data.referral}}
 							</div>
 						</ng-template>
 						<ng-template #referralNA>
@@ -632,9 +632,9 @@
 				<tr>
 					<td>Project Description</td>
 					<td>
-						<ng-template [ngIf]="user_data.project" [ngIfElse]="projectNA">
+						<ng-template [ngIf]="hacker_data.project" [ngIfElse]="projectNA">
 							<div>
-								{{user_data.project}}
+								{{hacker_data.project}}
 							</div>
 						</ng-template>
 						<ng-template #projectNA>
@@ -647,9 +647,9 @@
 				<tr>
 					<td>Expectations</td>
 					<td>
-						<ng-template [ngIf]="user_data.expectations" [ngIfElse]="expectationNA">
+						<ng-template [ngIf]="hacker_data.expectations" [ngIfElse]="expectationNA">
 							<div>
-								{{user_data.expectations}}
+								{{hacker_data.expectations}}
 							</div>
 						</ng-template>
 						<ng-template #expectationNA>
@@ -662,9 +662,9 @@
 				<tr>
 					<td>Veteran Status</td>
 					<td>
-						<ng-template [ngIf]="user_data.veteran" [ngIfElse]="veteranNA">
+						<ng-template [ngIf]="hacker_data.veteran" [ngIfElse]="veteranNA">
 							<div>
-								{{user_data.veteran}}
+								{{hacker_data.veteran}}
 							</div>
 						</ng-template>
 						<ng-template #veteranNA>
@@ -677,9 +677,9 @@
 				<tr>
 					<td>Pin Number</td>
 					<td>
-						<ng-template [ngIf]="user_data.pin" [ngIfElse]="pinNA">
+						<ng-template [ngIf]="hacker_data.pin" [ngIfElse]="pinNA">
 							<div>
-								{{user_data.pin}}
+								{{hacker_data.pin}}
 							</div>
 						</ng-template>
 						<ng-template #pinNA>
@@ -692,9 +692,9 @@
 				<tr>
 					<td>Hackathon ID</td>
 					<td>
-						<ng-template [ngIf]="user_data.hackathon" [ngIfElse]="hackathonNA">
+						<ng-template [ngIf]="hacker_data.hackathon" [ngIfElse]="hackathonNA">
 							<div>
-								{{user_data.hackathon}}
+								{{hacker_data.hackathon}}
 							</div>
 						</ng-template>
 						<ng-template #hackathonNA>
@@ -707,9 +707,9 @@
 				<tr>
 					<td>Pre-Registration ID</td>
 					<td>
-						<ng-template [ngIf]="user_data.pre_uid" [ngIfElse]="preRegIdNA">
+						<ng-template [ngIf]="hacker_data.pre_uid" [ngIfElse]="preRegIdNA">
 							<div>
-								{{user_data.pre_uid}}
+								{{hacker_data.pre_uid}}
 							</div>
 						</ng-template>
 		
@@ -723,9 +723,9 @@
 				<tr>
 					<td>Registration ID</td>
 					<td>
-						<ng-template [ngIf]="user_data.uid" [ngIfElse]="regIdNA">
+						<ng-template [ngIf]="hacker_data.uid" [ngIfElse]="regIdNA">
 							<div>
-								{{user_data.uid}}
+								{{hacker_data.uid}}
 							</div>
 						</ng-template>
 		
@@ -739,9 +739,9 @@
 				<tr>
 					<td>RSVP ID</td>
 					<td>
-						<ng-template [ngIf]="user_data.user_id" [ngIfElse]="rsvpIdNA">
+						<ng-template [ngIf]="hacker_data.user_id" [ngIfElse]="rsvpIdNA">
 							<div>
-								{{user_data.user_id}}
+								{{hacker_data.user_id}}
 							</div>
 						</ng-template>
 		
@@ -755,9 +755,9 @@
 				<tr>
 					<td>Scan User ID</td>
 					<td>
-						<ng-template [ngIf]="user_data.user_uid" [ngIfElse]="scanIdNA">
+						<ng-template [ngIf]="hacker_data.user_uid" [ngIfElse]="scanIdNA">
 							<div>
-								{{user_data.user_uid}}
+								{{hacker_data.user_uid}}
 							</div>
 						</ng-template>
 		

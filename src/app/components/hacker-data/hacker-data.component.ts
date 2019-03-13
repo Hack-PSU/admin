@@ -29,6 +29,7 @@ enum HackerStatus {
   Reg = 'uid',
   RSVP = 'user_id',
   CheckIn = 'user_uid',
+  NULL = '',
 }
 
 @Component({
@@ -85,7 +86,6 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
     public emailListService: EmailListService,
     private router: Router,
     private progressService: NgProgress,
-    private snackBar: MatSnackBar,
     public adminService: HttpAdminService,
     public activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
@@ -97,7 +97,7 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    * On the initilization of all angular components, execute the functions
    *
    * Retrieves the current user from authentication then calls to check the user permission level.
-   * Next it calls to update the latest stats header and retrieve the data for the user table.
+   * Then it calls to get the list of hackathons and stores a copy of the filter predicate.
    *
    * @exception: Failure on the auth service will cause an error to be displayed on the /userdata/ route page
    * @exception: Issue with the user not existing in the auth service database will cause an error to be displayed
@@ -120,20 +120,26 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Gets a list of the all the available hackathons to view data for
+   *
+   * Retrieves a list of all the hackathons in the database to be able to switch between and sets up the
+   * drop down menu. Then signals to load the table data and update the latest statistics header.
+   *
+   * @exception: Failure with the admin service will cause an error to be displayed on the /userdata/ route page
+   */
   getHackathons() {
     this.adminService.getHackathons().subscribe((data: IHackathonModel[]) => {
       this.hackathonOptions = [];
-      for (let i = 0; i < data.length; i = i + 1) {
-        if (data[i]) {
-          if (data[i].active) {
-            this.activeHackathon = data[i];
-            data[i].name = data[i].name +  ' - Current';
-          }
-          this.hackathonOptions.push({
-            value: data[i].uid, viewValue: data[i].name,
-          });
+      data.map((hackathon) => {
+        if (hackathon.active) {
+          hackathon.name += ' - Current';
+          this.activeHackathon = hackathon;
         }
-      }
+        this.hackathonOptions.push({
+          value: hackathon.uid, viewValue: hackathon.name,
+        });
+      });
       this.loadTableData(this.activeHackathon.uid);
       this.updateStatHeader(this.activeHackathon.uid);
     },                                          (error) => {
@@ -201,9 +207,9 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Retrieve and load the user data into the datasource
+   * Retrieve and load the hacker data into the datasource
    *
-   * Call the admin service request to retrieve the user data. Then set the columns names to
+   * Call the admin service request to retrieve the hacker data. Then set the columns names to
    * the entries defined in tableCols and the datasource data to the request response data.
    *
    * @exception: Failure with the admin service will cause an error to be displayed on the /userdata/ route page
@@ -221,7 +227,7 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
       });
 
     },                                                            (error) => {
-      this.errors = new Error('Error: Issue with loading the user table. Please refresh the page.');
+      this.errors = new Error('Error: Issue with loading the hacker table. Please refresh the page.');
       console.error(error);
     });
   }
@@ -251,6 +257,9 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Changes the selected hackathon view
+   */
   changeSelectedHackathon() {
     if (this.selectedHackathon) {
       this.refreshData(this.selectedHackathon);
@@ -260,25 +269,13 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Opens the local snackbar for 2000 ms
-   *
-   * @param: message  Message to be displayed in the snackbar
-   * @param: action  Action to be executed on clicking the snackbar
-   */
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
-    });
-  }
-
-  /**
    * Conversion from one numerical base to another numerical base
    *
    * @param: str  String representing the number
-   * @param: fromBase String representing the base to convert from
-   * @param: toBase  String representing the base to conver to
+   * @param: fromBase Number representing the base to convert from
+   * @param: toBase  Number representing the base to conver to
    */
-  convertFromBaseToBase(str, fromBase, toBase) {
+  convertFromBaseToBase(str: string, fromBase: number, toBase: number) {
     if (str == null) {
       return 'N/A';
     }
@@ -289,36 +286,36 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   /**
    * Returns the status of a hacker for Pre-Registration, Registration, RSVP, and Check-In
    *
-   * @param user Firebase User
+   * @param hacker Hacker Information
    * @param status Hacker Status
    */
-  checkHackerStatus(user, status: string) {
+  checkHackerStatus(hacker, status: string) {
     let hs: HackerStatus;
     switch (status) {
       case 'PreReg': hs = HackerStatus.PreReg; break;
       case 'Reg': hs = HackerStatus.Reg; break;
       case 'RSVP': hs = HackerStatus.RSVP; break;
       case 'CheckIn': hs = HackerStatus.CheckIn; break;
-      default: status = '';
+      default: hs = HackerStatus.NULL;
     }
-    if (status !== '') {
-      return !!user[hs];
+    if (hs !== HackerStatus.NULL) {
+      return !!hacker[hs];
     }
     return false;
   }
 
   /**
-   * Changes user status to checked in
+   * Changes hacker status to checked in
    *
-   * @param: user  User from the datasource
+   * @param: hacker  Hacker Information from the datasource
    */
-  onClickCheckedIn(user) {
-    user.check_in_status = true;
-    this.adminService.setHackerCheckedIn(user.uid)
+  onClickCheckedIn(hacker) {
+    hacker.check_in_status = true;
+    this.adminService.setHackerCheckedIn(hacker.uid)
         .subscribe(() => {},
                    (error) => {
-                     user.check_in_status = false;
-                     this.errors = new Error('Error: Issue with manually checking user in');
+                     hacker.check_in_status = false;
+                     this.errors = new Error('Error: Issue with manually checking hacker in');
                      console.error(error);
                    });
   }
@@ -332,11 +329,7 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   checkUserPermissions() {
     this.adminService.getAdminStatus()
         .subscribe((resp) => {
-          if (resp.body.data.privilege > 3) {
-            this.canEditHackerData = true;
-          } else {
-            this.canEditHackerData = false;
-          }
+          resp.privilege > 3 ? this.canEditHackerData = true : this.canEditHackerData = false;
         },         (error) => {
           this.errors = new Error('Error: Issue with getting the privilege level of the user');
           console.error(error);
@@ -349,25 +342,25 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    * @exception: Failure with the admin service with cause an error to be displayed on the /userdata/ route page
    */
   updateStatHeader(hackathonUid?: string) {
-    this.adminService.getAllUserCount(hackathonUid).subscribe((data) => {
+    this.adminService.getAllHackerCount(hackathonUid).subscribe((data) => {
       this.preRegStatNumber = data.preregistration_count;
       this.regStatNumber = data.registration_count;
       this.rsvpStatNumber = data.rsvp_count;
       this.checkInStatNumber = data.checkin_count;
-    },                                                        (error) => {
-      this.errors = new Error('Error: Issue with getting the number of users');
+    },                                                          (error) => {
+      this.errors = new Error('Error: Issue with getting the number of hackers');
       console.error(error);
     });
   }
 
   /**
-   * Opens a modal for displaying more single user information, located in ViewUserDataDialog.ts
+   * Opens a modal for displaying more single hacker information, located in ViewUserDataDialog.ts
    *
-   * @param: user  single user data
+   * @param: hacker  Hacker Information
    */
-  viewAdditionalUserData(user) {
+  viewAdditionalHackerData(hacker: IHackathonModel) {
     const editPermission = this.canEditHackerData;
-    const dt = { editPermission, user };
+    const dt = { editPermission, hacker };
     const dialogRef = this.dialog.open(ViewHackerDataDialogComponent, {
       height: '600px',
       width: '750px',
@@ -380,7 +373,7 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
         this.adminService.updateHackerRegistration(result)
         .subscribe((resp) => {
           const hacker_name = result.firstName + ' ' + result.lastName;
-          this.alertsService.success('Update Hacker Information for ' +  hacker_name);
+          this.alertsService.success('Updated Hacker Information for ' +  hacker_name);
           this.refreshData();
         },         (err) => {
           console.log(err);

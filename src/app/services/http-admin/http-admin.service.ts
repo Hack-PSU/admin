@@ -26,8 +26,7 @@ import { CustomErrorHandlerService } from '../custom-error-handler/custom-error-
 
 import * as _ from 'lodash';
 import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
-import { stringify } from '@angular/compiler/src/util';
-import { query } from '@angular/core/src/render3/query';
+import { query } from '@angular/animations';
 
 
 @Injectable()
@@ -42,9 +41,12 @@ export class HttpAdminService extends BaseHttpService {
    * 
    * @returns IResponseModel containing admin, privilege properties
    */
-  getAdminStatus(): Observable<IApiResponseModel<{admin: boolean, privilege: number}>> {
+  getAdminStatus(): Observable<{admin: boolean, privilege: number}> {
     const apiRoute = new ApiRoute('admin/', true);
-    return super.genericGet<IApiResponseModel<{admin: boolean, privilege: number}>>(apiRoute);
+    return super.genericGet<IApiResponseModel<{admin: boolean, privilege: number}>>(apiRoute)
+      .pipe(
+        map(response => response.body.data),
+      );
   }
 
   /**
@@ -122,10 +124,9 @@ export class HttpAdminService extends BaseHttpService {
    */
   updateEvent(event: EventModel): Observable<{}> {
     const apiRoute = new ApiRoute(
-    'live/events/update',
-    true,
+      'live/events/update',
+      true,
     );
-    console.log(event.restRepr());
     return super.genericPost<{}>(apiRoute, event.restRepr());
   }
 
@@ -304,7 +305,7 @@ export class HttpAdminService extends BaseHttpService {
    * @param uid Hacker unique indentifier
    */
   setHackerCheckedIn(uid: string) {
-    const rfid = `NO_BAND_${uuid()}`;
+    const wid = `NO_BAND_${uuid()}`;
     const time: number = new Date().getTime();
 
     const apiRoute = new ApiRoute(
@@ -312,7 +313,7 @@ export class HttpAdminService extends BaseHttpService {
       true,
 
     );
-    return super.genericPost<{}>(apiRoute, { assignments: [{ uid, rfid, time }] });
+    return super.genericPost<{}>(apiRoute, { assignments: [{ uid, wid, time }] });
   }
 
   /**
@@ -323,9 +324,9 @@ export class HttpAdminService extends BaseHttpService {
    */
   getAllHackers(limit?: number, hackathon?: string): Observable<IApiResponseModel<IHackerDataModel[]>> {
     const queryParams = new Map<string, any>();
-    queryParams.set('byHackathon', true);
-    if (limit != null) { queryParams.set('limit', limit); };
-    if (hackathon != null) { queryParams.set('hackathon', hackathon); };
+    queryParams.set('ignoreCache', true);
+    if (limit) { queryParams.set('limit', limit); };
+    if (hackathon) { queryParams.set('hackathon', hackathon); };
     const apiRoute = new ApiRoute(
       'admin/data/?type=registration_stats',
       true,
@@ -368,7 +369,7 @@ export class HttpAdminService extends BaseHttpService {
    * @param limit Maximun integer number Pre/Reg/RSVP/CheckedIn Count entries to fetch
    * @returns Integer number count of hackers who have Pre/Reg/RSVP/CheckedIn in the ICountModel format
    */
-  getAllUserCount(hackathon?: string): Observable<ICountModel> {
+  getAllHackerCount(hackathon?: string): Observable<ICountModel> {
     const queryParams = new Map<string, any>();
     if (hackathon) { queryParams.set('hackathon', hackathon); }
     const apiRoute = new ApiRoute(

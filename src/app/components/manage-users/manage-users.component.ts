@@ -43,8 +43,8 @@ export class ManageUsersComponent implements OnInit {
     this.activatedRoute.data.subscribe((user) => {
       if (user) {
         this.adminService.getAdminStatus()
-            .subscribe((adminData) => {
-              this.options = this._totalOptions.slice(0, adminData.body.data.privilege);
+            .subscribe((adminData: {admin: boolean, privilege: number}) => {
+              this.options = this._totalOptions.slice(0, adminData.privilege);
             },         (error) => { // TODO: Make better error handler
               console.error(error);
             });

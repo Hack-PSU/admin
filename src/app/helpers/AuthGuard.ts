@@ -7,7 +7,6 @@ import { catchError, map } from 'rxjs/operators';
 import { AuthService } from '../services/AuthService/auth.service';
 import { NgProgress } from '@ngx-progressbar/core';
 import { CustomErrorHandlerService } from '../services/services';
-import { IApiResponseModel } from '../models/api-response-model';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -33,26 +32,26 @@ export class AuthGuard implements CanActivate {
     };
     return this.httpService.getAdminStatus()
       .pipe(
-          map((adminData: IApiResponseModel<{admin: boolean, privilege: number}>) => {
-          if (!adminData || !adminData.body.data.admin) {
-            this.authService.signOut()
+          map((adminData: {admin: boolean, privilege: number} ) => {
+            if (!adminData || !adminData.admin) {
+              this.authService.signOut()
               .then(() => {
                 this.progress.complete();
                 this.router.navigate([AppConstants.LOGIN_ENDPOINT]);
               });
-            return false;
-          }
-          this.progress.complete();
-          return adminData.body.data.privilege >= privilegeLevel;
-        }),
-        catchError((error) => {
-          console.log(error);
-          this.errorHandler.handleHttpError(error);
-          this.authService.signOut();
-          this.router.navigate([AppConstants.LOGIN_ENDPOINT], navExtras);
-          this.progress.complete();
-          return Observable.of(false);
-        }),
+              return false;
+            }
+            this.progress.complete();
+            return adminData.privilege >= privilegeLevel;
+          }),
+          catchError((error) => {
+            console.log(error);
+            this.errorHandler.handleHttpError(error);
+            this.authService.signOut();
+            this.router.navigate([AppConstants.LOGIN_ENDPOINT], navExtras);
+            this.progress.complete();
+            return Observable.of(false);
+          }),
       );
   }
 }

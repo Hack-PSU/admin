@@ -13,6 +13,9 @@ export class UpdateLocationDialogComponent {
     this.passed_data = data;
   }
 
+  /**
+   * On clicking off the dialog, close the dialog
+   */
   onNoClick(): void {
     this.dialogRef.close();
   }

@@ -124,8 +124,8 @@
                          <!-- Full Name Column -->
                         <ng-container matColumnDef="name">
                             <mat-header-cell *matHeaderCellDef>Hacker</mat-header-cell>
-                            <mat-cell *matCellDef="let user"> 
-                                <a (click)='viewAdditionalUserData(user)'>{{user.firstname}} {{user.lastname}}</a>
+                            <mat-cell *matCellDef="let hacker"> 
+                                <a (click)='viewAdditionalHackerData(hacker)'>{{hacker.firstname}} {{hacker.lastname}}</a>
                             </mat-cell>
                         </ng-container>
                         

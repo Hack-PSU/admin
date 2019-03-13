@@ -22,7 +22,7 @@ import { IMatSelectionModel } from '../../../models/interfaces/mat-selection-int
 export class ViewHackerDataDialogComponent implements OnInit {
 
   private passed_data: any;
-  private user_data: IHackerDataModel;
+  private hacker_data: IHackerDataModel;
   private editToggleDisabled: boolean;
   private editToggleState: boolean;
   private hacker: IHackerDataModel;
@@ -59,8 +59,8 @@ export class ViewHackerDataDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.passed_data = data;
-    this.user_data = this.passed_data.user;
-    this.hacker = Object.assign({}, this.user_data);
+    this.hacker_data = this.passed_data.hacker;
+    this.hacker = Object.assign({}, this.hacker_data);
   }
 
   ngOnInit() {
@@ -121,72 +121,60 @@ export class ViewHackerDataDialogComponent implements OnInit {
   }
 
   private setupAutoCompleteFilters() {
-    this.schools = [];
-    for (const i in SchoolList) {
-      if (i) {
-        this.schools.push(i);
-      }
-    }
+    this.schools = this.jsonToArray(SchoolList);
     this.filteredSchoolOptions = this.schoolFormControl.valueChanges
       .pipe(
         startWith(''),
-        map(value => this.filterSchools(value)),
+        map(value => this.filterHelper(value, 'schools')),
     );
-    this.majors = [];
-    for (const i in MajorList) {
-      if (i) {
-        this.majors.push(i);
-      }
-    }
+    this.majors = this.jsonToArray(MajorList);
     this.filteredMajorOptions = this.majorFormControl.valueChanges
       .pipe(
         startWith(''),
-        map(value => this.filterMajors(value)),
+        map(value => this.filterHelper(value, 'majors')),
     );
-    this.referrals = [];
-    for (const i in ReferralList) {
-      if (i) {
-        this.referrals.push(i);
-      }
-    }
+    this.referrals = this.jsonToArray(ReferralList);
     this.filteredReferralOptions = this.referralFormControl.valueChanges
     .pipe(
       startWith(''),
-      map(value => this.filterReferrals(value)),
-  );
+      map(value => this.filterHelper(value, 'referrals')),
+    );
   }
 
-  private filterMajors(value: string): string[] {
-    if (value) {
-      const filterValue = value.toLowerCase();
-      return this.majors.filter(option => option.toLowerCase().includes(filterValue));
+  private jsonToArray(json: any) {
+    const temp = [];
+    for (const i in json) {
+      if (i) {
+        temp.push(i);
+      }
     }
-    return this.majors.filter(() => true);
+    return temp;
   }
 
-  private filterSchools(value: string): string[] {
+  private filterHelper(value: string, filter: string) {
     if (value) {
       const filterValue = value.toLowerCase();
-      return this.schools.filter(option => option.toLowerCase().includes(filterValue));
+      switch (filter) {
+        case 'majors': return this.majors.filter(option => option.toLowerCase().includes(filterValue));
+        case 'schools': return this.schools.filter(option => option.toLowerCase().includes(filterValue));
+        case 'referrals': return this.referrals.filter(option => option.toLowerCase().includes(filterValue));
+      }
+    } else {
+      switch (filter) {
+        case 'majors': return this.majors;
+        case 'schools': return this.schools;
+        case 'referrals': return this.referrals;
+      }
     }
-    return this.schools.filter(() => true);
-  }
-
-  private filterReferrals(value: string): string[] {
-    if (value) {
-      const filterValue = value.toLowerCase();
-      return this.referrals.filter(option => option.toLowerCase().includes(filterValue));
-    }
-    return this.referrals.filter(() => true);
   }
 
   private setupToggles() {
-    this.travelReimToggle = this.user_data.travel_reimbursement ? true : false;
-    this.firstHackToggle = this.user_data.first_hackathon ? true : false;
-    this.eighteenBeforeToggle = this.user_data.eighteenBeforeEvent ? true : false;
-    this.mlhCocToggle = this.user_data.mlh_coc ? true : false;
-    this.mlhDcpToggle = this.user_data.mlh_coc ? true : false;
-    this.veteranToggle = this.user_data.veteran === 'true' ? true : false;
+    this.travelReimToggle = this.hacker_data.travel_reimbursement ? true : false;
+    this.firstHackToggle = this.hacker_data.first_hackathon ? true : false;
+    this.eighteenBeforeToggle = this.hacker_data.eighteenBeforeEvent ? true : false;
+    this.mlhCocToggle = this.hacker_data.mlh_coc ? true : false;
+    this.mlhDcpToggle = this.hacker_data.mlh_coc ? true : false;
+    this.veteranToggle = this.hacker_data.veteran === 'true' ? true : false;
   }
 
   onChange(ob: MatSlideToggleChange) {
@@ -208,38 +196,38 @@ export class ViewHackerDataDialogComponent implements OnInit {
 
   onSubmitButtonClick() {
     if (this.dietaryResSelection !== 'other') { this.hacker.dietary_restriction = this.dietaryResSelection; }
-    if (this.dietaryResSelection === 'none') { this.hacker.dietary_restriction = 'none'; this.user_data.dietary_restriction = 'none'; }
+    if (this.dietaryResSelection === 'none') { this.hacker.dietary_restriction = 'none'; this.hacker_data.dietary_restriction = 'none'; }
     if (!this.dietaryResSelection) { this.hacker.dietary_restriction = null; }
     if (this.hacker.allergies === 'none' || this.hacker.allergies === 'None') {
       this.hacker.allergies = 'none';
-      this.user_data.allergies = 'none';
+      this.hacker_data.allergies = 'none';
     };
     const changedRegistration = {
-      firstName: this.hacker.firstname || this.user_data.firstname,
-      lastName: this.hacker.lastname || this.user_data.lastname,
-      email: this.hacker.email || this.user_data.email,
-      gender: this.hacker.gender || this.user_data.gender,
-      university: this.schoolFormControl.value ? this.schoolFormControl.value : this.user_data.university,
-      academicYear: this.hacker.academic_year || this.user_data.academic_year,
-      major: this.majorFormControl.value ? this.majorFormControl.value : this.user_data.major,
-      shirtSize: this.hacker.shirt_size || this.user_data.shirt_size,
-      dietaryRestriction: this.hacker.dietary_restriction || this.user_data.dietary_restriction,
-      allergies: this.hacker.allergies || this.user_data.allergies,
-      travelReimbursement: this.travelReimToggle.toString() || this.user_data.travel_reimbursement.toString(),
-      firstHackathon: this.firstHackToggle.toString() || this.user_data.first_hackathon.toString(),
-      phone: this.hacker.phone || this.user_data.phone,
-      ethnicity: this.hacker.race || this.user_data.race,
-      codingExperience: this.hacker.coding_experience || this.user_data.coding_experience,
-      eighteenBeforeEvent: this.eighteenBeforeToggle.toString() || this.user_data.eighteenBeforeEvent.toString(),
-      mlhcoc: this.mlhCocToggle.toString() || this.user_data.mlh_coc.toString(),
-      mlhdcp: this.mlhDcpToggle.toString() || this.user_data.mlh_dcp.toString(),
-      referral: this.referralFormControl.value ? this.referralFormControl.value : this.user_data.referral,
-      projectDesc: this.hacker.project || this.user_data.project,
-      expectations: this.hacker.expectations || this.user_data.expectations,
-      veteran: this.veteranToggle.toString() || this.user_data.veteran,
-      uid: this.hacker.uid || this.user_data.uid,
-      submitted: this.hacker.submitted || this.user_data.submitted,
-      hackathon: this.hacker.hackathon || this.user_data.hackathon,
+      firstName: this.hacker.firstname || this.hacker_data.firstname,
+      lastName: this.hacker.lastname || this.hacker_data.lastname,
+      email: this.hacker.email || this.hacker_data.email,
+      gender: this.hacker.gender || this.hacker_data.gender,
+      university: this.schoolFormControl.value ? this.schoolFormControl.value : this.hacker_data.university,
+      academicYear: this.hacker.academic_year || this.hacker_data.academic_year,
+      major: this.majorFormControl.value ? this.majorFormControl.value : this.hacker_data.major,
+      shirtSize: this.hacker.shirt_size || this.hacker_data.shirt_size,
+      dietaryRestriction: this.hacker.dietary_restriction || this.hacker_data.dietary_restriction,
+      allergies: this.hacker.allergies || this.hacker_data.allergies,
+      travelReimbursement: this.travelReimToggle.toString() || this.hacker_data.travel_reimbursement.toString(),
+      firstHackathon: this.firstHackToggle.toString() || this.hacker_data.first_hackathon.toString(),
+      phone: this.hacker.phone || this.hacker_data.phone,
+      ethnicity: this.hacker.race || this.hacker_data.race,
+      codingExperience: this.hacker.coding_experience || this.hacker_data.coding_experience,
+      eighteenBeforeEvent: this.eighteenBeforeToggle.toString() || this.hacker_data.eighteenBeforeEvent.toString(),
+      mlhcoc: this.mlhCocToggle.toString() || this.hacker_data.mlh_coc.toString(),
+      mlhdcp: this.mlhDcpToggle.toString() || this.hacker_data.mlh_dcp.toString(),
+      referral: this.referralFormControl.value ? this.referralFormControl.value : this.hacker_data.referral,
+      projectDesc: this.hacker.project || this.hacker_data.project,
+      expectations: this.hacker.expectations || this.hacker_data.expectations,
+      veteran: this.veteranToggle.toString() || this.hacker_data.veteran,
+      uid: this.hacker.uid || this.hacker_data.uid,
+      submitted: this.hacker.submitted || this.hacker_data.submitted,
+      hackathon: this.hacker.hackathon || this.hacker_data.hackathon,
     }
     this.dialogRef.close(changedRegistration);
   }
@@ -248,9 +236,10 @@ export class ViewHackerDataDialogComponent implements OnInit {
    * Resets the edit form to clear any changes
    */
   onResetHackerDataClick() {
-    this.hacker = Object.assign({}, this.user_data);
+    this.hacker = Object.assign({}, this.hacker_data);
     this.schoolFormControl.reset();
     this.majorFormControl.reset();
+    this.referralFormControl.reset();
     this.setupToggles();
   }
 
@@ -261,7 +250,7 @@ export class ViewHackerDataDialogComponent implements OnInit {
    * @return: String representing the size of a t-shirt
    */
   getSizeText(user_size: string) {
-    if (user_size != null) {
+    if (user_size) {
       switch (user_size) {
         case 'S':
           return 'Small';
@@ -296,15 +285,5 @@ export class ViewHackerDataDialogComponent implements OnInit {
       return '(' + str.slice(0, 3) + ')' + '-' + str.slice(3, 6) + '-' + str.slice(6);
     }
     return 'N/A';
-  }
-
-  /*
-   * Converts the string number (1 or 0) to True or False respectively
-   */
-  numberToBoolean(str: string) {
-    if (parseInt(str, 10) === 1) {
-      return 'True';
-    }
-    return 'False';
   }
 }
