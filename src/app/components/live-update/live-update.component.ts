@@ -18,23 +18,25 @@ import { HttpAdminService } from '../../services/services';
 // TODO: Revamp to match new update model
 export class LiveUpdateComponent implements OnInit {
 
-  update: UpdateModel[];
-  message: string;
-  title: string;
-  push_notification = false;
+  private message: string;
+  private title: string;
+  private push_notification = false;
 
-  constructor(public httpService: HttpAdminService, private alersService: AlertService) {
+  constructor(public httpService: HttpAdminService, private alertsService: AlertService) {
     this.message = '';
     this.title = '';
   }
 
   sendMessage() {
-    this.httpService.sendLiveUpdate(this.message, this.title, this.push_notification)
-      .subscribe(() => {
+    const liveUpdate = new UpdateModel(this.message, this.title, null, this.push_notification);
+    console.log(liveUpdate);
+    this.httpService.sendLiveUpdate(liveUpdate)
+      .subscribe((resp) => {
+        console.log(resp);
         this.message = '';
         this.title = '';
         this.push_notification = false;
-        this.alersService.success('Live update sent!');
+        this.alertsService.success('Live update sent!');
       })
   }
 
@@ -42,6 +44,6 @@ export class LiveUpdateComponent implements OnInit {
   }
 
   showError(error: any) {
-    this.alersService.danger(error.toString());
+    this.alertsService.danger(error.toString());
   }
 }

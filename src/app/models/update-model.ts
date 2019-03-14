@@ -1,5 +1,13 @@
 export class UpdateModel {
-  public idLIVE_UPDATES: string;
-  public update_text: string;
-  public update_title: string;
+  public updateTitle: string;
+  public updateText: string;
+  public updateImage: string;
+  public pushNotificaiton: boolean;
+
+  constructor(updateTitle: string, updateText: string, updateImage?: string, pushNotificaiton?: boolean) {
+    this.updateTitle = updateTitle;
+    this.updateText = updateText;
+    this.updateImage = updateImage;
+    this.pushNotificaiton = pushNotificaiton;
+  }
 }

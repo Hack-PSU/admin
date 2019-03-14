@@ -121,19 +121,19 @@ export class ViewHackerDataDialogComponent implements OnInit {
   }
 
   private setupAutoCompleteFilters() {
-    this.schools = Array.from(Object.keys(SchoolList));
+    this.schools = Object.keys(SchoolList);
     this.filteredSchoolOptions = this.schoolFormControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this.filterHelper(value, 'schools')),
     );
-    this.majors = Array.from(Object.keys(MajorList));
+    this.majors = Object.keys(MajorList);
     this.filteredMajorOptions = this.majorFormControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this.filterHelper(value, 'majors')),
     );
-    this.referrals = Array.from(Object.keys(ReferralList));
+    this.referrals = Object.keys(ReferralList);
     this.filteredReferralOptions = this.referralFormControl.valueChanges
     .pipe(
       startWith(''),

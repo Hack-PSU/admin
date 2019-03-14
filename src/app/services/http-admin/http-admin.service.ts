@@ -27,6 +27,7 @@ import { CustomErrorHandlerService } from '../custom-error-handler/custom-error-
 import * as _ from 'lodash';
 import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
 import { query } from '@angular/animations';
+import { UpdateModel } from 'app/models/update-model';
 
 
 @Injectable()
@@ -457,12 +458,13 @@ export class HttpAdminService extends BaseHttpService {
     return super.genericPost<{}>(apiRoute, { checkoutId: data.uid });
   }
 
-  sendLiveUpdate(message: string, title: string, pushNotification: boolean) {
+  sendLiveUpdate(liveUpdate: UpdateModel) {
     const apiRoute = new ApiRoute(
       'live/updates',
       true,
     );
-    return super.genericPost<{}>(apiRoute, { pushNotification, updateTitle: title, updateText: message });
+    console.log(liveUpdate);
+    return super.genericPost<{}>(apiRoute, liveUpdate);
   }
 
   /**
