@@ -458,13 +458,13 @@ export class HttpAdminService extends BaseHttpService {
     return super.genericPost<{}>(apiRoute, { checkoutId: data.uid });
   }
 
-  sendLiveUpdate(liveUpdate: UpdateModel) {
+  sendLiveUpdate(liveUpdate: UpdateModel): Observable<{}> {
     const apiRoute = new ApiRoute(
       'live/updates',
       true,
     );
     console.log(liveUpdate);
-    return super.genericPost<{}>(apiRoute, liveUpdate);
+    return super.genericPost<IApiResponseModel<{}>>(apiRoute, liveUpdate);
   }
 
   /**

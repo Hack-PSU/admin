@@ -14,6 +14,5 @@ export const environment = {
     messagingSenderId: '614592542726',
   },
   //apiUrl: 'http://localhost:5000/v2/',
-  //apiUrl: 'https://staging-dot-hackpsu18.appspot.com/v1/',
   apiUrl: 'http://staging.hackpsu18.appspot.com/v2/',
 };
