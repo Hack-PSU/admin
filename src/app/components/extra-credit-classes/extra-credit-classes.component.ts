@@ -7,14 +7,14 @@ import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import {
   MatDialog,
   MatPaginator,
-  MatSnackBar,
   MatSort,
   MatTableDataSource,
 } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { SelectionModel } from '@angular/cdk/collections';
-import { AddUserClassDialogComponent } from './add-user-class-dialog';
+import { AddUserClassDialogComponent } from './add-user-class-dialog/add-user-class-dialog';
+import { AlertService } from 'ngx-alerts';
 
 @Component({
   selector: 'app-extra-credit-classes',
@@ -38,7 +38,7 @@ export class ExtraCreditClassesComponent implements OnInit, AfterViewInit {
     public adminService: HttpAdminService,
     public afAuth: AngularFireAuth,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
+    public alertsService: AlertService,
   ) {
   }
 
@@ -88,25 +88,6 @@ export class ExtraCreditClassesComponent implements OnInit, AfterViewInit {
         });
   }
 
-  insertLocation(locationValue: string) {
-    const mLocationValue = locationValue.trim();
-    this.adminService.addNewLocation(mLocationValue)
-        .subscribe((resp) => {
-          this.refreshData();
-        },         (error) => {
-          console.error(error);
-        });
-  }
-
-  removeLocation(uid: string) {
-    this.adminService.removeLocation(uid)
-        .subscribe((resp) => {
-          this.refreshData();
-        },         (error) => {
-          console.error(error);
-        });
-  }
-
   refreshData() {
     this.onClassesClick();
   }
@@ -117,30 +98,26 @@ export class ExtraCreditClassesComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
       if (result) {
         this.adminService.getUserUID(result)
-            .subscribe((resp) => {
+            .subscribe((resp: {uid: string}) => {
+              console.log(resp);
               this.selection.selected.forEach(({ uid }) => {
-                this.adminService.addHackerToExtraCreditClass(resp.body.data.uid, uid)
+                console.log(uid);
+                console.log(resp.uid);
+                this.adminService.addHackerToExtraCreditClass(resp.uid, uid)
                 .subscribe((rest) => {
-                  this.openSnackBar('Success: Added User', '');
+                  this.alertsService.success('Success: Added Hacker');
                 },         (error) => {
                   console.error(error);
-                  this.openSnackBar('Error: Failed to Add User', '');
+                  this.alertsService.danger('Error: Failed to add Hacker');
                 });
               });
             },         (error) => {
               console.error(error);
-              this.openSnackBar('Error: Issue with provided Email', '');
+              this.alertsService.warning('Error: Issue with the provided Email');
             });
       }
-    });
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
     });
   }
 }

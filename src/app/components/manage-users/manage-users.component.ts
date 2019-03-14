@@ -58,7 +58,7 @@ export class ManageUsersComponent implements OnInit {
     if (email != null) {
       this.adminService.getUserUID(email).subscribe((resp) => {
         console.log(resp);
-        this.adminService.elevateUser(resp.body.data.uid, this.level.toString())
+        this.adminService.elevateUser(resp.uid, this.level.toString())
             .subscribe((resp) => {
             },         (error) => {
               console.error(error);

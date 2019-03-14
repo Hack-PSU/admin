@@ -9,9 +9,9 @@ import { IHackerDataModel } from '../../../models/hacker-model';
 import { FormControl } from '@angular/forms';
 import { Observable, ObservableLike } from 'rxjs';
 import { map, startWith, toArray } from 'rxjs/operators';
-import * as SchoolList from '../../../../assets/schools.json';
-import * as MajorList from '../../../../assets/majors.json';
-import * as ReferralList from '../../../../assets/referral_sources.json';
+import { default as SchoolList } from '../../../../assets/schools.json';
+import { default as MajorList } from '../../../../assets/majors.json';
+import { default as ReferralList } from '../../../../assets/referral_sources.json';
 import { IMatSelectionModel } from '../../../models/interfaces/mat-selection-interface'
 
 @Component({
@@ -121,34 +121,24 @@ export class ViewHackerDataDialogComponent implements OnInit {
   }
 
   private setupAutoCompleteFilters() {
-    this.schools = this.jsonToArray(SchoolList);
+    this.schools = Array.from(Object.keys(SchoolList));
     this.filteredSchoolOptions = this.schoolFormControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this.filterHelper(value, 'schools')),
     );
-    this.majors = this.jsonToArray(MajorList);
+    this.majors = Array.from(Object.keys(MajorList));
     this.filteredMajorOptions = this.majorFormControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this.filterHelper(value, 'majors')),
     );
-    this.referrals = this.jsonToArray(ReferralList);
+    this.referrals = Array.from(Object.keys(ReferralList));
     this.filteredReferralOptions = this.referralFormControl.valueChanges
     .pipe(
       startWith(''),
       map(value => this.filterHelper(value, 'referrals')),
     );
-  }
-
-  private jsonToArray(json: any) {
-    const temp = [];
-    for (const i in json) {
-      if (i) {
-        temp.push(i);
-      }
-    }
-    return temp;
   }
 
   private filterHelper(value: string, filter: string) {

@@ -51,13 +51,13 @@
             <!--  Class Name Column -->
             <ng-container matColumnDef="class_name">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Class Name</mat-header-cell>
-                <mat-cell *matCellDef="let user"> {{user.class_name}}</mat-cell>
+                <mat-cell *matCellDef="let class"> {{class.class_name}}</mat-cell>
             </ng-container>
 
             <!-- UID Column -->
             <ng-container matColumnDef="uid">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> UID</mat-header-cell>
-                <mat-cell *matCellDef="let user"> {{user.uid}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Class UID</mat-header-cell>
+                <mat-cell *matCellDef="let class"> {{class.uid}}</mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

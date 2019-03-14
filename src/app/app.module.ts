@@ -32,7 +32,7 @@ import { VisComponent } from './components/vis/vis.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AddEventDialogComponent } from './components/manage-events/add-event-dialog/add-event-dialog';
 import { UpdateEventDialogComponent } from './components/manage-events/update-event-dialog/update-event-dialog';
-import { AddUserClassDialogComponent } from './components/extra-credit-classes/add-user-class-dialog';
+import { AddUserClassDialogComponent } from './components/extra-credit-classes/add-user-class-dialog/add-user-class-dialog';
 import { AddLocationDialogComponent } from './components/manage-locations/add-location-dialog/add-location-dialog';
 import { UpdateLocationDialogComponent } from './components/manage-locations/update-location-dialog/update-location-dialog';
 import { RemoveLocationDialogComponent } from './components/manage-locations/remove-location-dialog/remove-location-dialog';

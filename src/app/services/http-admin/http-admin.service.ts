@@ -134,15 +134,18 @@ export class HttpAdminService extends BaseHttpService {
    * Gets the firebase unique identifier (UID) for the user associated with the email
    * 
    * @param email Firebase user email address
-   * @returns 
+   * @returns Firebase user profile
    */
-  getUserUID(email: string): Observable<IApiResponseModel<{uid: string}>> {
+  getUserUID(email: string): Observable<{uid: string}> {
     const apiRoute = new ApiRoute(
       'admin/userid',
       true,
       new Map().set('email', email),
     );
-    return super.genericGet<IApiResponseModel<{uid: string}>>(apiRoute);
+    return super.genericGet<IApiResponseModel<{uid: string}>>(apiRoute)
+      .pipe(
+        map(response => response.body.data),
+      );
   }
 
   /**
@@ -278,11 +281,14 @@ export class HttpAdminService extends BaseHttpService {
    */
   getExtraCreditClasses(limit?: number): Observable<ClassesModel[]> {
     const apiRoute = new ApiRoute(
-      'admin/extra_credit_list',
+      'users/extra-credit',
       true,
       limit ? new Map<string, number>().set('limit', limit) : null,
     );
-    return super.genericGet<ClassesModel[]>(apiRoute);
+    return super.genericGet<IApiResponseModel<ClassesModel[]>>(apiRoute)
+    .pipe(
+      map(response => response.body.data),
+    );
   }
 
   /**
@@ -291,12 +297,12 @@ export class HttpAdminService extends BaseHttpService {
    * @param uid Hacker unique identifier
    * @param cid Class unique identifier
    */
-  addHackerToExtraCreditClass(uid: string, cid: string) {
+  addHackerToExtraCreditClass(uid: string, cid: string): Observable<{}>  {
     const apiRoute = new ApiRoute(
-      'admin/assign_extra_credit',
+      'users/extra-credit',
       true,
     );
-    return super.genericPost<{}>(apiRoute, { uid, cid });
+    return super.genericPost<IApiResponseModel<{}>>(apiRoute, { uid, cid });
   }
 
   /**
