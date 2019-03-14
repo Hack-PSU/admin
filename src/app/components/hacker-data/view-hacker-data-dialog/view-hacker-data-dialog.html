@@ -2,10 +2,9 @@
 	<mat-card-title>
 		<div class="title-container">
 			<p>{{hacker_data.firstname}} {{hacker_data.lastname}}</p>
-			<button mat-raised-button color="primary" (click)="onSubmitButtonClick()">Submit Registration Data Changes</button>
 			<div>
-				<mat-slide-toggle name="editToggle" style="margin-left: 5px;" color="accent" (change)="onChange($event)" [disabled]="editToggleDisable">Edit</mat-slide-toggle>
-				<button mat-icon-button color="primary" (click)="onResetHackerDataClick()" style="margin-left: 5px;"><mat-icon aria-label="Refresh button with refresh icon">refresh</mat-icon></button>
+				<mat-slide-toggle name="editToggle" style="margin-left: 5px;" color="accent" (change)="onChange($event)" [disabled]="editToggleDisabled">Edit</mat-slide-toggle>
+				<button mat-icon-button color="primary" (click)="onResetHackerDataClick()" style="margin-left: 5px;" matTooltip="Reset Hacker Data"><mat-icon aria-label="Refresh button with refresh icon">refresh</mat-icon></button>
 			</div>
 		</div>
 	</mat-card-title>
@@ -769,6 +768,9 @@
 					</td>
 				</tr>
 			</table>
+		</ng-template>
+		<ng-template [ngIf]="editToggleState">
+				<button style="margin-top: 10px;" mat-raised-button color="primary" (click)="onSubmitButtonClick()">Submit Registration Data Changes</button>
 		</ng-template>
 	</mat-card-content>
 </mat-card>

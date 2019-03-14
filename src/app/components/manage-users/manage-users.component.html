@@ -1,24 +1,28 @@
-<br>
-<div class="container-fluid center">
-    <form (submit)="makeAdmin(email)" class="row">
-        <div class="row">
-            <mat-form-field class="admin-maker" class="col-sm-6 col-sm-offset-3">
-                <input matInput [(ngModel)]="email" placeholder="Admin Email" id="admin-maker"
-                       [formControl]="emailControl"
-                       required>
-            </mat-form-field>
+<div class="top-container">
+<mat-card>
+    <mat-card-title>
+        <div class="header-text">Upgrade User</div>
+    </mat-card-title>
+    <mat-card-content>
+        <form (submit)="changeUserRole(email)">
+        <div class="form-container">
+            <div class="form-field-container">
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="email" placeholder="Admin Email" id="admin-maker"
+                            [formControl]="emailControl"
+                            required>
+                </mat-form-field>
+                <mat-form-field appearance="outline" >
+                    <mat-select [(value)]="level">
+                        <mat-option *ngFor="let option of options" value="{{option.value}}">{{option.text}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <button mat-raised-button color='primary' type="submit">Submit</button>
+            </div>
         </div>
-        <div class="row">
-            <mat-form-field class="col-sm-6 col-sm-offset-3">
-                <mat-select [(value)]="level">
-                    <mat-option *ngFor="let option of options" value="{{option.value}}">{{option.text}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="row">
-            <button type="submit" class="btn btn-social">
-                Submit
-            </button>
-        </div>
-    </form>
+        </form>
+    </mat-card-content>
+</mat-card>
 </div>
