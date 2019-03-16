@@ -73,13 +73,13 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   /*
    * Table Filtering - array of categorys to filter by and currently selected category
    */
-  private searchFilterOptions = [];
-  private filterSelect = '';
-  private orgFilterPredicate: (data: IHackerDataModel, filter: string) => boolean;
+  public searchFilterOptions = [];
+  public filterSelect = '';
+  public orgFilterPredicate: (data: IHackerDataModel, filter: string) => boolean;
 
-  private activeHackathon: IHackathonModel;
-  private hackathonOptions: IMatSelectionModel[];
-  private selectedHackathon: IMatSelectionModel;
+  public activeHackathon: IHackathonModel;
+  public hackathonOptions: IMatSelectionModel[];
+  public selectedHackathon: IMatSelectionModel;
 
   constructor(
     public emailListService: EmailListService,

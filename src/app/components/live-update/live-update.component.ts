@@ -18,9 +18,9 @@ import { IApiResponseModel } from 'app/models/api-response-model';
 
 export class LiveUpdateComponent implements OnInit {
 
-  private message: string;
-  private title: string;
-  private push_notification = false;
+  public message: string;
+  public title: string;
+  public push_notification = false;
 
   constructor(public httpService: HttpAdminService, private alertsService: AlertService) {
     this.message = '';

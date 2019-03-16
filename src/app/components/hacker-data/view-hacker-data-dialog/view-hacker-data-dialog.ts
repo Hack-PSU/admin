@@ -21,38 +21,38 @@ import { IMatSelectionModel } from '../../../models/interfaces/mat-selection-int
 })
 export class ViewHackerDataDialogComponent implements OnInit {
 
-  private passed_data: any;
-  private hacker_data: IHackerDataModel;
-  private editToggleDisabled: boolean;
-  private editToggleState: boolean;
-  private hacker: IHackerDataModel;
+  public passed_data: any;
+  public hacker_data: IHackerDataModel;
+  public editToggleDisabled: boolean;
+  public editToggleState: boolean;
+  public hacker: IHackerDataModel;
 
-  private genderOptions: IMatSelectionModel[];
-  private academicYearOptions: IMatSelectionModel[];
-  private shirtSizeOptions: IMatSelectionModel[];
-  private dietaryRestrictionOptions: IMatSelectionModel[];
-  private raceOptions: IMatSelectionModel[];
-  private codingOptions: IMatSelectionModel[];
+  public genderOptions: IMatSelectionModel[];
+  public academicYearOptions: IMatSelectionModel[];
+  public shirtSizeOptions: IMatSelectionModel[];
+  public dietaryRestrictionOptions: IMatSelectionModel[];
+  public raceOptions: IMatSelectionModel[];
+  public codingOptions: IMatSelectionModel[];
 
-  private schools: string[];
-  private schoolFormControl = new FormControl();
-  private filteredSchoolOptions: Observable<string[]>;
+  public schools: string[];
+  public schoolFormControl = new FormControl();
+  public filteredSchoolOptions: Observable<string[]>;
 
-  private majors: string[];
-  private majorFormControl = new FormControl();
-  private filteredMajorOptions: Observable<string[]>;
+  public majors: string[];
+  public majorFormControl = new FormControl();
+  public filteredMajorOptions: Observable<string[]>;
 
-  private referrals: string[];
-  private referralFormControl = new FormControl();
-  private filteredReferralOptions: Observable<string[]>;
+  public referrals: string[];
+  public referralFormControl = new FormControl();
+  public filteredReferralOptions: Observable<string[]>;
 
-  private dietaryResSelection: string;
-  private travelReimToggle: boolean;
-  private firstHackToggle: boolean;
-  private eighteenBeforeToggle: boolean;
-  private mlhCocToggle: boolean;
-  private mlhDcpToggle: boolean;
-  private veteranToggle: boolean;
+  public dietaryResSelection: string;
+  public travelReimToggle: boolean;
+  public firstHackToggle: boolean;
+  public eighteenBeforeToggle: boolean;
+  public mlhCocToggle: boolean;
+  public mlhDcpToggle: boolean;
+  public veteranToggle: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<ViewHackerDataDialogComponent>,

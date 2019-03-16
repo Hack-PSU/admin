@@ -15,8 +15,8 @@ export class UpdateEventDialogComponent {
 
   public updatedEvent: EventModel;
   public locationList: Observable<LocationModel[]>;
-  private eventStartTime: Date;
-  private eventEndTime: Date;
+  public eventStartTime: Date;
+  public eventEndTime: Date;
 
   constructor(
     public dialogRef: MatDialogRef<UpdateEventDialogComponent>,
@@ -30,7 +30,7 @@ export class UpdateEventDialogComponent {
     this.eventEndTime = new Date(this.updatedEvent.event_end_time);
   }
 
-  private dateToNumber() {
+  public dateToNumber() {
     this.updatedEvent.event_start_time = new Date(this.eventStartTime).getTime();
     this.updatedEvent.event_end_time = new Date(this.eventEndTime).getTime();
   }
