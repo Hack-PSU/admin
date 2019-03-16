@@ -454,7 +454,7 @@ export class HttpAdminService extends BaseHttpService {
     queryParams.set('type', 'attendance');
     queryParams.set('aggregator', 'event')
     const apiRoute = new ApiRoute(
-      'admin/data',
+      'admin/data/',
       true,
       queryParams,
     );
