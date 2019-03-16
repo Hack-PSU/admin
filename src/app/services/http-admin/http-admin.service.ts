@@ -451,8 +451,10 @@ export class HttpAdminService extends BaseHttpService {
     hackathon ? queryParams.set('hackathon', hackathon) : null;
     limit ? new Map<string, any>().set('limit', limit) : null;
     queryParams.set('ignoreCache', true);
+    queryParams.set('type', 'attendance');
+    queryParams.set('aggregator', 'event')
     const apiRoute = new ApiRoute(
-      'admin/data/?type=attendance&aggregator=event',
+      'admin/data',
       true,
       queryParams,
     );

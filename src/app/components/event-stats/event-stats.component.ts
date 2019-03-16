@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   MatDialog,
   MatPaginator,
-  MatSort,
   MatTableDataSource,
-  MatSnackBar,
 } from '@angular/material';
 import { AlertService } from 'ngx-alerts';
 import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
@@ -16,7 +14,7 @@ import { ViewEventAttendanceDialogComponent } from './view-event-attendance/view
 @Component({
   selector: 'app-event-stats',
   templateUrl: './event-stats.component.html',
-  styleUrls: ['./event-stats.component.css']
+  styleUrls: ['./event-stats.component.css'],
 })
 export class EventStatsComponent implements OnInit {
 
@@ -57,12 +55,11 @@ export class EventStatsComponent implements OnInit {
 
   getEventData() {
     this.adminService.getEventAttendance().subscribe((data: IEventStatisticsModel) => {
-      const formattedData: IEventStatisticsModel[] = [];
-      for (const i in data) {
-        if (i) {
-          formattedData.push(data[i]);
-        }
-      }
+      let formattedData: IEventStatisticsModel[] = [];
+      formattedData = Object.keys(data).map((key) => {
+        return data[key];
+      });
+
       this.displayedColumns = EventStatsComponent.tableCols;
       this.dataSource.data = formattedData;
     },                                               (error) => {
