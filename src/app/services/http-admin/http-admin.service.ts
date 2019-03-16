@@ -39,7 +39,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the admin and privilege status of the current user denoted by the idtoken (found in local memory)
-   * 
+   *
    * @returns IResponseModel containing admin, privilege properties
    */
   getAdminStatus(): Observable<{admin: boolean, privilege: number}> {
@@ -52,9 +52,9 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the current list of hackers who have preregistered for the hackathon
-   * 
+   *
    * @param limit Maximun integer number of PreRegistraion entries to fetch
-   * @return Array of hackers who preregistered in PreRegistraitonModel format 
+   * @return Array of hackers who preregistered in PreRegistraitonModel format
    */
   getPreRegistrations(limit?: number): Observable<PreRegistrationModel[]> {
     const apiRoute = new ApiRoute(
@@ -67,9 +67,9 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the current list of hackers who have registered for the hackathon
-   * 
+   *
    * @param limit Maximun integer number of Registration entries to fetch
-   * @return Array of hackers who registered in RegistrationModel format 
+   * @return Array of hackers who registered in RegistrationModel format
    */
   getRegistrations(limit?: number): Observable<RegistrationModel[]> {
     const apiRoute = new ApiRoute(
@@ -82,7 +82,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the current list of available events for the hackathon
-   * 
+   *
    * @param limit Maximun integer number of Event entries to fetch
    * @returns Array of events for the hackathon in the EventModel format
    */
@@ -103,7 +103,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Adds a new event to the list of available events for the hackathon
-   * 
+   *
    * @param event New EventModel format event to add
    * @returns Response containing success message
    */
@@ -119,7 +119,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Updates a current event in the list of available events for the hackathon
-   * 
+   *
    * @param event Current EvenModel format event to update
    * @returns Response containing success message
    */
@@ -133,7 +133,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the firebase unique identifier (UID) for the user associated with the email
-   * 
+   *
    * @param email Firebase user email address
    * @returns Firebase user profile
    */
@@ -151,7 +151,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Elevates the privilege of a user denoted by the unique identifier (UID)
-   * 
+   *
    * @param uid Firebase unique identifier
    * @param privilege Integer number corresponding to firebase privilege level
    */
@@ -165,10 +165,10 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Sends an email containing a custom subject and body
-   * 
-   * @param emailBody 
-   * @param emailSubject 
-   * @param emailObjects 
+   *
+   * @param emailBody
+   * @param emailSubject
+   * @param emailObjects
    */
   sendEmail(emailBody: string, emailSubject: string, emailObjects: any[]): Observable<any> {
     const chunkedEmails = _.chunk(emailObjects, 100);
@@ -200,9 +200,9 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the current list of hackers who have RSVP'd for the hackathon
-   * 
+   *
    * @param limit Maximun integer number of RSVP entries to fetch
-   * @return Array of hackers who RSVP'd in RegistrationModel format 
+   * @return Array of hackers who RSVP'd in RegistrationModel format
    */
   getRSVPs(limit?: number): Observable<RegistrationModel[]> {
     const apiRoute = new ApiRoute(
@@ -215,7 +215,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the current list of available events for the hackathon
-   * 
+   *
    * @param limit Maximun integer number of Event entries to fetch
    * @returns Array of events for the hackathon in the EventModel format
    */
@@ -235,8 +235,8 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Add a new location to the list of available locations to use for events at the hackathon
-   * 
-   * @param locationName Name of the new location entry 
+   *
+   * @param locationName Name of the new location entry
    */
   addNewLocation(locationName: string) {
     const apiRoute = new ApiRoute(
@@ -248,7 +248,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Removes the location from the list of available locations to use for events at the hackathon
-   * 
+   *
    * @param uid Unique identifer (UID) for the location
    */
   removeLocation(uid: string) {
@@ -262,7 +262,7 @@ export class HttpAdminService extends BaseHttpService {
   /**
    * Update a location (determined by the UID), in the list of available locations to use for events
    * at the hackathon, to have a new location name
-   * 
+   *
    * @param uid Unique identifier (UID) for the location
    * @param location_name New name for the location
    */
@@ -276,7 +276,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the current list of classes that allow for extra credit from attending the hackathon
-   * 
+   *
    * @param limit Maximun integer number of Extra Credit Classes entries to fetch
    * @returns Array of extra credit classes for the hackathon in the ClassesModel format
    */
@@ -294,7 +294,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Associates a hacker with an extra credit class for tracking involvement at the hackathon
-   * 
+   *
    * @param uid Hacker unique identifier
    * @param cid Class unique identifier
    */
@@ -308,7 +308,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Manually sets the hackers attendance status to be checked in with no wristband association
-   * 
+   *
    * @param uid Hacker unique indentifier
    */
   setHackerCheckedIn(uid: string) {
@@ -325,7 +325,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets a list of all hackers who have preregistered/registered/rsvp'd/checked-in to the hackathon
-   * 
+   *
    * @param limit Maximun integer number of hacker entries to fetch
    * @returns Array of extra credit classes for the hackathon in the ClassesModel format
    */
@@ -344,7 +344,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets a count of all the hackers who have preregistered for the hackathon
-   * 
+   *
    * @param limit Maximun integer number PreRegistration Count entries to fetch
    * @returns Integer number count of hackers who have preregisted in the ICountModel format
    */
@@ -358,7 +358,7 @@ export class HttpAdminService extends BaseHttpService {
   }
   /**
    * Gets a count of all the hackers who have registered for the hackathon
-   * 
+   *
    * @param limit Maximun integer number Registered Count entries to fetch
    * @returns Integer number count of hackers who have registered in the ICountModel format
    */
@@ -372,13 +372,14 @@ export class HttpAdminService extends BaseHttpService {
   }
   /**
    * Gets a count of all the hackers who have Pre/Reg/RSVP/CheckedIn for the hackathon
-   * 
+   *
    * @param limit Maximun integer number Pre/Reg/RSVP/CheckedIn Count entries to fetch
    * @returns Integer number count of hackers who have Pre/Reg/RSVP/CheckedIn in the ICountModel format
    */
   getAllHackerCount(hackathon?: string): Observable<ICountModel> {
     const queryParams = new Map<string, any>();
     if (hackathon) { queryParams.set('hackathon', hackathon); }
+    queryParams.set('ignoreCache', true);
     const apiRoute = new ApiRoute(
       'admin/data/?type=stats_count',
       true,
@@ -392,7 +393,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the count for each category option presented when hackers registered.
-   * 
+   *
    * @param limit Maximun integer number category option count entries to fetch
    * @retuns Array of counts for each category option in the IStatisticsModel format
    */
@@ -407,7 +408,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Gets the list of available items to checkout for Item Checkout during the hackathon
-   * 
+   *
    * @returns Array of items that are available in the ItemCheckoutModel format
    */
   getAvailableCheckoutItems(): Observable<ItemCheckoutModel[]> {
@@ -482,7 +483,7 @@ export class HttpAdminService extends BaseHttpService {
 
   /**
    * Updates the Hacker's Registration Data
-   * 
+   *
    * @param data Updated Registration data for a Hacker
    */
   updateHackerRegistration(data: IHackerRegistrationModel) {

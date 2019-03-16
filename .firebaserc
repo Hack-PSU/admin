@@ -1,5 +1,11 @@
 {
-  "projects": {
-    "default": "hackpsu18"
+  "targets": {
+    "hackpsu18": {
+      "hosting": {
+        "admin": [
+          "hackpsu18-admin"
+        ]
+      }
+    }
   }
 }
