@@ -16,16 +16,13 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 before_deploy:
-- ng build --prod --no-aot
-- rvm default do gem install aws-sdk -v 2.1.36
+- ng build --prod
 deploy:
-  provider: s3
+- provider: firebase
   skip_cleanup: true
-  access_key_id: AKIAJAG5TNY3SN77L5HA
-  secret_access_key:
-    secure: krAOZmvGBjWQHjHPiPP4G6ATPnk+mml6IXLMnobEnnVBcXg0qiy8d/m++TJDn4IQ6vkF7XUJ170LI+4qWaSh7Wvv1bDjvDJ4/Y9Xbol6htwH7GNqd1FnAlQzXBz3UDA/4XQb2sqhvNTKMD0uAx9mRC6TGfU+swfwQU8yaXkXD1YeacliWyt0HZJFRiy+HkZbA3ceJrLBNxb63oAV6GuDLcD9UjojDMHf/UgvfJY8xWmKygMTtV3p51gcTWYsWn2mE53ApjdbWjpZ8dbU5fIVvrpWb9Y3qbOdHFbQLms8yIsn/fACoh8/M5gz/WkZDqxusYVwQKl6eCCAwbFGjlU8VoqVooi22ZqjT+CmdwdIw1cFrVh1clgSxd5Tgv1sEmOpdtdLt5uVmcwwqozE0nfGN6M55Xzi7waES89wp/3Sje5BmN1RFwYid342ng981F7ZZ0Z76gOBY6xY3mu2TyO73m24uwqREYoH5tbZUmLnoxvawBLzqxxn2HEQ5NGlu14Znxzwc+OoV/sSpYu/pROGjl/ahWJw9g9Wy2CtAZqpXq6JWGAy+pAzfFBw3u6j/D2IxWDrNJTZOgIcHPwsYBjIQcS+Pv6L8paRF2RmCnd+rWXMTQfKmf+uvVZOZw9lh6pRf/RKb585UCD1IFUgOv4A5DKtbdgt1iq+QOfJdaBcKXM=
-  bucket: aws-website-hackpsu-admin-p5vbm
-  local-dir: dist
-  acl: public_read
+  token:
+    secure: UppjTzfRFpwh09HFh1t0+WHFRw3ZQlRYZx5x0CdN4GAAyftnAgJ89AEl/aPtT37iCh/XtpamqBFdRxEDpwiCBuZ3p6FlvlnDMeoLaJuv/+rWjhA4nKxpNalI4doL2tlu2jLujPB1gN8mRjZtGqexQtDbnJIOYUaxX9soovrXbNqj1SBiCdREMQSYx7DxmdlRoYX+qfBNRLk+GEb3dNsvCsr2zXah4KBN2KIRZM/VfaNvyBJDUTVebXH2zqyVLU7bX6FyXvs/x9qAek+ExuWazL+3t3jjXa14QtmyajaTIMYaOcYQFdIaE2GJGBkJIUpNpTEtDyZzgbfEkGcQ1m3Lqvtnx4fBaWpVEz/2SHfgCiDPFlBvEK6GLf/yXeq/60RvzCY4B5GJtf+09MmiT1eKtBupPhghwb+gKZGDdedHUrzIgsY+v+I8yloRJb5VMAtcB4soCZafd6cNqoHdDHNKlgfCORE4/42QWeIAbpMU8PjIv76HQy/xvEP4lSJf+BvPzQfisad0F9WoYOr2Ww/bBIE5qHeg8xXR6PUX9u99cTEtm9vfYC7cNmHmRUYWfO8w++npxXjofb7+unFd0LuK1THCBRESTG4IfKiQ/qZxdEhAURe6pGCjiM0RZIAvJiYSb1URHvAKK5kszz1MmPPu9VXpbwCF3iJ8DGfv8+KuTLY=
+  project: hackpsu18
   on:
     repo: hackpsu-tech/hackPSUS2018-admin
+    branch: master
