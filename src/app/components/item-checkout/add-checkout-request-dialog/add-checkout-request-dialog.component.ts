@@ -35,7 +35,6 @@ export class AddCheckoutRequestDialogComponent {
   }
 
   submitCheckoutRequest(result) {
-    console.log(result);
     this.dialogRef.close(result);
   }
 }

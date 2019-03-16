@@ -1,17 +1,52 @@
-<h3> Event Check-In </h3>
 <mat-card>
-	<mat-table #table [dataSource]="dataSource" matSort>
-		<!-- Last Name Column -->
-	    <ng-container matColumnDef="eventname">
-	        <mat-header-cell *matHeaderCellDef> Event Name</mat-header-cell>
-	        <mat-cell *matCellDef="let event"> {{event.event_name}}</mat-cell>
-	    </ng-container>
-	    <!-- Last Name Column -->
-	    <ng-container matColumnDef="eventcount">
-	        <mat-header-cell *matHeaderCellDef>Scanned Count</mat-header-cell>
-	        <mat-cell *matCellDef="let event"> {{event.event_count}}</mat-cell>
-	    </ng-container>
-		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-	    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-	</mat-table>
+	<mat-card-title>
+		<div class='stats-container'>
+			Event Statistics
+			<mat-form-field class="stats-filter">
+				<input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search" id="stats-filter">
+			</mat-form-field>
+			<div class = "title-button-group">
+				<div class="context-menu">
+					<button mat-icon-button [matMenuTriggerFor]="menu" class = "menu-icon">
+						<mat-icon>settings</mat-icon>
+					</button>
+					<mat-menu #menu="matMenu">
+						<button mat-menu-item>
+							<mat-icon>build</mat-icon>
+							<span>Settings</span>
+						</button>
+						<button mat-menu-item (click)="refreshData()">
+							<mat-icon>refresh</mat-icon>
+							<span>Refresh Data</span>
+						</button>
+					</mat-menu>
+				</div>
+			</div>
+		</div>
+	</mat-card-title>
+	<mat-card-content>
+		<mat-table #table [dataSource]="dataSource">
+			<!-- Event Title Column -->
+			<ng-container matColumnDef="eventTitle">
+				<mat-header-cell *matHeaderCellDef>Event Title</mat-header-cell>
+				<mat-cell *matCellDef="let event">
+					<a (click)='viewAttendanceData(event.attendees)'>{{event.event_title}}</a>
+				</mat-cell>
+			</ng-container>
+	
+			<!-- Event Attendance Column -->
+			<ng-container matColumnDef="eventAttendance">
+				<mat-header-cell *matHeaderCellDef>Scans / Attendance</mat-header-cell>
+				<mat-cell *matCellDef="let event">{{event.attendees.length}}</mat-cell>
+			</ng-container>
+	
+			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+			<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+		</mat-table>
+		<mat-paginator #paginator
+			[pageSize]="10"
+			[pageSizeOptions]="[50,100,500]"
+			[showFirstLastButtons]="true">
+		</mat-paginator>
+	</mat-card-content>
 </mat-card>

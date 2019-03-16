@@ -1,0 +1,34 @@
+<mat-card>
+    <mat-card-title>
+        Event Attendees
+    </mat-card-title>
+    <mat-card-content>
+        <mat-table #table [dataSource]="dataSource">
+            <!-- Hacker First Name Column -->
+            <ng-container matColumnDef="hackerFirstName">
+                <mat-header-cell *matHeaderCellDef>First Name</mat-header-cell>
+                <mat-cell *matCellDef="let hacker">{{hacker.firstname}}</mat-cell>
+            </ng-container>
+
+            <!-- Hacker Last Name Column -->
+            <ng-container matColumnDef="hackerLastName">
+                <mat-header-cell *matHeaderCellDef>Last Name</mat-header-cell>
+                <mat-cell *matCellDef="let hacker">{{hacker.lastname}}</mat-cell>
+            </ng-container>
+
+            <!-- Hacker Email Column -->
+            <ng-container matColumnDef="hackerEmail">
+                <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+                <mat-cell *matCellDef="let hacker">{{hacker.email}}</mat-cell>
+            </ng-container>
+    
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator
+            [pageSize]="10"
+            [pageSizeOptions]="[50,100,500]"
+            [showFirstLastButtons]="true">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>

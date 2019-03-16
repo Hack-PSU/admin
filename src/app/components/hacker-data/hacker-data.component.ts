@@ -328,7 +328,6 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   checkUserPermissions() {
     this.adminService.getAdminStatus()
         .subscribe((resp) => {
-          console.log(resp);
           resp.privilege > 3 ? this.canEditHackerData = true : this.canEditHackerData = false;
         },         (error) => {
           this.errors = new Error('Error: Issue with getting the privilege level of the user');
@@ -360,7 +359,6 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    */
   viewAdditionalHackerData(hacker: IHackathonModel) {
     const editPermission = this.canEditHackerData;
-    console.log(this.canEditHackerData);
     const dt = { editPermission, hacker };
     const dialogRef = this.dialog.open(ViewHackerDataDialogComponent, {
       height: '600px',

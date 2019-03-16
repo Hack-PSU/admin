@@ -39,6 +39,7 @@ import { AddLocationDialogComponent } from './components/manage-locations/add-lo
 import { UpdateLocationDialogComponent } from './components/manage-locations/update-location-dialog/update-location-dialog';
 import { RemoveLocationDialogComponent } from './components/manage-locations/remove-location-dialog/remove-location-dialog';
 import { AddEmailDialogComponent } from './components/send-email/add-email-dialog';
+import { ViewEventAttendanceDialogComponent } from './components/event-stats/view-event-attendance/view-event-attendance';
 import { HackerDataComponent } from './components/hacker-data/hacker-data.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ViewHackerDataDialogComponent } from './components/hacker-data/view-hacker-data-dialog/view-hacker-data-dialog';
@@ -77,6 +78,7 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
     ExtraCreditClassesComponent,
     AddUserClassDialogComponent,
     AddCheckoutRequestDialogComponent,
+    ViewEventAttendanceDialogComponent,
     VisComponent,
     ReturnCheckoutSheetComponent,
     HackerDataComponent,
@@ -107,7 +109,7 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
   entryComponents: [
     AddEmailDialogComponent, AddUserClassDialogComponent, AddEventDialogComponent,
     AddLocationDialogComponent, UpdateLocationDialogComponent, RemoveLocationDialogComponent,
-    ViewHackerDataDialogComponent, LocationDialogComponent,
+    ViewHackerDataDialogComponent, LocationDialogComponent, ViewEventAttendanceDialogComponent,
     AddCheckoutRequestDialogComponent, ReturnCheckoutSheetComponent,
     UpdateEventDialogComponent,
   ],

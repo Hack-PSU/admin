@@ -1,0 +1,28 @@
+mat-cell a {
+    text-decoration: none;
+    color: black;
+  }
+  
+mat-cell a:hover {
+    color: #6C88B7;
+}
+
+
+.stats-filter {
+  margin: 10px;
+  font-size: small;
+  flex-basis: 50%;
+}
+
+.stats-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title-button-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 25%;
+}

@@ -60,7 +60,6 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.activatedRoute.data
         .subscribe((user) => {
-          console.log(user);
           if (user) {
             // this.user = user;
             this.loadTableData();

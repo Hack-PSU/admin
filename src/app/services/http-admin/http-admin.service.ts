@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import * as uuid from 'uuid/v4';
 import 'rxjs/add/observable/throw';
 import { map } from 'rxjs/operators';
-
 import { AttendanceModel } from '../../models/attendance-model';
 import { CheckoutInstanceModel } from '../../models/checkout-instance-model';
 import { ClassesModel } from '../../models/classes-model';
@@ -27,7 +26,8 @@ import { CustomErrorHandlerService } from '../custom-error-handler/custom-error-
 import * as _ from 'lodash';
 import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
 import { query } from '@angular/animations';
-import { UpdateModel } from 'app/models/update-model';
+import { UpdateModel } from '../../models/update-model';
+import { IEventStatisticsModel } from '../../models/event-statistic-model';
 
 
 @Injectable()
@@ -425,8 +425,6 @@ export class HttpAdminService extends BaseHttpService {
   }
 
   addCheckoutRequest(itemId: number, userId: string) {
-    console.log(itemId);
-    console.log(userId);
     const apiRoute = new ApiRoute(
       'admin/checkout',
       true,
@@ -448,13 +446,20 @@ export class HttpAdminService extends BaseHttpService {
     );
   }
 
-  getEventAttendance(limit?: number): Observable<AttendanceModel[]> {
+  getEventAttendance(limit?: number, hackathon?: number): Observable<{}> {
+    const queryParams = new Map<string, any>();
+    hackathon ? queryParams.set('hackathon', hackathon) : null;
+    limit ? new Map<string, any>().set('limit', limit) : null;
+    queryParams.set('ignoreCache', true);
     const apiRoute = new ApiRoute(
-      'admin/attendance',
+      'admin/data/?type=attendance&aggregator=event',
       true,
-      limit ? new Map<string, any>().set('limit', limit) : null,
+      queryParams,
     );
-    return super.genericGet<AttendanceModel[]>(apiRoute);
+    return super.genericGet<IApiResponseModel<{}>>(apiRoute)
+    .pipe(
+      map(response => response.body.data),
+    );
   }
 
   returnCheckoutItem(data: CheckoutInstanceModel) {
@@ -470,7 +475,6 @@ export class HttpAdminService extends BaseHttpService {
       'live/updates',
       true,
     );
-    console.log(liveUpdate);
     return super.genericPost<IApiResponseModel<{}>>(apiRoute, liveUpdate);
   }
 
