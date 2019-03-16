@@ -8,7 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 })
 export class RemoveLocationDialogComponent {
 
-  private passed_data: any;
+  public passed_data: any;
   constructor(public dialogRef: MatDialogRef<RemoveLocationDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.passed_data = data;
