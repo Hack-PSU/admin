@@ -28,4 +28,4 @@ deploy:
   local-dir: dist
   acl: public_read
   on:
-    repo: hackpsu-tech/hackPSUS2018-admin
+    repo: Hack-PSU/admin
