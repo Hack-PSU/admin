@@ -415,7 +415,7 @@ export class HttpAdminService extends BaseHttpService {
     const queryParams = new Map<string, any>();
     queryParams.set('ignoreCache', true);
     const apiRoute = new ApiRoute(
-      'admin/checkout/items/availability',
+      'admin/checkout/items/availability/',
       true,
       queryParams,
     );
@@ -437,7 +437,7 @@ export class HttpAdminService extends BaseHttpService {
     const queryParams = new Map<string, any>();
     queryParams.set('ignoreCache', true);
     const apiRoute = new ApiRoute(
-      'admin/checkout',
+      'admin/checkout/',
       true,
       queryParams,
     );
