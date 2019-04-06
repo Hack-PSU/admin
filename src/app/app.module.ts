@@ -16,15 +16,12 @@ import { environment } from '../environments/environment';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserViewComponent } from './components/user-view/user-view.component';
 import { CustomMaterialModule } from './helpers/custom.materials';
-import { RegistrationTableComponent } from './components/registration-table/registration-table.component';
 import { ManageUsersComponent } from './components/manage-users/manage-users.component';
-import { PreRegistrationTableComponent } from './components/pre-registration-table/pre-registration-table.component';
 import { LiveUpdateComponent } from './components/live-update/live-update.component';
 import { SendEmailComponent } from './components/send-email/send-email.component';
 import { EmailListService } from './services/email-list/email-list.service';
 import { HttpAdminService } from './services/http-admin/http-admin.service';
 import { ManageEventsComponent } from './components/manage-events/manage-events.component';
-import { ManageRsvpComponent } from './components/manage-rsvp/manage-rsvp.component';
 import {
   ManageLocationsComponent,
 } from './components/manage-locations/manage-locations.component';
@@ -43,8 +40,6 @@ import { ViewEventAttendanceDialogComponent } from './components/event-stats/vie
 import { HackerDataComponent } from './components/hacker-data/hacker-data.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ViewHackerDataDialogComponent } from './components/hacker-data/view-hacker-data-dialog/view-hacker-data-dialog';
-import { ManageAdminComponent } from './components/manage-admin/manage-admin.component';
-import { LocationDialogComponent } from './components/manage-admin/location-dialog';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { AuthService, CustomErrorHandlerService } from './services/services';
 import { AlertModule } from 'ngx-alerts';
@@ -61,16 +56,13 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
     LoginComponent,
     SidebarComponent,
     UserViewComponent,
-    RegistrationTableComponent,
     ManageUsersComponent,
-    PreRegistrationTableComponent,
     LiveUpdateComponent,
     SendEmailComponent,
     AddEmailDialogComponent,
     AddEventDialogComponent,
     UpdateEventDialogComponent,
     ManageEventsComponent,
-    ManageRsvpComponent,
     ManageLocationsComponent,
     AddLocationDialogComponent,
     UpdateLocationDialogComponent,
@@ -84,8 +76,6 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
     HackerDataComponent,
     DashboardComponent,
     ViewHackerDataDialogComponent,
-    ManageAdminComponent,
-    LocationDialogComponent,
     StatisticsComponent,
     ItemCheckoutComponent,
     EventStatsComponent,
@@ -109,7 +99,7 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
   entryComponents: [
     AddEmailDialogComponent, AddUserClassDialogComponent, AddEventDialogComponent,
     AddLocationDialogComponent, UpdateLocationDialogComponent, RemoveLocationDialogComponent,
-    ViewHackerDataDialogComponent, LocationDialogComponent, ViewEventAttendanceDialogComponent,
+    ViewHackerDataDialogComponent, ViewEventAttendanceDialogComponent,
     AddCheckoutRequestDialogComponent, ReturnCheckoutSheetComponent,
     UpdateEventDialogComponent,
   ],

@@ -12,7 +12,6 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { AppConstants } from '../../helpers/AppConstants';
 import { CheckoutInstanceModel } from '../../models/checkout-instance-model';
 import { ItemCheckoutModel } from '../../models/item-checkout-model';
-import { LoginResponseModel } from '../../models/deprecated-login-response-model';
 import { PRIVILEGE_LEVEL } from '../../models/privilege-model';
 import { HttpAdminService } from '../../services/services';
 import { AddCheckoutRequestDialogComponent } from './add-checkout-request-dialog/add-checkout-request-dialog.component'
@@ -152,9 +151,11 @@ export class ItemCheckoutComponent implements OnInit, AfterViewInit {
           return of(null);
         }),
       )
-      .subscribe(() => {
-        this.refreshData();
-        this.alertsService.success('Success! The item has been checked out.');
+      .subscribe((resp) => {
+        if (resp) {
+          this.refreshData();
+          this.alertsService.success('Success! The item has been checked out.');
+        }
       },         (error) => {
         console.error(error);
         this.alertsService.danger('Error: There was a problem with checking out the item');
@@ -175,8 +176,10 @@ export class ItemCheckoutComponent implements OnInit, AfterViewInit {
     })
       .afterDismissed()
       .subscribe((resp) => {
-        this.refreshReturnData();
-        this.alertsService.success('Success! The item has been returned.');
+        if (resp) {
+          this.refreshReturnData();
+          this.alertsService.success('Success! The item has been returned.');
+        }
       },         (error) => {
         console.error(error);
         this.alertsService.danger('Error: There was a problem with returning the item');
