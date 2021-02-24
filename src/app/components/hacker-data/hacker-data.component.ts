@@ -22,6 +22,7 @@ import { AlertService } from 'ngx-alerts';
 import { IHackerRegistrationModel } from '../../models/hacker-registration-model';
 import { IMatSelectionModel } from '../../models/interfaces/mat-selection-interface';
 import { IHackathonModel } from '../../models/hackathon-model';
+import { IApiResponseModel } from '../../models/api-response-model';
 
 enum HackerStatus {
   PreReg = 'pre_uid',
@@ -257,6 +258,66 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Exporting hacker data into a Excel sheet (.csv)
+   */
+  exportData(limit?: number, hackathon?: string) {
+    let csvData = '';
+    // information header
+    csvData += '"' + 'pre_uid' + '",' + 'Registration ID' + '",' + '"' + 'FirstName' + '",' + '"' + 'Last Name' + '",' + '"' + 'Gender' + '",'
+      + '"' + '18 Before Event' + '",' + '"' + 'Shirt Size' + '",' + '"' + 'Dietary Restrictions' + '",' + '"' + 'Allergies' + '",' + '"' + 'Travel Reimbursement' + '",' + '"' + 'First Hackathon' + '",'
+      + '"' + 'University' + '",' + '"' + 'Email' + '",'  + '"' + 'Academic Year' + '",' + '"' + 'Major' + '",' + '"' + 'Resume' + '",' + '"' + 'COC' + '",' + '"' + 'DCP' + '",'
+      + '"' + 'Phone Number' + '",' + '"' + 'Race' + '",' + '"' + 'Coding Experience' + '",' + '"' + 'Referral Source' + '",' + '"' + 'Project Desc' + '",' + '"' + 'Active???' + '",'
+      + '"' + 'Expectations' + '",' + '"' + 'Veteran' + '",' + '"' + 'PIN Number' + '",' + '"' + 'Time' + '",' + '"' + 'Hackathon ID' + '",' + '"' + 'Hackathon' + '",'
+      + '"' + 'Start Time' + '",' + '"' + 'End Time' + '",' + '"' + 'Base Pin' + '",' + '"' + 'Submitted' + '",' + '"' + 'RSVP ID' + '",' + '"' + 'RSVP Time' + '",' + '"' + 'RSVP Status' + '",'
+      + '"' + 'user_uid' + '",';
+    csvData = csvData.substr(0, csvData.length - 1) + '\n';
+    console.log('export csv called');
+    this.adminService.getAllHackers(limit, hackathon).subscribe({
+      next: (resp: IApiResponseModel<IHackerDataModel[]>) => {
+        console.log(resp.body.data);  // this is the array output
+        const hackerArray = resp.body.data;
+        // iterate through each entry of the array
+        hackerArray.forEach((hacker: IHackerDataModel) => {
+          // hacker contains the individual information of a single hacker
+          // console.log(hacker);
+          // if we want to iterate through the properties of a hacker, reference them individually
+          console.log(hacker.firstname);
+          // if we want to iterate through all the properties of a hacker
+          Object.keys(hacker).forEach((key: string) => {
+            // a key in this case is the property of the hacker object, think of maps
+            // console.log(key);
+            // we use the [bracket notation] instead . because our key is variable --> object[key]
+            csvData += '"' + hacker[key] + '",';
+          });
+          csvData = csvData.substr(0, csvData.length - 1) + '\n';
+        });
+      },
+      error: (err) => {
+        console.error(err);
+      },
+      complete: () => {
+        if (csvData !== '') {
+          const blob = new Blob([csvData], { type: 'text/csv' });
+          const url = window.URL.createObjectURL(blob);
+          // IE support
+          if (navigator.msSaveOrOpenBlob) {
+            navigator.msSaveBlob(blob, 'Hack_Data.csv');
+          } else {
+            const a = document.createElement('a');
+            a.setAttribute('style', 'display: none;');
+            a.href = url;
+            a.download = 'Hacker_Data.csv';
+            document.body.appendChild(a);
+            a.click();
+            // document.body.removeChild(a);
+          }
+          window.URL.revokeObjectURL(url);
+        }
+      },
+    });
+  }
+
+  /**
    * Changes the selected hackathon view
    */
   changeSelectedHackathon() {
@@ -291,15 +352,15 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   checkHackerStatus(hacker, status: string) {
     let hs: HackerStatus;
     switch (status) {
-      case 'PreReg': hs = HackerStatus.PreReg; break;
-      case 'Reg': hs = HackerStatus.Reg; break;
-      case 'RSVP': hs = HackerStatus.RSVP; break;
-      case 'CheckIn': hs = HackerStatus.CheckIn; break;
-      default: hs = HackerStatus.NULL;
-    }
+    case 'PreReg': hs = HackerStatus.PreReg; break;
+    case 'Reg': hs = HackerStatus.Reg; break;
+    case 'RSVP': hs = HackerStatus.RSVP; break;
+    case 'CheckIn': hs = HackerStatus.CheckIn; break;
+    default: hs = HackerStatus.NULL;
+  }
     if (hs !== HackerStatus.NULL) {
-      return !!hacker[hs];
-    }
+    return !!hacker[hs];
+  }
     return false;
   }
 
@@ -340,16 +401,16 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
    *
    * @exception: Failure with the admin service with cause an error to be displayed on the /userdata/ route page
    */
-  updateStatHeader(hackathonUid?: string) {
+  updateStatHeader(hackathonUid ?: string) {
     this.adminService.getAllHackerCount(hackathonUid).subscribe((data) => {
-      this.preRegStatNumber = data.preregistration_count;
-      this.regStatNumber = data.registration_count;
-      this.rsvpStatNumber = data.rsvp_count;
-      this.checkInStatNumber = data.checkin_count;
-    },                                                          (error) => {
-      this.errors = new Error('Error: Issue with getting the number of hackers');
-      console.error(error);
-    });
+    this.preRegStatNumber = data.preregistration_count;
+    this.regStatNumber = data.registration_count;
+    this.rsvpStatNumber = data.rsvp_count;
+    this.checkInStatNumber = data.checkin_count;
+  },                                                          (error) => {
+    this.errors = new Error('Error: Issue with getting the number of hackers');
+    console.error(error);
+  });
   }
 
   /**
@@ -361,15 +422,15 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
     const editPermission = this.canEditHackerData;
     const dt = { editPermission, hacker };
     const dialogRef = this.dialog.open(ViewHackerDataDialogComponent, {
-      height: '600px',
-      width: '750px',
-      data: dt,
-      autoFocus: false,
-    });
+    height: '600px',
+    width: '750px',
+    data: dt,
+    autoFocus: false,
+  });
     dialogRef.afterClosed().subscribe((result: IHackerRegistrationModel) => {
-      if (result) {
-        this.progressService.start();
-        this.adminService.updateHackerRegistration(result)
+    if (result) {
+      this.progressService.start();
+      this.adminService.updateHackerRegistration(result)
         .subscribe((resp) => {
           const hacker_name = result.firstName + ' ' + result.lastName;
           this.alertsService.success('Updated Hacker Information for ' +  hacker_name);
@@ -378,7 +439,7 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
           console.log(err);
           this.alertsService.danger('There was an issue with updating Hacker Information');
         });
-      }
-    })
+    }
+  })
   }
 }

@@ -81,6 +81,13 @@
                                         <mat-icon>refresh</mat-icon>
                                         <span>Refresh Data</span>
                                     </button>
+
+                                    <!-- Export Button -->
+                                    <button mat-menu-item (click)="exportData()">
+                                        <mat-icon>export</mat-icon>
+                                        <span>Export Hackers List</span>
+                                    </button>
+
                                     <button mat-menu-item *ngIf="!selection.isEmpty()" (click)="sendEmail()">
                                         <mat-icon>email</mat-icon>
                                         <span>Send email</span>
@@ -111,11 +118,11 @@
                          <!-- Full Name Column -->
                         <ng-container matColumnDef="name">
                             <mat-header-cell *matHeaderCellDef>Hacker</mat-header-cell>
-                            <mat-cell *matCellDef="let hacker"> 
+                            <mat-cell *matCellDef="let hacker">
                                 <a (click)='viewAdditionalHackerData(hacker)'>{{hacker.firstname}} {{hacker.lastname}}</a>
                             </mat-cell>
                         </ng-container>
-                        
+
                         <!-- Last Name Column
                         <ng-container matColumnDef="lastname">
                             <mat-header-cell *matHeaderCellDef> Last Name</mat-header-cell>
@@ -167,7 +174,7 @@
                                     <mat-icon>panorama_fish_eye</mat-icon>
                                 </ng-template>
 
-                                <!-- RSVP --> 
+                                <!-- RSVP -->
                                 <ng-template [ngIf]="checkHackerStatus(user, 'RSVP')" [ngIfElse] = "rsvpEmpty">
                                     <mat-icon class="check-circle-green">check_circle</mat-icon>
                                 </ng-template>
