@@ -57,8 +57,8 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
    */
   public errors: Error = null;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) table: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) table: MatSort;
 
   constructor(
     private httpService: HttpAdminService,

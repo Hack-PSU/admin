@@ -50,10 +50,10 @@ export class ItemCheckoutComponent implements OnInit, AfterViewInit {
   public displayedColumns = ItemCheckoutComponent._regCols;
   public displayedReturnColumns = ItemCheckoutComponent._returnCols;
 
-  @ViewChild('itemPaginator') itemPaginator: MatPaginator;
-  @ViewChild(MatSort) itemTableSort: MatSort;
-  @ViewChild('returnPaginator') returnPaginator: MatPaginator;
-  @ViewChild(MatSort) returnTableSort: MatSort;
+  @ViewChild('itemPaginator', { static: true }) itemPaginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) itemTableSort: MatSort;
+  @ViewChild('returnPaginator', { static: true }) returnPaginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) returnTableSort: MatSort;
 
   constructor(
     private httpService: HttpAdminService,

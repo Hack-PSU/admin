@@ -31,8 +31,8 @@ export class ExtraCreditClassesComponent implements OnInit, AfterViewInit {
   private user: firebase.User;
   selection = new SelectionModel<any>(true, []);
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) table: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) table: MatSort;
 
   constructor(
     public adminService: HttpAdminService,

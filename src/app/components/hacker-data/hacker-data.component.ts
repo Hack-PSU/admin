@@ -49,8 +49,8 @@ export class HackerDataComponent implements OnInit, AfterViewInit {
   public dataSource = new MatTableDataSource<any>([]);
   public selection = new SelectionModel<any>(true, []);
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) table: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) table: MatSort;
 
   /*
    * Local private integers representing the counts in the latest stats header

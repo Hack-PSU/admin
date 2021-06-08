@@ -23,7 +23,7 @@ export class EventStatsComponent implements OnInit {
   public dataSource = new MatTableDataSource<any>([]);
   private errors: Error = null;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     public adminService: HttpAdminService,

@@ -11,7 +11,7 @@ export class ViewEventAttendanceDialogComponent {
 
   private static tableCols = ['hackerFirstName', 'hackerLastName', 'hackerEmail'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   private attendeeData: IHackerRegistrationModel[];
   public displayedColumns = ViewEventAttendanceDialogComponent.tableCols;

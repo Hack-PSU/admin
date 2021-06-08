@@ -20,7 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SendEmailComponent implements OnInit {
 
-  @ViewChild('iframe') iframe: ElementRef;
+  @ViewChild('iframe', { static: true }) iframe: ElementRef;
 
   secondFormGroup: FormGroup;
   keys = [];
