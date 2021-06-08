@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { forkJoin ,  Observable } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import 'rxjs/add/observable/throw';
+
 import { map } from 'rxjs/operators';
 import { AttendanceModel } from '../../models/attendance-model';
 import { CheckoutInstanceModel } from '../../models/checkout-instance-model';
