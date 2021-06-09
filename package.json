@@ -14,19 +14,19 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^10.2.5",
-    "@angular/cdk": "^9.2.4",
+    "@angular/cdk": "^10.2.7",
     "@angular/common": "^10.2.5",
     "@angular/compiler": "^10.2.5",
     "@angular/core": "^10.2.5",
     "@angular/forms": "^10.2.5",
-    "@angular/material": "^9.2.4",
+    "@angular/material": "^10.2.7",
     "@angular/platform-browser": "10.2.5",
     "@angular/platform-browser-dynamic": "^10.2.5",
     "@angular/router": "^10.2.5",
     "@ngx-progressbar/core": "5.0.1",
     "@ngx-progressbar/http": "5.0.1",
     "@ngx-progressbar/router": "5.0.1",
-    "@swimlane/ngx-charts": "^9.0.0",
+    "@swimlane/ngx-charts": "^16.0.0",
     "angularfire2": "5.0.0-rc.12",
     "chart.js": "^2.7.2",
     "compress.js": "1.1.2",
@@ -36,7 +36,6 @@
     "jquery": "^3.3.1",
     "lodash": "latest",
     "n3-charts": "^2.0.28",
-    "ng2-charts": "^1.6.0",
     "ngx-alerts": "latest",
     "node-sass": "^4.14.0",
     "rxjs": "^6.6.7",
@@ -65,6 +64,6 @@
     "ts-node": "~2.0.0",
     "tslint": "~6.1.0",
     "tslint-config-airbnb": "^5.7.0",
-    "typescript": "^4.0.7"
+    "typescript": "^3.9.2"
   }
 }

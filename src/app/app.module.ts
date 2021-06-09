@@ -28,7 +28,6 @@ import {
   ManageLocationsComponent,
 } from './components/manage-locations/manage-locations.component';
 import { ExtraCreditClassesComponent } from './components/extra-credit-classes/extra-credit-classes.component';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { VisComponent } from './components/vis/vis.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AddEventDialogComponent } from './components/manage-events/add-event-dialog/add-event-dialog';
@@ -86,7 +85,6 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
   imports: [
     BrowserModule,
     FormsModule,
-    ChartsModule,
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
