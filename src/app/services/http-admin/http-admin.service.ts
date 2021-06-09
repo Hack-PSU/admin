@@ -28,6 +28,8 @@ import { query } from '@angular/animations';
 import { UpdateModel } from '../../models/update-model';
 import { IEventStatisticsModel } from '../../models/event-statistic-model';
 
+import { throwError } from 'rxjs';
+
 
 @Injectable()
 export class HttpAdminService extends BaseHttpService {
@@ -189,7 +191,7 @@ export class HttpAdminService extends BaseHttpService {
         });
       });
     } catch (error) {
-      return Observable.throwError(error);
+      return throwError(error);
     }
     return forkJoin(...chunkedEmails.map(batchedEmails => super.genericPost<{}>(
       apiRoute,

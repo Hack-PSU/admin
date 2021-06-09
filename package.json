@@ -30,7 +30,7 @@
     "angularfire2": "5.0.0-rc.12",
     "chart.js": "^2.7.2",
     "compress.js": "1.1.2",
-    "core-js": "^2.4.1",
+    "core-js": "^2.6.12",
     "d3": "^4.13.0",
     "firebase": "5.4.2",
     "jquery": "^3.3.1",
@@ -40,11 +40,12 @@
     "ngx-alerts": "latest",
     "node-sass": "^4.14.0",
     "rxjs": "^6.6.7",
+    "rxjs-compat": "^6.6.7",
     "uuid": "latest",
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^12.0.3",
+    "@angular-devkit/build-angular": "^0.803.24",
     "@angular/cli": "^8.3.29",
     "@angular/compiler-cli": "^8.2.14",
     "@types/d3": "^5.0.0",
