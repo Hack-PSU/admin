@@ -1,4 +1,6 @@
-import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { IStatisticsModel } from '../../models/statistics-model';
 import * as firebase from 'firebase';

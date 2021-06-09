@@ -4,7 +4,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { MatSelectChange, MatGridListModule } from '@angular/material';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

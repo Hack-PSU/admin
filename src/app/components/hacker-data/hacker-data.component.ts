@@ -6,12 +6,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NgProgress } from '@ngx-progressbar/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  MatDialog,
-  MatPaginator,
-  MatSort,
-  MatTableDataSource,
-} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { AppConstants } from '../../helpers/AppConstants';

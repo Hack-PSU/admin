@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 import { ItemCheckoutModel } from '../../../models/item-checkout-model';
 import { HttpAdminService } from '../../../services/services';
