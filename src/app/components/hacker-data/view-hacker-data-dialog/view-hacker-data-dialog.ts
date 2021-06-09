@@ -4,7 +4,9 @@
  * page.
  */
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSlideToggleChange, MatSlideToggle, MatButton} from '@angular/material';
+import { MatButton } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 import { IHackerDataModel } from '../../../models/hacker-model';
 import { FormControl } from '@angular/forms';
 import { Observable, ObservableLike } from 'rxjs';

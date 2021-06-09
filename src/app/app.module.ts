@@ -16,7 +16,8 @@ import { environment } from '../environments/environment';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserViewComponent } from './components/user-view/user-view.component';
 import { CustomMaterialModule } from './helpers/custom.materials';
-import { MatDatepickerModule, MatNativeDateModule } from '@angular/material';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ManageUsersComponent } from './components/manage-users/manage-users.component';
 import { LiveUpdateComponent } from './components/live-update/live-update.component';
 import { SendEmailComponent } from './components/send-email/send-email.component';
@@ -27,7 +28,6 @@ import {
   ManageLocationsComponent,
 } from './components/manage-locations/manage-locations.component';
 import { ExtraCreditClassesComponent } from './components/extra-credit-classes/extra-credit-classes.component';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { VisComponent } from './components/vis/vis.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AddEventDialogComponent } from './components/manage-events/add-event-dialog/add-event-dialog';
@@ -85,7 +85,6 @@ import { ManageHackathonComponent } from './components/manage-hackathon/manage-h
   imports: [
     BrowserModule,
     FormsModule,
-    ChartsModule,
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,

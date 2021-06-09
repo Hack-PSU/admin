@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material';
+import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { CheckoutInstanceModel } from '../../models/checkout-instance-model';
 import { HttpAdminService } from '../../services/services';
 

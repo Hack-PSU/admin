@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource, MatPaginator } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
 
 @Component({
@@ -11,7 +13,7 @@ export class ViewEventAttendanceDialogComponent {
 
   private static tableCols = ['hackerFirstName', 'hackerLastName', 'hackerEmail'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   private attendeeData: IHackerRegistrationModel[];
   public displayedColumns = ViewEventAttendanceDialogComponent.tableCols;

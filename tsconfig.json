@@ -1,6 +1,9 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "module": "esnext",
+	"resolveJsonModule": true,
+	"esModuleInterop": true,
     "outDir": "./dist/out-tsc",
     "baseUrl": "src",
     "sourceMap": true,
@@ -16,6 +19,9 @@
     "lib": [
       "es2016",
       "dom"
-    ],
-  }
+    ]
+  },
+  "angularCompilerOptions": {
+      "enableIvy": false
+	}
 }

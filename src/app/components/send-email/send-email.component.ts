@@ -3,7 +3,7 @@
  */
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { EmailListService } from '../../services/email-list/email-list.service';
 import { htmlTemplate } from '../../../assets/email_template';
@@ -20,7 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SendEmailComponent implements OnInit {
 
-  @ViewChild('iframe') iframe: ElementRef;
+  @ViewChild('iframe', { static: true }) iframe: ElementRef;
 
   secondFormGroup: FormGroup;
   keys = [];

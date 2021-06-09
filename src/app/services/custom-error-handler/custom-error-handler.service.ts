@@ -3,8 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Error as GenericError } from 'tslint/lib/error';
 import { Error } from '../../models/error.interface';
 import { AlertService } from 'ngx-alerts';
-import { Observable } from 'rxjs/Observable';
-import { throwError } from 'rxjs';
+import { Observable ,  throwError } from 'rxjs';
 import 'rxjs-compat/add/observable/throw';
 
 @Injectable()

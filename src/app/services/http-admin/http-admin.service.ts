@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { forkJoin ,  Observable } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import 'rxjs/add/observable/throw';
+
 import { map } from 'rxjs/operators';
 import { AttendanceModel } from '../../models/attendance-model';
 import { CheckoutInstanceModel } from '../../models/checkout-instance-model';
@@ -28,6 +27,8 @@ import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
 import { query } from '@angular/animations';
 import { UpdateModel } from '../../models/update-model';
 import { IEventStatisticsModel } from '../../models/event-statistic-model';
+
+import { throwError } from 'rxjs';
 
 
 @Injectable()
@@ -190,7 +191,7 @@ export class HttpAdminService extends BaseHttpService {
         });
       });
     } catch (error) {
-      return Observable.throwError(error);
+      return throwError(error);
     }
     return forkJoin(...chunkedEmails.map(batchedEmails => super.genericPost<{}>(
       apiRoute,

@@ -12,7 +12,6 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './helpers/app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from 'angularfire2';
-import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
@@ -28,7 +27,6 @@ describe('AppComponent', () => {
       imports: [
         BrowserModule,
         FormsModule,
-        HttpModule,
         HttpClientModule,
         AppRoutingModule,
         AngularFireModule.initializeApp(environment.firebase),

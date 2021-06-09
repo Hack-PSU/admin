@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EventModel } from '../../../models/event-model';
 import { HttpAdminService } from '../../../services/services';
 import { LocationModel } from '../../../models/location-model';

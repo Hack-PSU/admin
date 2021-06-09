@@ -4,13 +4,11 @@
  */
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { EventModel } from '../../models/event-model';
-import {
-  MatDialog,
-  MatPaginator,
-  MatSnackBar,
-  MatSort,
-  MatTableDataSource,
-} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AddEventDialogComponent } from './add-event-dialog/add-event-dialog';
 import { UpdateEventDialogComponent } from './update-event-dialog/update-event-dialog';
@@ -57,7 +55,7 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
    */
   public errors: Error = null;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort) table: MatSort;
 
   constructor(

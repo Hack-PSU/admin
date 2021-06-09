@@ -1,11 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpAdminService } from '../../services/http-admin/http-admin.service';
 import { ActivatedRoute } from '@angular/router';
-import {
-  MatDialog,
-  MatPaginator,
-  MatTableDataSource,
-} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { AlertService } from 'ngx-alerts';
 import { IHackerRegistrationModel } from 'app/models/hacker-registration-model';
 import { IEventStatisticsModel } from '../../models/event-statistic-model';
@@ -23,7 +21,7 @@ export class EventStatsComponent implements OnInit {
   public dataSource = new MatTableDataSource<any>([]);
   private errors: Error = null;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
     public adminService: HttpAdminService,

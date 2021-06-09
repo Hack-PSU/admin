@@ -1,8 +1,9 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { AppConstants } from './AppConstants';
 import { HttpAdminService } from '../services/http-admin/http-admin.service';
-import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AuthService } from '../services/AuthService/auth.service';
 import { NgProgress } from '@ngx-progressbar/core';
@@ -50,7 +51,7 @@ export class AuthGuard implements CanActivate {
             this.authService.signOut();
             this.router.navigate([AppConstants.LOGIN_ENDPOINT], navExtras);
             this.progress.complete();
-            return Observable.of(false);
+            return observableOf(false);
           }),
       );
   }

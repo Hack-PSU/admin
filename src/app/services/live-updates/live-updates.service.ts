@@ -1,7 +1,8 @@
+
+import {filter} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/filter';
+import { Observable ,  BehaviorSubject } from 'rxjs';
+
 import { AppConstants } from '../../helpers/AppConstants';
 
 
@@ -17,7 +18,7 @@ export class LiveUpdatesService {
   }
 
   public subject(event: Event): Observable<Event> {
-    return this.broadcastSubject.asObservable().filter(e => e.type === event.type);
+    return this.broadcastSubject.asObservable().pipe(filter(e => e.type === event.type));
   }
 
 

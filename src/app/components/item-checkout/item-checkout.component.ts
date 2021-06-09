@@ -1,11 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild, QueryList } from '@angular/core';
-import {
-  MatBottomSheet,
-  MatDialog,
-  MatPaginator,
-  MatSort,
-  MatTableDataSource,
-} from '@angular/material';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
@@ -50,10 +48,10 @@ export class ItemCheckoutComponent implements OnInit, AfterViewInit {
   public displayedColumns = ItemCheckoutComponent._regCols;
   public displayedReturnColumns = ItemCheckoutComponent._returnCols;
 
-  @ViewChild('itemPaginator') itemPaginator: MatPaginator;
-  @ViewChild(MatSort) itemTableSort: MatSort;
-  @ViewChild('returnPaginator') returnPaginator: MatPaginator;
-  @ViewChild(MatSort) returnTableSort: MatSort;
+  @ViewChild('itemPaginator', { static: true }) itemPaginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) itemTableSort: MatSort;
+  @ViewChild('returnPaginator', { static: true }) returnPaginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) returnTableSort: MatSort;
 
   constructor(
     private httpService: HttpAdminService,
